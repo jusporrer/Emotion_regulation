@@ -96,9 +96,9 @@ remove_Surprised = [];
  
  %% Total of People Removed 
  
- remove = [remove_lumi,remove_unusual,remove_Afraid, remove_Surprised]; 
+ % remove = [remove_lumi,remove_unusual,remove_Afraid, remove_Surprised]; 
   
- CFD_norming_data(remove,:) = [];
+ % CFD_norming_data(remove,:) = [];
  
  disp(['Warning: ',num2str(size(CFD_norming_data_original,1)-size(CFD_norming_data,1)),' people were removed'])
  disp(['Warning: ',num2str(size(CFD_norming_data,1)),' out of ', num2str(size(CFD_norming_data_original,1)) ,' people remain'])
@@ -106,7 +106,7 @@ remove_Surprised = [];
  %% Transfer the files from the downloaded folder to the experimental one 
  
 % Creates new folders for the experimental images. 
-initial_folder = 'CFD_Images';
+initial_folder = 'CFD 2.0.3 Images';
 dest_folder = '../exp_images';
 
 if ~isfolder(dest_folder)
@@ -117,7 +117,7 @@ end
 file_names = [];
 for img = 1: size(CFD_norming_data,1)
     file_names = [file_names; fullfile(initial_folder,char(CFD_norming_data.Target(img)),'*.jpg')];
-    %copyfile (file_names(img,:),dest_folder) 
+    copyfile (file_names(img,:),dest_folder) 
 end 
 
 disp(['End: the selected files were transfered correctly']);
