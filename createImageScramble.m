@@ -1,5 +1,11 @@
 function [img_scramble] = createImageScramble(img, nSection, window)
 
+if nargin < 3
+    createTexture = false;
+else
+    createTexture = true;
+end
+
 %% Create Matrix
 [nRow, nCol, nDim] = size(img);
 
@@ -45,6 +51,9 @@ for dimIdx = 1:nDim
     img_scramble = cat(3, img_scramble, imresize(squeeze(cat_col(:,:,dimIdx)), [nRow, nCol]));
 end
 
-%% Make the image into a texture
-img_scramble = Screen('MakeTexture', window, img_scramble);
+%% Make the image into a texture (only if a window is given) 
+
+if createTexture
+    img_scramble = Screen('MakeTexture', window, img_scramble);
+end
 
