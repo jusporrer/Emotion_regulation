@@ -1,11 +1,5 @@
 %% Settings for the Emotional Rapid Serial Visual Presentation Task
 
-% Size of the images
-size_img_rsvp = 600;
-
-% Scrambled matrix of input image, [nSection+1 by nSection+1]
-nSection = 4;
-
 % Number of trials per set size
 nTrialsTrain = 1;
 nTrialsExp = 1;

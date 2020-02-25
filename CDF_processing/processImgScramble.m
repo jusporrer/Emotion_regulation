@@ -1,11 +1,11 @@
-%% Settings (for img size) 
-settings_rsvp;
+% Scrambled matrix of input image, [nSection+1 by nSection+1]
+nSection = 4;
 
 %% Load the initial matrices 
-load('exp_images/WMN_img_rsvp.mat');
-load('exp_images/WMF_img_rsvp.mat');
-load('exp_images/WFN_img_rsvp.mat');
-load('exp_images/WFF_img_rsvp.mat');
+load('../exp_images/WMN_img_rsvp.mat');
+load('../exp_images/WMF_img_rsvp.mat');
+load('../exp_images/WFN_img_rsvp.mat');
+load('../exp_images/WFF_img_rsvp.mat');
 
 %% Transform them into scrambled images 
 WMN_img_scramble = cell(1,size(WMN_img_rsvp,2));
@@ -30,7 +30,7 @@ end
 
 %% Save the scrambled images 
 
-save('exp_images/WMN_img_scramble.mat','WMN_img_scramble');
-save('exp_images/WMF_img_scramble.mat','WMF_img_scramble');
-save('exp_images/WFN_img_scramble.mat','WFN_img_scramble');
-save('exp_images/WFF_img_scramble.mat','WFF_img_scramble');
+save('../exp_images/WMN_img_scramble.mat','WMN_img_scramble');
+save('../exp_images/WMF_img_scramble.mat','WMF_img_scramble');
+save('../exp_images/WFN_img_scramble.mat','WFN_img_scramble');
+save('../exp_images/WFF_img_scramble.mat','WFF_img_scramble');

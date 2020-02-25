@@ -1,9 +1,6 @@
 
 %% Settings for the Emotional Visual Search Task
 
-% Size of the images 
-size_img_vs = 250; 
-
 % Length of fixation in seconds
 fixationDuration = 0.5;
 
