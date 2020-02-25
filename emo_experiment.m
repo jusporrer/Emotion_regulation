@@ -1,3 +1,4 @@
+
 try
     %% Initialise screen
     Screen('Preference', 'SkipSyncTests', 1) % Need to be put to 0 when testing
