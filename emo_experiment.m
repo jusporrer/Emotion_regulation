@@ -54,21 +54,28 @@ try
     
     ID = ceil(100000*rand);
     
+    %% Start of the experiment 
+    
+    DrawFormattedText(window, bonjour, 'center', 'center', black);
+    DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+    Screen('Flip', window);
+    KbStrokeWait;
+    
     %% If last digit ID even -> VS first (odd -> RSVP first)
     
-    if rem(ID,2)==0
-        % Training Period
-        [respMat_training_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, true);
-        
-        % Experiment without Training
-        [respMat_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, false);
-        
-        DrawFormattedText(window, finiVS, 'center', 'center', black);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        Screen('Flip', window);
-        KbStrokeWait;
-        
-    else
+%     if rem(ID,2)==0
+%         % Training Period
+%         [respMat_training_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, true);
+%         
+%         % Experiment without Training
+%         [respMat_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, false);
+%         
+%         DrawFormattedText(window, finiVS, 'center', 'center', black);
+%         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+%         Screen('Flip', window);
+%         KbStrokeWait;
+%         
+%     else
         % Training Period
         [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
         
@@ -79,11 +86,11 @@ try
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
         Screen('Flip', window);
         KbStrokeWait;
-    end
+%     end
     
     %% If last digit ID even -> RSVP second (odd -> VS second)
     
-    if rem(ID,2)==1
+%     if rem(ID,2)==1
         % Training Period
         [respMat_training_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, true);
         
@@ -94,21 +101,26 @@ try
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
         Screen('Flip', window);
         KbStrokeWait;
-    else
-        
-        %Training Period
-        [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
-        
-        %Experiment without Training
-        [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
-        
-        DrawFormattedText(window, finiRSVP, 'center', 'center', black);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        Screen('Flip', window);
-        KbStrokeWait;
-    end
+%     else
+%         
+%         %Training Period
+%         [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
+%         
+%         %Experiment without Training
+%         [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
+%         
+%         DrawFormattedText(window, finiRSVP, 'center', 'center', black);
+%         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+%         Screen('Flip', window);
+%         KbStrokeWait;
+%     end
     
     %% End of the experiment (Save results)
+    
+    DrawFormattedText(window, fini, 'center', 'center', black);
+    Screen('Flip', window);
+    KbStrokeWait;
+    
     
     if ~isfolder('results')
         mkdir results
