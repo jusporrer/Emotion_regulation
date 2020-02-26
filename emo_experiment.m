@@ -70,10 +70,10 @@ try
         
     else
         % Training Period
-        %[respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
+        [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
         
         % Experiment without Training
-        %[respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
+        [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
         
         DrawFormattedText(window, finiRSVP, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
@@ -96,11 +96,11 @@ try
         KbStrokeWait;
     else
         
-        % Training Period
-        %[respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
+        %Training Period
+        [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
         
-        % Experiment without Training
-        %[respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
+        %Experiment without Training
+        [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
         
         DrawFormattedText(window, finiRSVP, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
@@ -118,19 +118,21 @@ try
     data_visual_search = [respMat_training_visual_search, respMat_visual_search];
     save(fileNameVS, 'data_visual_search');
     
-%     fileNameRSVP = ['results/',num2str(ID),'_rsvp.mat'];
-%     data_rsvp = [respMat_training_rsvp, respMat_rsvp];
-%     save(fileNameRSVP, 'data_rsvp');
-%     
+    fileNameRSVP = ['results/',num2str(ID),'_rsvp.mat'];
+    data_rsvp = [respMat_training_rsvp, respMat_rsvp];
+    save(fileNameRSVP, 'data_rsvp');
+    
     sca;
     
     % Check if file was saved -> if problem, save matrices manually
     
     if isfile(fileNameVS) %&& isfile(fileNameRSVP)
-        warningMessage = sprintf('End experiment: all data was saved correctly.');
+        warningMessage = sprintf(['End experiment: all data was saved correctly. \n ID: ', ...
+            num2str(ID), '\n Date: ',datestr(datetime('now'))]);
         uiwait(msgbox(warningMessage));
     else
-        warningMessage = sprintf('Warning: data was not saved correctly.');
+        warningMessage = sprintf(['Warning: data was not saved correctly. \n ID: ', ...
+            num2str(ID), '\n Date: ',datestr(datetime('now'))]);
         uiwait(msgbox(warningMessage));
     end
     

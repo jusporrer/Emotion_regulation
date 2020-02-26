@@ -119,10 +119,8 @@ try
         KbStrokeWait;
     end
     
-    respMatRSVP = nan(nTrials*nBlocks, length(respMatColumnsRSVP)); % but NaN not recommened for VBA ?
-    
     %% Actual Experiment
-    line_save = 0;
+    a = 0;
     
     for block = 1:nBlocks
         

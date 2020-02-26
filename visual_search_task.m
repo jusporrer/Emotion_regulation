@@ -34,6 +34,8 @@ try
     [fearFemTexture,fearMaleTexture, neutralFemTexture, neutralMaleTexture, ...
         sizeImg] = createImageTexture(WMN_img_vs, WMF_img_vs, WFN_img_vs, WFF_img_vs,window);
     
+    sizeImg = size(WMN_img_vs{1});
+    
     %% Fixation cross
     
     [CoordsFix, lineWidthFix] = create_fix_cross();
@@ -44,6 +46,7 @@ try
     % vs.trialTimeout, vs.timeBetwTrial
     
     settings_visual_search;
+    respMatVS.cfg = vs;
     
     %% Create Condition Matrix
     % Condition (1 = DC, 3 = CC, 5 = BC)
@@ -66,7 +69,7 @@ try
     pixelScaleX = screenXpixels / (dx*2);
     pixelScaleY = screenYpixels / (dy*1.5); % (1.5 for 3 img, 2 for 4 img)
     x = x .* pixelScaleX;
-    y = y .* pixelScaleY +50; % top margin
+    y = y .* pixelScaleY;
     
     % Nb of positions
     nbPosition = numel(x);

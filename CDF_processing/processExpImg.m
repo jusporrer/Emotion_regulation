@@ -1,6 +1,6 @@
 %% Settings (for img size) 
 size_img_rsvp = 700;
-size_img_vs = 300;
+size_img_vs = 250;
 
 %% Retrieve the images
 

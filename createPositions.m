@@ -1,7 +1,7 @@
 function [pos1, pos2, pos3, pos4, orient1, orient2, orient3, orient4] = createPositions(positionMatrix, setSize, sizeImg)
 
 %% Initialise the matrices 
-positions = zeros(setSize,4);
+positions = zeros(2,setSize);
 imgPositions = zeros(setSize, 4); % 4 coordinates 
 imgOrientation = zeros(1,setSize);
 
@@ -14,13 +14,13 @@ for i = 1:setSize
     %positions(:,i) = positionMatrix(:,a);  
     
     % Store the randomly selected coordinates and Add jitters 
-    positions(1,i) = positionMatrix(1,a) + ((positionMatrix(1,a)+35)-(positionMatrix(1,a)-35))*randn; % our current cell size is 272*272
-    positions(2,i) = positionMatrix(2,a)+ ((positionMatrix(2,a)+35)-(positionMatrix(2,a)-35))*randn;
+    positions(1,i) = positionMatrix(1,a) + ((positionMatrix(1,a)+50)-(positionMatrix(1,a)-50))*round(randn,1); % our current cell size is 272*272
+    positions(2,i) = positionMatrix(2,a) + ((positionMatrix(2,a)+20)-(positionMatrix(2,a)-20))*round(randn,1);
     
+    display(positions)
     %positions(1,i) = positionMatrix(1,a);
     %positions(2,i) = positionMatrix(2,a);
-    
-    % Adds more jitter: round to integers
+        
     positions = ceil(positions);
      
     % Creates the positions in terms of 4 coordinates 
