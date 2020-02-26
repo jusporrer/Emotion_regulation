@@ -291,6 +291,7 @@ try
             respMatVS(a).training = training;
             %respMatVS(a).reward = reward; %(0 = Small reward, 1 = Large reward)
             respMatVS(a).condition = condition(block); %(0 = DC, 1 = CC, 2 = BC)
+            respMatVS(a).setSize = vs.setSize;
             respMatVS(a).block = block;
             respMatVS(a).trial = trial;
             respMatVS(a).RTs = rt;
