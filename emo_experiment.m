@@ -46,7 +46,7 @@ try
     
     %% Define the text
     Screen('TextFont',window, 'Calibri');
-    Screen('TextSize', window, 60);
+    Screen('TextSize', window, 30);
     
     text_experiment;
     
@@ -66,7 +66,7 @@ try
 %     if rem(ID,2)==0
 %         % Training Period
 %         [respMat_training_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, true);
-%         
+
 %         % Experiment without Training
 %         [respMat_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, false);
 %         

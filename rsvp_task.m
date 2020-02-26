@@ -42,7 +42,7 @@ try
     
     %% Defines the text
     Screen('TextFont',window, 'Calibri');
-    Screen('TextSize', window, 60);
+    Screen('TextSize', window, 30);
     
     text_experiment;
     
@@ -89,15 +89,16 @@ try
         nTrials = rsvp.nTrialsTrain;
         condition = ones(1,6); % the only condition for traning
         
+        DrawFormattedText(window, instRSVP, 'center', 'center', black);
+        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        Screen('Flip', window);
+        KbStrokeWait;
+        
         DrawFormattedText(window, trainRSVP, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
         Screen('Flip', window);
         KbStrokeWait;
         
-        DrawFormattedText(window, instRSVP, 'center', 'center', black);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        Screen('Flip', window);
-        KbStrokeWait;
         
     else
         nBlocks = rsvp.nBlocksExp;

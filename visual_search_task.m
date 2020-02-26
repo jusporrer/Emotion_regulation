@@ -20,7 +20,7 @@ try
     
     %% Defines the text
     Screen('TextFont',window, 'Calibri');
-    Screen('TextSize', window, 60);
+    Screen('TextSize', window, 30);
     
     text_experiment;
     
@@ -84,12 +84,12 @@ try
         nTrials = vs.nTrialsTrain;
         condition = ones(1,6); % the only condition for training
         
-        DrawFormattedText(window, trainVS, 'center', 'center', black);
+        DrawFormattedText(window, instVS, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
         Screen('Flip', window);
         KbStrokeWait;
         
-        DrawFormattedText(window, instVS, 'center', 'center', black);
+        DrawFormattedText(window, trainVS, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
         Screen('Flip', window);
         KbStrokeWait;
