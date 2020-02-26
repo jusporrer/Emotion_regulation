@@ -39,9 +39,9 @@ try
     [CoordsFix, lineWidthFix] = create_fix_cross();
     
     %% Settings
-    % nTrialsExp, nTrialsTrain, setSize, targSetSize, distSetSize, ...
-    % nBlocksExp, nBlocksTrain, breakAfterTrials, ...
-    % trialTimeout, timeBetweenTrials
+    % vs.nTrialsExp, vs.nTrialsTrain, vs.setSize, targSetSize, distSetSize, ...
+    % vs.nBlocksExp, vs.nBlocksTrain, breakAfterTrials, ...
+    % vs.trialTimeout, vs.timeBetwTrial
     
     settings_visual_search;
     
@@ -56,7 +56,7 @@ try
     nx = 4;
     dx = (0.8/nx);
     % Nb img on y-axis
-    ny = 4;
+    ny = 3;
     dy = (0.8/ny);
     
     % Use meshgrid to create equally spaced coordinates in the X and Y
@@ -64,9 +64,9 @@ try
     
     % Scale the grid so that it is in pixel coordinates
     pixelScaleX = screenXpixels / (dx*2);
-    pixelScaleY = screenYpixels / (dy*2); % (1.5 for 3 img, 2 for 4 img)
+    pixelScaleY = screenYpixels / (dy*1.5); % (1.5 for 3 img, 2 for 4 img)
     x = x .* pixelScaleX;
-    y = y .* pixelScaleY;
+    y = y .* pixelScaleY +50; % top margin
     
     % Nb of positions
     nbPosition = numel(x);
@@ -77,9 +77,9 @@ try
     %% Training or not
     
     if training
-        nBlocks = nBlocksTrain;
-        nTrials = nTrialsTrain;
-        condition = ones(1,6); % the only condition for traning
+        nBlocks = vs.nBlocksTrain;
+        nTrials = vs.nTrialsTrain;
+        condition = ones(1,6); % the only condition for training
         
         DrawFormattedText(window, trainVS, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
@@ -92,8 +92,8 @@ try
         KbStrokeWait;
         
     else
-        nBlocks = nBlocksExp;
-        nTrials = nTrialsExp;
+        nBlocks = vs.nBlocksExp;
+        nTrials = vs.nTrialsExp;
         
         % Complete shuffle
         % condition = Shuffle(repmat([1:6],1,2));
@@ -110,11 +110,9 @@ try
         Screen('Flip', window);
         KbStrokeWait;
     end
-    
-    respMatVS = nan(nTrials*nBlocks, length(respMatColumnsVS)); % but nan not recommened for VBA ?
-    
+      
     %% Actual Experiment
-    line_save = 0;
+    a = 0;
     
     for block = 1:nBlocks
         
@@ -149,33 +147,49 @@ try
             SetMouse(xCenter, yCenter, window);
             
             % Initialise response
+            a = a + 1;
             rt = 0;
-            click = 0;
-            responseFF = 0;
-            responseNF = 0;
-            responseFM = 0;
-            responseNM = 0;
+            response = [];
+            respFF = 0; respNF = 0;
+            respFM = 0; respNM = 0;
             
             % Draw fixation cross
             Screen('DrawLines', window, CoordsFix, lineWidthFix, black, [xCenter yCenter], 2);
             tFixation = Screen('Flip', window);
-            Screen('Flip', window, tFixation + fixationDuration - ifi, 0);
+            Screen('Flip', window, tFixation + vs.fixationDuration - ifi, 0);
             
             %Create position and orientation for search display (change every trial)
-            [fearFemPosition, neutralFemPosition, fearMalePosition, neutralMalePosition, ...
-                fearFemOrient, neutralFemOrient, fearMaleOrient, neutralMaleOrient ] = ...
-                createPositions(positionMatrix, setSize, sizeImg, screenXpixels, screenYpixels);
+            [posFF, posNF, posFM, posNM, ...
+                orientFF, orientNF, orientFM, orientNM ] = ...
+                createPositions(positionMatrix, vs.setSize, sizeImg);
+            
+            % Save pos for eye-tracking 
+            respMatVS(a).posFF = posFF;
+            respMatVS(a).posNF = posNF;
+            respMatVS(a).posFM = posFM;
+            respMatVS(a).posNM = posNM;
+            
+%             img = createSearchDisplay(WMN_img_vs, WMF_img_vs, WFN_img_vs, WFF_img_vs, vs.setSize,...
+%                 posFF,posNF, posFM, posNM, screenXpixels,screenYpixels);
+%             
+%             % Calculate image position (center of the screen)
+%             displaySize = size(img);
+%              posCenter = [(screenXpixels-displaySize(2))/2 (screenYpixels-displaySize(1))/2 (screenXpixels+displaySize(2))/2 (screenYpixels+displaySize(1))/2];
+%             imageDisplay = Screen('MakeTexture', window, img);
+%             Screen('DrawTexture', window, imageDisplay, [], posCenter);
+%             Screen('Flip', window);
+%             KbStrokeWait;
             
             % Initialise
-            fearFemTrial = zeros(1,setSize/4); neutralFemTrial = zeros(1,setSize/4);
-            fearMaleTrial = zeros(1,setSize/4); neutralMaleTrial = zeros(1,setSize/4);
+            fearFem = zeros(1,vs.imgSetSize); neutralFem = zeros(1,vs.imgSetSize);
+            fearMale = zeros(1,vs.imgSetSize); neutralMale = zeros(1,vs.imgSetSize);
             
-            % Select setSize/4 new faces
-            for nb_img = 1: setSize/4
-                fearFemTrial(nb_img) = fearFemTexture{randi([1 size(fearFemTexture,2)])};
-                neutralFemTrial(nb_img) = neutralFemTexture{randi([1 size(neutralFemTexture,2)])};
-                fearMaleTrial(nb_img) = fearMaleTexture{randi([1 size(fearMaleTexture,2)])};
-                neutralMaleTrial(nb_img) = neutralMaleTexture{randi([1 size(neutralMaleTexture,2)])};
+            % Select vs.setSize/4 new faces
+            for nb_img = 1: vs.imgSetSize
+                fearFem(nb_img) = fearFemTexture{randi([1 size(fearFemTexture,2)])};
+                neutralFem(nb_img) = neutralFemTexture{randi([1 size(neutralFemTexture,2)])};
+                fearMale(nb_img) = fearMaleTexture{randi([1 size(fearMaleTexture,2)])};
+                neutralMale(nb_img) = neutralMaleTexture{randi([1 size(neutralMaleTexture,2)])};
             end
             
             % Start Time
@@ -185,7 +199,7 @@ try
             Priority(MaxPriority(window));
             Priority(2);
             
-            while GetSecs - startTime < trialTimeout
+            while GetSecs - startTime < vs.trialTimeout
                 [~,~,keyCode] = KbCheck;
                 respTime = GetSecs;
                 
@@ -199,60 +213,64 @@ try
                 % Get the current position of the mouse
                 [mx, my, buttons] = GetMouse(window);
                 
-                for i = 1: size(fearFemPosition,1)
-                    Screen('DrawTexture', window, fearFemTrial(i), [], fearFemPosition(i,:), fearFemOrient(i));
-                    fearFemInside = IsInRect(mx, my, fearFemPosition(i,:));
-                    if fearFemInside == 1 && sum(buttons) == 1
-                        responseFF = responseFF + 1;
-                        click = click + 1;
-                        fearFemPosition(i,:) = [];
-                        fearFemOrient(i) = [];
-                        fearFemTrial(i) = [];
+                for i = 1: size(posFF,1)
+                    Screen('DrawTexture', window, fearFem(i), [], posFF(i,:), orientFF(i));
+                    insideFF = IsInRect(mx, my, posFF(i,:));
+                    if insideFF == 1 && sum(buttons) == 1 && offsetSet == 0
+                        respFF = respFF + 1;
+                        response = [response 1];
+                        posFF(i,:) = [];
+                        orientFF(i) = [];
+                        fearFem(i) = [];
+                        offsetSet = 1;
                         break
                     end
                 end
                 
-                for j = 1: size(neutralFemPosition,1)
-                    Screen('DrawTexture', window, neutralFemTrial(j), [], neutralFemPosition(j,:),neutralFemOrient(j));
-                    neutralFemInside = IsInRect(mx, my, neutralFemPosition(j,:));
-                    if neutralFemInside == 1 && sum(buttons) == 1
-                        responseNF = responseNF + 1;
-                        click = click + 1;
-                        neutralFemPosition(j,:) = [];
-                        neutralFemOrient(j) = [];
-                        neutralFemTrial(j) = [];
+                for j = 1: size(posNF,1)
+                    Screen('DrawTexture', window, neutralFem(j), [], posNF(j,:),orientNF(j));
+                    insideNF = IsInRect(mx, my, posNF(j,:));
+                    if insideNF == 1 && sum(buttons) == 1 && offsetSet == 0
+                        respNF = respNF + 1;
+                        response = [response 2];
+                        posNF(j,:) = [];
+                        orientNF(j) = [];
+                        neutralFem(j) = [];
+                        offsetSet = 1;
                         break
                     end
                 end
                 
-                for y = 1: size(fearMalePosition,1)
-                    Screen('DrawTexture', window, fearMaleTrial(y), [], fearMalePosition(y,:),fearMaleOrient(y));
-                    fearMaleInside = IsInRect(mx, my, fearMalePosition(y,:));
-                    if fearMaleInside == 1 && sum(buttons) == 1
-                        responseFM = responseFM + 1;
-                        click = click + 1;
-                        fearMalePosition(y,:) = [];
-                        fearMaleOrient(y) = [];
-                        fearMaleTrial(y) = [];
+                for y = 1: size(posFM,1)
+                    Screen('DrawTexture', window, fearMale(y), [], posFM(y,:),orientFM(y));
+                    insideFM = IsInRect(mx, my, posFM(y,:));
+                    if insideFM == 1 && sum(buttons) == 1 && offsetSet == 0
+                        respFM = respFM + 1;
+                        response = [response 3];
+                        posFM(y,:) = [];
+                        orientFM(y) = [];
+                        fearMale(y) = [];
+                        offsetSet = 1;
                         break
                     end
                 end
                 
-                for z = 1: size(neutralMalePosition,1)
-                    Screen('DrawTexture', window, neutralMaleTrial(z), [], neutralMalePosition(z,:),neutralMaleOrient(z));
-                    neutralMaleInside = IsInRect(mx, my, neutralMalePosition(z,:));
-                    if neutralMaleInside == 1 && sum(buttons) == 1
-                        responseNM = responseNM + 1;
-                        click = click + 1;
-                        neutralMalePosition(z,:) = [];
-                        neutralMaleOrient(z) = [];
-                        neutralMaleTrial(z) = [];
+                for z = 1: size(posNM,1)
+                    Screen('DrawTexture', window, neutralMale(z), [], posNM(z,:),orientNM(z));
+                    insideNM = IsInRect(mx, my, posNM(z,:));
+                    if insideNM == 1 && sum(buttons) == 1 && offsetSet == 0
+                        respNM = respNM + 1;
+                        response = [response 4];
+                        posNM(z,:) = [];
+                        orientNM(z) = [];
+                        neutralMale(z) = [];
+                        offsetSet = 1;
                         break
                     end
                 end
                 
                 % if the participant clicks the right number it stops
-                if click == setSize/2
+                if length(response) == vs.setSize/2
                     rt = respTime - startTime;
                     break
                 end
@@ -261,31 +279,31 @@ try
                 Screen('DrawDots', window, [mx my], 15, [1 0 0], [], 1);
                 Screen('Flip', window);
                 
+                % Release the button
+                if sum(buttons) <= 0
+                    offsetSet = 0;
+                end
+                
             end
             
-            % Record the trial data into the data matrix
-            line_save = line_save + 1;
-            
-            respMatVS(line_save,1) = ID;
-            respMatVS(line_save,2) = training;
-            %respMatVS(trial,3) = reward; % to implement
-            respMatVS(trial,4) = condition(block);
-            respMatVS(line_save,5) = trial;
-            respMatVS(line_save,6) = block;
-            respMatVS(line_save,7) = rt;
-            respMatVS(line_save,8) = responseFF;
-            respMatVS(line_save,9) = responseNF;
-            respMatVS(line_save,10) = responseFM;
-            respMatVS(line_save,11) = responseNM;
-            %respMatVS(line_save,12) = fearFemPosition;
-            %respMatVS(line_save,13) = neutralFemPosition;
-            %respMatVS(line_save,14) = fearMalePosition;
-            %respMatVS(line_save,15) = neutralMalePosition;
+            % Save data 
+            respMatVS(a).ID = ID;
+            respMatVS(a).training = training;
+            %respMatVS(a).reward = reward; %(0 = Small reward, 1 = Large reward)
+            respMatVS(a).condition = condition(block); %(0 = DC, 1 = CC, 2 = BC)
+            respMatVS(a).block = block;
+            respMatVS(a).trial = trial;
+            respMatVS(a).RTs = rt;
+            respMatVS(a).order = response;
+            respMatVS(a).respFF = respFF;
+            respMatVS(a).respNF = respNF;
+            respMatVS(a).respFM = respFM;
+            respMatVS(a).respNM = respNM;
             
             % Screen after trial
             Screen('FillRect', window, white);
             Screen('Flip', window);
-            WaitSecs(timeBetweenTrials);
+            WaitSecs(vs.timeBetwTrial);
             
         end
     end

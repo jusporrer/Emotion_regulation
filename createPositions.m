@@ -1,4 +1,4 @@
-function [pos1, pos2, pos3, pos4, orient1, orient2, orient3, orient4] = createPositions(positionMatrix, setSize, sizeImg, screenXpixels, screenYpixels)
+function [pos1, pos2, pos3, pos4, orient1, orient2, orient3, orient4] = createPositions(positionMatrix, setSize, sizeImg)
 
 %% Initialise the matrices 
 positions = zeros(setSize,4);

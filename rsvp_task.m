@@ -51,8 +51,8 @@ try
     [CoordsFix, lineWidthFix] = create_fix_cross();
     
     %% Settings
-    % nTrialsExp, nTrialsTrain, nBlocksExp, nBlocksTrain,  ...
-    % trialTimeout, timeBetweenTrials
+    % rsvp.rsvp.nTrialsExp, rsvp.rsvp.nTrialsTrain, nBlocksExp, nBlocksTrain,  ...
+    % rsvp.trialTimeout, timeBetweenTrials
     
     settings_rsvp;
     
@@ -85,8 +85,8 @@ try
     %% Training or not
     
     if training
-        nBlocks = nBlocksTrain;
-        nTrials = nTrialsTrain;
+        nBlocks = rsvp.nBlocksTrain;
+        nTrials = rsvp.nTrialsTrain;
         condition = ones(1,6); % the only condition for traning
         
         DrawFormattedText(window, trainRSVP, 'center', 'center', black);
@@ -100,8 +100,8 @@ try
         KbStrokeWait;
         
     else
-        nBlocks = nBlocksExp;
-        nTrials = nTrialsExp;
+        nBlocks = rsvp.nBlocksExp;
+        nTrials = rsvp.nTrialsExp;
         
         % Complete shuffle
         % condition = Shuffle(repmat([1:6],1,2));
@@ -131,7 +131,7 @@ try
             % Initialise RTs and response
             rt = 0;
             response = 0;
-            imageDisplay = zeros(1,setSize);
+            imageDisplay = zeros(1,rsvp.setSize);
             
             % Screen priority
             Priority(MaxPriority(window));
@@ -152,10 +152,10 @@ try
                 neutralFemTexture{randi([1 size(neutralFemTexture,2)])}, ... % 3
                 neutralMaleTexture{randi([1 size(neutralMaleTexture,2)])}]; % 4
             
-            img_scramble = [fearFemScramble{randi([1 size(fearFemScramble,2)],1,setSize)};... % 1
-                fearMaleScramble{randi([1 size(fearMaleScramble,2)],1,setSize)}; ... % 2
-                neutralFemScramble{randi([1 size(neutralFemScramble,2)],1,setSize)}; ... %3
-                neutralMaleScramble{randi([1 size(neutralMaleScramble,2)],1,setSize)}]; %4
+            img_scramble = [fearFemScramble{randi([1 size(fearFemScramble,2)],1,rsvp.setSize)};... % 1
+                fearMaleScramble{randi([1 size(fearMaleScramble,2)],1,rsvp.setSize)}; ... % 2
+                neutralFemScramble{randi([1 size(neutralFemScramble,2)],1,rsvp.setSize)}; ... %3
+                neutralMaleScramble{randi([1 size(neutralMaleScramble,2)],1,rsvp.setSize)}]; %4
             
             % Indexing of img
             fem = [1,3]; male = [2,4]; fear = [1,2]; neutral = [3,4];
@@ -199,7 +199,7 @@ try
                 target = fear(randi(2)); % 1 or 2
             end
             
-            for nbImage = 1: setSize
+            for nbImage = 1: rsvp.setSize
                 if nbImage == posCritDist
                     imageDisplay(nbImage) = img(distractor);
                 elseif nbImage == posTarget
@@ -210,15 +210,15 @@ try
             end
             
             flipTime = Screen('Flip', window);
-            for nbImage = 1: setSize
+            for nbImage = 1: rsvp.setSize
                 Screen(window, 'FillRect', white);
                 Screen('DrawTexture', window, imageDisplay(nbImage), [],posCenter,0);
-                flipTime = Screen('Flip', window, flipTime + imageDuration - ifi,0);
+                flipTime = Screen('Flip', window, flipTime + rsvp.imageDuration - ifi,0);
             end
             Screen(window, 'FillRect', white);
-            startTime = Screen('Flip', window, flipTime + imageDuration - ifi,0);
+            startTime = Screen('Flip', window, flipTime + rsvp.imageDuration - ifi,0);
             
-            while GetSecs - startTime < trialTimeout
+            while GetSecs - startTime < rsvp.trialTimeout
                 [~,~,keyCode] = KbCheck;
                 respTime = GetSecs;
                 
@@ -249,28 +249,28 @@ try
                 if rt > 0
                     break;
                 end
-            end % end while
-            
-            line_save = line_save + 1;
+                
+            end
             
             % Record the trial data into the data matrix
-            respMatRSVP(line_save,1) = ID;
-            respMatRSVP(line_save,2) = training;
-            %respMatRSVP(trial,3) = reward;
-            respMatRSVP(line_save,4) = condition(block);
-            respMatRSVP(line_save,5) = trial;
-            respMatRSVP(line_save,6) = block;
-            respMatRSVP(line_save,7) = rt;
-            respMatRSVP(line_save,8) = response;
-            respMatRSVP(line_save,9) = posCritDist;
-            respMatRSVP(line_save,10) = posTarget;
-            respMatRSVP(line_save,11) = distractor;
-            respMatRSVP(line_save,12) = target;
+            a = a + 1;
+            respMatRSVP(a).ID = ID;
+            respMatRSVP(a).training = training;
+            %respMatRSVP(a).reward = reward(block); %(1 = Small reward, 2 = Large reward)
+            respMatRSVP(a).condition = condition(block); %(0 = DC, 1 = CC, 2 = BC)
+            respMatRSVP(a).block = block;
+            respMatRSVP(a).trial = trial;
+            respMatRSVP(a).RTs = rt;
+            respMatRSVP(a).response = response;
+            respMatRSVP(a).posCritDist = posCritDist;
+            respMatRSVP(a).posTarget = posTarget;
+            respMatRSVP(a).distractor = distractor;
+            respMatRSVP(a).target = target;
             
             % Screen after trial
             Screen('FillRect', window, white);
             Screen('Flip', window);
-            WaitSecs(timeBetweenTrials);
+            WaitSecs(rsvp.timeBetweenTrials);
             
         end % end trial
     end % end block

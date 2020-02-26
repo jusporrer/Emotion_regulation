@@ -1,44 +1,40 @@
 %% Settings for the Emotional Rapid Serial Visual Presentation Task
 
 % Number of trials per set size
-nTrialsTrain = 1;
-nTrialsExp = 1;
+rsvp.nTrialsTrain = 5;
+rsvp.nTrialsExp = 5;
 
 % Number of blocks
-nBlocksTrain = 1;
-nBlocksExp = 1;
+rsvp.nBlocksTrain = 1;
+rsvp.nBlocksExp = 1;
 
 % Number of trialsbefore a break
-breakAfterTrials = 100;
+rsvp.breakAfterTrials = 100;
 
 % Number of images around the target
-setSize = 15;
+rsvp.setSize = 15;
 
 % How long each image in the RSVP sequence is on screen(normally 100 ms so 0.1 s)
-imageDuration = 0.1;
+rsvp.imageDuration = 0.1;
 
 % How long to wait (in seconds) for subject response before the trial times out
-trialTimeout = 2;
+rsvp.trialTimeout = 20;
 
 % How long to pause in between trials
-timeBetweenTrials = 2;
+rsvp.timeBetweenTrials = 2;
 
 %% Create Response Matrix
 
-% This is a X column matrix:
-% 1st column: ID
-% 2nd column: Training
-% 3rd column: Reward (0 = Small reward, Large reward)
-% 4th column: Condition (1 = DC_male, 2 = DC_female, 3 = CC_male, 4 =
+respMatRSVP.ID = 0; 
+respMatRSVP.training = 0;
+respMatRSVP.reward = 0; %(1 = Small reward, 2 = Large reward)
+respMatRSVP.condition = 0; %(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 =
 % CC_female, 5 = BC_male , 6 = BC_female)
-% 5th column: Nb Trial
-% 6th column: Nb Block
-% 7th column: RTs
-% 8th column: Response
-% 9th column: posCritDist (critical distractor position between 4 & 8)
-% 10th column: posTarget (target either 2 or 4 position after posCritDist)
-% 11th column: distractor;
-% 12th column: target;
-
-respMatColumnsRSVP = ["ID", "Training","Reward","Condition", "Nb Trial", "Nb Block", ...
-    "RTs", "Response", "posCritDist", "posTarget","distractor","target"];
+respMatRSVP.block = 0; 
+respMatRSVP.trial = 0; 
+respMatRSVP.RTs = 0; 
+respMatRSVP.response = 0; %(1 = left key / oui; 2 = right key / non)
+respMatRSVP.posCritDist = 0; 
+respMatRSVP.posTarget = 0; 
+respMatRSVP.distractor = 0; 
+respMatRSVP.target = 0; 

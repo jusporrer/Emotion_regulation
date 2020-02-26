@@ -70,10 +70,10 @@ try
         
     else
         % Training Period
-        [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
+        %[respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
         
         % Experiment without Training
-        [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
+        %[respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
         
         DrawFormattedText(window, finiRSVP, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
@@ -97,10 +97,10 @@ try
     else
         
         % Training Period
-        [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
+        %[respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
         
         % Experiment without Training
-        [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
+        %[respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
         
         DrawFormattedText(window, finiRSVP, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
@@ -115,18 +115,18 @@ try
     end
     
     fileNameVS = [ 'results/',num2str(ID), '_visual_search.mat'];
-    data_visual_search = [respMatColumnsVS; respMat_training_visual_search; respMat_visual_search];
+    data_visual_search = [respMat_training_visual_search, respMat_visual_search];
     save(fileNameVS, 'data_visual_search');
     
-    fileNameRSVP = ['results/',num2str(ID),'_rsvp.mat'];
-    data_rsvp = [respMatColumnsRSVP; respMat_training_rsvp; respMat_rsvp];
-    save(fileNameRSVP, 'data_rsvp');
-    
+%     fileNameRSVP = ['results/',num2str(ID),'_rsvp.mat'];
+%     data_rsvp = [respMat_training_rsvp, respMat_rsvp];
+%     save(fileNameRSVP, 'data_rsvp');
+%     
     sca;
     
     % Check if file was saved -> if problem, save matrices manually
     
-    if isfile(fileNameVS) && isfile(fileNameRSVP)
+    if isfile(fileNameVS) %&& isfile(fileNameRSVP)
         warningMessage = sprintf('End experiment: all data was saved correctly.');
         uiwait(msgbox(warningMessage));
     else
