@@ -89,7 +89,12 @@ try
         nTrials = rsvp.nTrialsTrain;
         condition = ones(1,6); % the only condition for traning
         
-        DrawFormattedText(window, instRSVP, 'center', 'center', black);
+        DrawFormattedText(window, instRSVP1, 'center', 'center', black);
+        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        Screen('Flip', window);
+        KbStrokeWait;
+        
+        DrawFormattedText(window, instRSVP2, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
         Screen('Flip', window);
         KbStrokeWait;
@@ -222,13 +227,15 @@ try
                 respTime = GetSecs;
                 
                 if condition(block) == 1 || condition(block) == 3 || condition(block) == 5
-                    DrawFormattedText(window, 'Was there a women?', 'center', screenYpixels*0.5, black);
-                    DrawFormattedText(window, ' Oui / Non ', 'center', screenYpixels*0.65, black);
+                    Screen('TextSize', window, 50);
+                    DrawFormattedText(window, femRSVP, 'center', screenYpixels*0.5, black);
+                    DrawFormattedText(window, respRSVP, 'center', screenYpixels*0.65, black);
                     Screen('Flip', window);
                     
                 elseif condition(block) == 2 || condition(block) == 4 || condition(block) == 6
-                    DrawFormattedText(window, 'Was there a man?', 'center', screenYpixels*0.5, black);
-                    DrawFormattedText(window, ' Oui / Non ', 'center', screenYpixels*0.65, black);
+                    Screen('TextSize', window, 50);
+                    DrawFormattedText(window, maleRSVP, 'center', screenYpixels*0.5, black);
+                    DrawFormattedText(window, respRSVP, 'center', screenYpixels*0.65, black);
                     Screen('Flip', window);
                 end
                 

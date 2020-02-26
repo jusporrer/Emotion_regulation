@@ -59,7 +59,7 @@ try
     nx = 4;
     dx = (0.8/nx);
     % Nb img on y-axis
-    ny = 3;
+    ny = 4;
     dy = (0.8/ny);
     
     % Use meshgrid to create equally spaced coordinates in the X and Y
@@ -67,7 +67,7 @@ try
     
     % Scale the grid so that it is in pixel coordinates
     pixelScaleX = screenXpixels / (dx*2);
-    pixelScaleY = screenYpixels / (dy*1.5); % (1.5 for 3 img, 2 for 4 img)
+    pixelScaleY = screenYpixels / (dy*2); % (1.5 for 3 img, 2 for 4 img)
     x = x .* pixelScaleX;
     y = y .* pixelScaleY;
     
@@ -84,7 +84,12 @@ try
         nTrials = vs.nTrialsTrain;
         condition = ones(1,6); % the only condition for training
         
-        DrawFormattedText(window, instVS, 'center', 'center', black);
+        DrawFormattedText(window, instVS1, 'center', 'center', black);
+        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        Screen('Flip', window);
+        KbStrokeWait;
+        
+        DrawFormattedText(window, instVS2, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
         Screen('Flip', window);
         KbStrokeWait;
@@ -119,6 +124,7 @@ try
     
     for block = 1:nBlocks
         
+        Screen('TextSize', window, 50);
         if condition(block) == 1
             DrawFormattedText(window, DC_VS, 'center', 'center', black);
             DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);

@@ -61,6 +61,11 @@ try
     Screen('Flip', window);
     KbStrokeWait;
     
+    DrawFormattedText(window, reward, 'center', 'center', black);
+    DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+    Screen('Flip', window);
+    KbStrokeWait;
+    
     %% If last digit ID even -> VS first (odd -> RSVP first)
     
 %     if rem(ID,2)==0
@@ -116,7 +121,7 @@ try
 %     end
     
     %% End of the experiment (Save results)
-    
+    Screen('TextSize', window, 30);
     DrawFormattedText(window, fini, 'center', 'center', black);
     Screen('Flip', window);
     KbStrokeWait;
