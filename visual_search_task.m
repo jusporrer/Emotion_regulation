@@ -109,6 +109,7 @@ try
         condition = [Shuffle(1:2:6), Shuffle(1:2:6)];
         
         DrawFormattedText(window, trainingFiniVS, 'center', 'center', black);
+        DrawFormattedText(window, question, 'center', screenYpixels*0.7, black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
         Screen('Flip', window);
         KbStrokeWait;
@@ -124,31 +125,22 @@ try
     
     for block = 1:nBlocks
         
-        Screen('TextSize', window, 50);
+        
         if condition(block) == 1
-            DrawFormattedText(window, DC_VS, 'center', 'center', black);
-            DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-            Screen('Flip', window);
-            KbStrokeWait;
-            
+            text = DC_VS;
         elseif condition(block) == 3
-            DrawFormattedText(window, CC_fem_VS, 'center', 'center', black);
-            DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-            Screen('Flip', window);
-            KbStrokeWait;
-            
-        elseif condition(block) == 4
-            DrawFormattedText(window, CC_male_VS, 'center', 'center', black);
-            DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-            Screen('Flip', window);
-            KbStrokeWait;
-            
+            text = CC_fem_VS;
+        elseif condition(block) == 4 %% Need to add between subjects if loop 
+            text = CC_male_VS;
         elseif condition(block) == 5
-            DrawFormattedText(window, BC_VS, 'center', 'center', black);
-            DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-            Screen('Flip', window);
-            KbStrokeWait;
+            text = BC_VS;
         end
+        Screen('TextSize', window, 50);
+        DrawFormattedText(window, text , 'center', 'center', black);
+        Screen('TextSize', window, 30);
+        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        Screen('Flip', window);
+        KbStrokeWait;
         
         for trial = 1:nTrials
             

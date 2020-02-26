@@ -10,7 +10,7 @@ vs.nTrialsExp = 1;
 
 % Number of blocks
 vs.nBlocksTrain = 1;
-vs.nBlocksExp = 1;
+vs.nBlocksExp = 6;
 
 % Number of stimuli ( needs to be < 12 and multiple of 4)
 vs.setSize = 8;

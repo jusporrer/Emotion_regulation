@@ -6,7 +6,7 @@ rsvp.nTrialsExp = 1;
 
 % Number of blocks
 rsvp.nBlocksTrain = 1;
-rsvp.nBlocksExp = 1;
+rsvp.nBlocksExp = 6;
 
 % Number of trialsbefore a break
 rsvp.breakAfterTrials = 100;

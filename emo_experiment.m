@@ -68,37 +68,10 @@ try
     
     %% If last digit ID even -> VS first (odd -> RSVP first)
     
-%     if rem(ID,2)==0
-%         % Training Period
-%         [respMat_training_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, true);
-
-%         % Experiment without Training
-%         [respMat_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, false);
-%         
-%         DrawFormattedText(window, finiVS, 'center', 'center', black);
-%         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-%         Screen('Flip', window);
-%         KbStrokeWait;
-%         
-%     else
-        % Training Period
-        [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
-        
-        % Experiment without Training
-        [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
-        
-        DrawFormattedText(window, finiRSVP, 'center', 'center', black);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        Screen('Flip', window);
-        KbStrokeWait;
-%     end
-    
-    %% If last digit ID even -> RSVP second (odd -> VS second)
-    
-%     if rem(ID,2)==1
+    if rem(ID,2)==0
         % Training Period
         [respMat_training_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, true);
-        
+
         % Experiment without Training
         [respMat_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, false);
         
@@ -106,19 +79,48 @@ try
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
         Screen('Flip', window);
         KbStrokeWait;
-%     else
-%         
-%         %Training Period
-%         [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
-%         
-%         %Experiment without Training
-%         [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
-%         
-%         DrawFormattedText(window, finiRSVP, 'center', 'center', black);
-%         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-%         Screen('Flip', window);
-%         KbStrokeWait;
-%     end
+        
+    else
+        % Training Period
+        [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
+        
+        % Experiment without Training
+        [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
+        
+        Screen('TextSize', window, 30);
+        DrawFormattedText(window, finiRSVP, 'center', 'center', black);
+        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        Screen('Flip', window);
+        KbStrokeWait;
+     end
+    
+    %% If last digit ID even -> RSVP second (odd -> VS second)
+    
+     if rem(ID,2)==1
+        % Training Period
+        [respMat_training_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, true);
+        
+        % Experiment without Training
+        [respMat_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, false);
+        
+        Screen('TextSize', window, 30);
+        DrawFormattedText(window, finiVS, 'center', 'center', black);
+        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        Screen('Flip', window);
+        KbStrokeWait;
+    else
+        
+        %Training Period
+        [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
+        
+        %Experiment without Training
+        [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
+        
+        DrawFormattedText(window, finiRSVP, 'center', 'center', black);
+        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        Screen('Flip', window);
+        KbStrokeWait;
+    end
     
     %% End of the experiment (Save results)
     Screen('TextSize', window, 30);
@@ -144,13 +146,21 @@ try
     % Check if file was saved -> if problem, save matrices manually
     
     if isfile(fileNameVS) %&& isfile(fileNameRSVP)
-        warningMessage = sprintf(['End experiment: all data was saved correctly. \n ID: ', ...
-            num2str(ID), '\n Date: ',datestr(datetime('now'))]);
-        uiwait(msgbox(warningMessage));
+        warningMessage = sprintf([' End experiment: all data was saved correctly.                     \n ID : ', ...
+            num2str(ID), '\n Date : ',datestr(datetime('now'))]);
+        msg = msgbox(warningMessage);
+        amsg = get( msg, 'CurrentAxes' );
+        chmsg = get( amsg, 'Children' );
+        set( chmsg, 'FontSize', 11);
+        uiwait(msg);
     else
-        warningMessage = sprintf(['Warning: data was not saved correctly. \n ID: ', ...
-            num2str(ID), '\n Date: ',datestr(datetime('now'))]);
-        uiwait(msgbox(warningMessage));
+        warningMessage = sprintf([' Warning: data was not saved correctly.                  \n ID : ', ...
+            num2str(ID), '\n Date : ',datestr(datetime('now'))]);
+        msg = msgbox(warningMessage, 'Error','warn');
+        amsg = get( msg, 'CurrentAxes' );
+        chmsg = get( amsg, 'Children' );
+        set( chmsg, 'FontSize', 11);
+        uiwait(msg);
     end
     
     
