@@ -14,8 +14,8 @@ for i = 1:setSize
     %positions(:,i) = positionMatrix(:,a);  
     
     % Store the randomly selected coordinates and Add jitters 
-    positions(1,i) = positionMatrix(1,a) + ((positionMatrix(1,a)+50)-(positionMatrix(1,a)-50))*round(randn,1); % our current cell size is 272*272
-    positions(2,i) = positionMatrix(2,a) + ((positionMatrix(2,a)+20)-(positionMatrix(2,a)-20))*round(randn,1);
+    positions(1,i) = positionMatrix(1,a) + ((positionMatrix(1,a)+50)-(positionMatrix(1,a)-50))*round(randn,1); 
+    positions(2,i) = positionMatrix(2,a) + ((positionMatrix(2,a)+10)-(positionMatrix(2,a)-10))*round(randn,1);
     
     %positions(1,i) = positionMatrix(1,a);
     %positions(2,i) = positionMatrix(2,a);

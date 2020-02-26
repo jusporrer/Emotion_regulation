@@ -32,7 +32,7 @@ try
     load('exp_images/WFF_img_vs.mat','WFF_img_vs');
     
     [fearFemTexture,fearMaleTexture, neutralFemTexture, neutralMaleTexture, ...
-        sizeImg] = createImageTexture(WMN_img_vs, WMF_img_vs, WFN_img_vs, WFF_img_vs,window);
+        ] = createImageTexture(WMN_img_vs, WMF_img_vs, WFN_img_vs, WFF_img_vs,window);
     
     sizeImg = size(WMN_img_vs{1});
     
@@ -109,7 +109,6 @@ try
         condition = [Shuffle(1:2:6), Shuffle(1:2:6)];
         
         DrawFormattedText(window, trainingFiniVS, 'center', 'center', black);
-        DrawFormattedText(window, question, 'center', screenYpixels*0.7, black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
         Screen('Flip', window);
         KbStrokeWait;

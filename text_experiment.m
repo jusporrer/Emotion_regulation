@@ -5,15 +5,14 @@ reward = 'Vous allez jouer à deux jeux d’environ 20 min. \n\n Chaque jeu contine
 smallReward = 'Ce block vaut le moins d’argent'; 
 largeReward = 'Ce block vaut le plus d’argent'; 
 
-question = 'Si vous avez des questions, demandez à l’expérimentatrice  s’il vous plait. ';
 continuer = 'Appuyez sur [espace] pour continuer';
 fini = 'L’expérience est finie, merci d’avoir participé.';
 
 %% Text for RSVP
 instRSVP1 = 'Instructions pour le jeu de discrimination.';
-instRSVP2 = 'Pour ce jeu, on va vous présenter une séquence d’images. \n\n Chaque image représente un visage d’homme ou de femme qui a soit une expression faciale neutre ou de peur. \n\n Certaines images sont intactes et d’autres apparaissent mélangées.  \n\n Vous devez répondre si vous avez vu un visage intacte d’homme ou de femme parmi les images mélangées. \n\n Pour cela, utiliser la flèche gauche pour répondre « Oui » ou la flèche droite pour répondre « Non ». \n\n  Le but est de répondre le plus rapidement possible.  ';
+instRSVP2 = 'Pour ce jeu, on va vous présenter une séquence d’images. \n\n Chaque image représente un visage d’homme ou de femme qui a soit une expression faciale neutre ou de peur. \n\n Vous devez répondre si vous avez vu un visage intacte d’homme ou de femme parmi les images mélangées. \n\n Pour cela, utiliser la flèche gauche pour répondre « Oui » ou la flèche droite pour répondre « Non ». \n\n  Le but est de répondre le plus rapidement possible.  ';
 trainRSVP = 'Vous allez maintenant avoir plusieurs essais d’entrainement. \n\n Rappelez-vous d’utiliser la flèche gauche pour répondre « Oui » et la flèche droite pour répondre « Non ».  ';
-trainingFiniRSVP = 'L’entrainement du jeu de discrimination est terminé. ';
+trainingFiniRSVP = 'L’entrainement du jeu de discrimination est terminé. \n\n Si vous avez des questions, demandez à l’expérimentatrice  s’il vous plait. ';
 
 RSVP = 'Vous allez maintenant commencer le jeu. \n\n Rappelez-vous d’utiliser la flèche gauche pour répondre « Oui » et la flèche droite pour répondre « Non ».   ';
 
@@ -27,7 +26,7 @@ finiRSVP = 'Le jeu de discrimination est fini !';
 instVS1 = 'Instructions pour le jeu de recherche.';  
 instVS2 = 'Pour ce jeu, on va vous présenter plusieurs images en même temps. \n\n Chaque image représente un visage d’homme ou de femme qui a soit une expression faciale neutre ou de peur. \n\n Selon les instructions, vous devez cliquer avec la souris sur différentes catégories de visages. \n\n Par exemple, on va vous demander de cliquer sur tous les visages neutres, ou tous les visages peureux quel que soit le sexe. \n\n On peut aussi vous demander de trouver tous les visages de femme ou d’homme quel que soit leur expression faciale. \n\n Le but est de cliquer le plus rapidement possible même si vous faites des erreurs. ';
 trainVS = 'Vous allez maintenant avoir plusieurs essais d’entrainement. \n\n Rappelez-vous de cliquer sur le visage selon les instructions.';
-trainingFiniVS = 'L’entraînement du jeu de recherche est terminé. ';
+trainingFiniVS = 'L’entraînement du jeu de recherche est terminé.\n\n Si vous avez des questions, demandez à l’expérimentatrice  s’il vous plait. ';
 VS = 'Vous allez maintenant commencer le jeu. \n\n Rappelez-vous de cliquer sur le visage selon les instructions.';
 finiVS = 'Le jeu de recherche est fini ! ';
 DC_VS = 'Cliquez sur les visages neutres';

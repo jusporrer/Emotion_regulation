@@ -116,6 +116,7 @@ try
         %Experiment without Training
         [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
         
+        Screen('TextSize', window, 30);
         DrawFormattedText(window, finiRSVP, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
         Screen('Flip', window);

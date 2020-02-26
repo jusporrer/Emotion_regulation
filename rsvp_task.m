@@ -115,7 +115,6 @@ try
         condition = [Shuffle(1:6), Shuffle(1:6)];
         
         DrawFormattedText(window, trainingFiniRSVP, 'center', 'center', black);
-        DrawFormattedText(window, question, 'center', screenYpixels*0.7, black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
         Screen('Flip', window);
         KbStrokeWait;
