@@ -146,7 +146,7 @@ try
     
     % Check if file was saved -> if problem, save matrices manually
     
-    if isfile(fileNameVS) %&& isfile(fileNameRSVP)
+    if isfile(fileNameVS) && isfile(fileNameRSVP)
         warningMessage = sprintf([' End experiment: all data was saved correctly.                     \n ID : ', ...
             num2str(ID), '\n Date : ',datestr(datetime('now'))]);
         msg = msgbox(warningMessage);

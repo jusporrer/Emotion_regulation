@@ -153,6 +153,7 @@ try
             a = a + 1;
             rt = 0;
             response = [];
+            posRect = []; orientRect = [];
             respFF = 0; respNF = 0;
             respFM = 0; respNM = 0;
             
@@ -171,21 +172,6 @@ try
             respMatVS(a).posNF = posNF;
             respMatVS(a).posFM = posFM;
             respMatVS(a).posNM = posNM;
-            
-%             img = createSearchDisplay(WMN_img_vs, WMF_img_vs, WFN_img_vs, WFF_img_vs, vs.setSize,...
-%                 posFF,posNF, posFM, posNM, screenXpixels,screenYpixels);
-%             
-%             % Calculate image position (center of the screen)
-%             displaySize = size(img);
-%             posCenter = [(screenXpixels-displaySize(2))/2 (screenYpixels-displaySize(1))/2 (screenXpixels+displaySize(2))/2 (screenYpixels+displaySize(1))/2];
-%             imageDisplay = Screen('MakeTexture', window, img);
-%             Screen('DrawTexture', window, imageDisplay, [], posCenter);
-%             Screen('Flip', window);
-%             KbStrokeWait;
-%             
-%             % Initialise
-%             fearFem = zeros(1,vs.imgSetSize); neutralFem = zeros(1,vs.imgSetSize);
-%             fearMale = zeros(1,vs.imgSetSize); neutralMale = zeros(1,vs.imgSetSize);
             
             % Select vs.setSize/4 new faces
             for nb_img = 1: vs.imgSetSize
@@ -222,11 +208,10 @@ try
                     if insideFF == 1 && sum(buttons) == 1 && offsetSet == 0
                         respFF = respFF + 1;
                         response = [response 1];
-                        posFF(i,:) = [];
-                        orientFF(i) = [];
-                        fearFem(i) = [];
+                        posRect = [posRect ; [posFF(i,1)-15, posFF(i,2)-15,posFF(i,3)+15,posFF(i,4)+15]];
+                        orientRect = [orientRect ; orientFF(i)];
                         offsetSet = 1;
-                        break
+                        break  
                     end
                 end
                 
@@ -236,9 +221,8 @@ try
                     if insideNF == 1 && sum(buttons) == 1 && offsetSet == 0
                         respNF = respNF + 1;
                         response = [response 2];
-                        posNF(j,:) = [];
-                        orientNF(j) = [];
-                        neutralFem(j) = [];
+                        posRect = [posRect ; [posNF(j,1)-15, posNF(j,2)-15,posNF(j,3)+15,posNF(j,4)+15]];
+                        orientRect = [orientRect ; orientNF(j)];
                         offsetSet = 1;
                         break
                     end
@@ -250,9 +234,8 @@ try
                     if insideFM == 1 && sum(buttons) == 1 && offsetSet == 0
                         respFM = respFM + 1;
                         response = [response 3];
-                        posFM(y,:) = [];
-                        orientFM(y) = [];
-                        fearMale(y) = [];
+                        posRect = [posRect ; [posFM(y,1)-15, posFM(y,2)-15,posFM(y,3)+15,posFM(y,4)+15]];
+                        orientRect = [orientRect ; orientFM(y)];
                         offsetSet = 1;
                         break
                     end
@@ -264,12 +247,15 @@ try
                     if insideNM == 1 && sum(buttons) == 1 && offsetSet == 0
                         respNM = respNM + 1;
                         response = [response 4];
-                        posNM(z,:) = [];
-                        orientNM(z) = [];
-                        neutralMale(z) = [];
+                        posRect = [posRect ; [posNM(z,1)-15, posNM(z,2)-15,posNM(z,3)+15,posNM(z,4)+15]];
+                        orientRect = [orientRect ; orientNM(z)];
                         offsetSet = 1;
                         break
                     end
+                end
+                
+                if posRect
+                    Screen('FillRect', window, white , posRect');
                 end
                 
                 % if the participant clicks the right number it stops
@@ -279,9 +265,7 @@ try
                 end
                 
                 % Flip to the screen
-%                 Screen('DrawDots', window, [mx my], 15, [1 0 0], [], 1);
-
-
+                Screen('DrawDots', window, [mx my], 15, [1 0 0], [], 1);
                 Screen('Flip', window);
                 
                 % Release the button

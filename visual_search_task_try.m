@@ -89,7 +89,7 @@ try
     
     %% Settings
     % nTrialsExp, nTrialsTrain, setSize, targSetSize, distSetSize, ...
-    % nBlocksExp, nBlocksTrain, breakAfterTrials, ...
+    % nBlocksExp, nBlocksTrain, vs.breakAfterTrials, ...
     % trialTimeout, timeBetweenTrials
     
     settings_visual_search;
@@ -121,8 +121,8 @@ try
     
     %% Training or not
     
-    nBlocks = nBlocksExp;
-    nTrials = nTrialsExp;
+    nBlocks = vs.nBlocksExp;
+    nTrials = vs.nTrialsExp;
     
     %respMatVS = nan(nTrials*nBlocks, length(respMatColumnsVS)); % but nan not recommened for VBA ?
     
@@ -139,8 +139,7 @@ try
             % Initialise response
             a = a + 1;
             rt = 0;
-            posRectFF = []; orientRectFF = []; posRectNF = [];
-            posRectFM = []; posRectNM = [];
+            posRect = []; orientRect = [];
             response = [];
             respFF = 0; respNF = 0;
             respFM = 0; respNM = 0;
@@ -148,12 +147,12 @@ try
             % Draw fixation cross
             Screen('DrawLines', window, CoordsFix, lineWidthFix, black, [xCenter yCenter], 2);
             tFixation = Screen('Flip', window);
-            Screen('Flip', window, tFixation + fixationDuration - ifi, 0);
+            Screen('Flip', window, tFixation + vs.fixationDuration - ifi, 0);
             
             %Create position and orientation for search display (change every trial)
             [posFF, posNF, posFM, posNM, ...
                 orientFF, orientNF, orientFM, orientNM ] = ...
-                createPositions(positionMatrix, setSize, sizeImg);
+                createPositions(positionMatrix, vs.setSize, sizeImg);
             
             % Save pos for eye-tracking
             respMatVS(a).posFF = posFF;
@@ -161,7 +160,7 @@ try
             respMatVS(a).posFM = posFM;
             respMatVS(a).posNM = posNM;
             
-%             img = createSearchDisplay(WMN_img_vs, WMF_img_vs, WFN_img_vs, WFF_img_vs, setSize,...
+%             img = createSearchDisplay(WMN_img_vs, WMF_img_vs, WFN_img_vs, WFF_img_vs, vs.setSize,...
 %                 posFF,posNF, posFM, posNM, screenXpixels,screenYpixels);
 %             
 %             % Calculate image position (center of the screen)
@@ -174,11 +173,11 @@ try
 %             KbStrokeWait;
             
             % Initialise
-            fearFemEXP = zeros(1,setSize/4); neutralFemEXP = zeros(1,setSize/4);
-            fearMaleEXP = zeros(1,setSize/4); neutralMaleEXP = zeros(1,setSize/4);
+            fearFemEXP = zeros(1,vs.setSize/4); neutralFemEXP = zeros(1,vs.setSize/4);
+            fearMaleEXP = zeros(1,vs.setSize/4); neutralMaleEXP = zeros(1,vs.setSize/4);
             
-            % Select setSize/4 new faces
-            for nb_img = 1: setSize/4
+            % Select vs.setSize/4 new faces
+            for nb_img = 1: vs.setSize/4
                 fearFemEXP(nb_img) = fearFemTexture{randi([1 size(fearFemTexture,2)])};
                 neutralFemEXP(nb_img) = neutralFemTexture{randi([1 size(neutralFemTexture,2)])};
                 fearMaleEXP(nb_img) = fearMaleTexture{randi([1 size(fearMaleTexture,2)])};
@@ -194,7 +193,7 @@ try
             Priority(MaxPriority(window));
             Priority(2);
             
-            while GetSecs - startTime < trialTimeout
+            while GetSecs - startTime < vs.trialTimeout
                 [~,~,keyCode] = KbCheck;
                 respTime = GetSecs;
                 
@@ -214,16 +213,11 @@ try
                     if insideFF == 1 && sum(buttons) == 1 && offsetSet == 0
                         respFF = respFF + 1;
                         response = [response 1];
-                        posRectFF = [posRectFF ; posFF(i,:)];
-                        orientRectFF = [orientRectFF ; orientFF(i)];
-                        %posRectFF = [posRectFF(1)+orientFF(1), posRectFF(2)+orientFF(1), posRectFF(3)-orientFF(1), posRectFF(4)-orientFF(1)]
-                        %fearFemEXP(i) = [];
+                        posRect = [posRect ; [posFF(i,1)-15, posFF(i,2)-15,posFF(i,3)+15,posFF(i,4)+15]];
+                        orientRect = [orientRect ; orientFF(i)];
                         offsetSet = 1;
-                        break
+                        continue
                     end
-                end
-                if posRectFF
-                    Screen('FrameRect', window,  [0 0 1], posRectFF', 6);
                 end
                 
                 for j = 1: size(posNF,1)
@@ -232,11 +226,10 @@ try
                     if insideNF == 1 && sum(buttons) == 1 && offsetSet == 0
                         respNF = respNF + 1;
                         response = [response 2];
-                        posNF(j,:) = [];
-                        orientNF(j) = [];
-                        neutralFemEXP(j) = [];
+                        posRect = [posRect ; [posNF(j,1)-15, posNF(j,2)-15,posNF(j,3)+15,posNF(j,4)+15]];
+                        orientRect = [orientRect ; orientNF(j)];
                         offsetSet = 1;
-                        break
+                        continue
                     end
                 end
                 
@@ -246,11 +239,10 @@ try
                     if insideFM == 1 && sum(buttons) == 1 && offsetSet == 0
                         respFM = respFM + 1;
                         response = [response 3];
-                        posFM(y,:) = [];
-                        orientFM(y) = [];
-                        fearMaleEXP(y) = [];
+                        posRect = [posRect ; [posFM(y,1)-15, posFM(y,2)-15,posFM(y,3)+15,posFM(y,4)+15]];
+                        orientRect = [orientRect ; orientFM(y)];
                         offsetSet = 1;
-                        break
+                        continue
                     end
                 end
                 
@@ -260,16 +252,19 @@ try
                     if insideNM == 1 && sum(buttons) == 1 && offsetSet == 0
                         respNM = respNM + 1;
                         response = [response 4];
-                        posNM(z,:) = [];
-                        orientNM(z) = [];
-                        neutralMaleEXP(z) = [];
+                        posRect = [posRect ; [posNM(z,1)-15, posNM(z,2)-15,posNM(z,3)+15,posNM(z,4)+15]];
+                        orientRect = [orientRect ; orientNM(z)];
                         offsetSet = 1;
-                        break
+                        continue
                     end
                 end
                 
+                if posRect
+                    Screen('FillRect', window, white , posRect');
+                end
+                
                 % if the participant clicks the right number it stops
-                if length(response) == setSize/2
+                if length(response) == vs.setSize/2
                     rt = respTime - startTime;
                     break
                 end
@@ -302,7 +297,7 @@ try
             % Screen after trial
             Screen('FillRect', window, white);
             Screen('Flip', window);
-            WaitSecs(timeBetweenTrials);
+            WaitSecs(vs.timeBetwTrial);
             
         end
     end
