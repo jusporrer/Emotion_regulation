@@ -69,11 +69,11 @@ try
     %% If last digit ID even -> VS first (odd -> RSVP first)
     
     if rem(ID,2)==0
-        % Training Period
-        [respMat_training_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, true);
-
-        % Experiment without Training
-        [respMat_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, false);
+%         % Training Period
+%         [respMat_training_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, true);
+% 
+%         % Experiment without Training
+%         [respMat_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, false);
         
         DrawFormattedText(window, finiVS, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
@@ -81,10 +81,10 @@ try
         KbStrokeWait;
         
     else
-        % Training Period
+        %Training Period
         [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
         
-        % Experiment without Training
+        %Experiment without Training
         [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
         
         Screen('TextSize', window, 30);
@@ -97,11 +97,11 @@ try
     %% If last digit ID even -> RSVP second (odd -> VS second)
     
      if rem(ID,2)==1
-        % Training Period
-        [respMat_training_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, true);
-        
-        % Experiment without Training
-        [respMat_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, false);
+%         % Training Period
+%         [respMat_training_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, true);
+%         
+%         % Experiment without Training
+%         [respMat_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, false);
         
         Screen('TextSize', window, 30);
         DrawFormattedText(window, finiVS, 'center', 'center', black);
@@ -134,9 +134,9 @@ try
         mkdir results
     end
     
-    fileNameVS = [ 'results/',num2str(ID), '_visual_search.mat'];
-    data_visual_search = [respMat_training_visual_search, respMat_visual_search];
-    save(fileNameVS, 'data_visual_search');
+%     fileNameVS = [ 'results/',num2str(ID), '_visual_search.mat'];
+%     data_visual_search = [respMat_training_visual_search, respMat_visual_search];
+%     save(fileNameVS, 'data_visual_search');
     
     fileNameRSVP = ['results/',num2str(ID),'_rsvp.mat'];
     data_rsvp = [respMat_training_rsvp, respMat_rsvp];
@@ -146,7 +146,7 @@ try
     
     % Check if file was saved -> if problem, save matrices manually
     
-    if isfile(fileNameVS) && isfile(fileNameRSVP)
+    if  isfile(fileNameRSVP) %isfile(fileNameVS) &&
         warningMessage = sprintf([' End experiment: all data was saved correctly.                     \n ID : ', ...
             num2str(ID), '\n Date : ',datestr(datetime('now'))]);
         msg = msgbox(warningMessage);

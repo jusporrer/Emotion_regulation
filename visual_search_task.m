@@ -23,7 +23,7 @@ try
     
     %% Defines the text
     Screen('TextFont',window, 'Calibri');
-    Screen('TextSize', window, 30);
+    Screen('TextSize', window, 35);
     
     text_experiment;
     
@@ -208,10 +208,10 @@ try
                     if insideFF == 1 && sum(buttons) == 1 && offsetSet == 0
                         respFF = respFF + 1;
                         response = [response 1];
-                        posRect = [posRect ; [posFF(i,1)-15, posFF(i,2)-15,posFF(i,3)+15,posFF(i,4)+15]];
+                        posRect = [posRect ; [posFF(i,1)-35, posFF(i,2)-35,posFF(i,3)+35,posFF(i,4)+35]];
                         orientRect = [orientRect ; orientFF(i)];
                         offsetSet = 1;
-                        break  
+                        continue  
                     end
                 end
                 
@@ -221,10 +221,10 @@ try
                     if insideNF == 1 && sum(buttons) == 1 && offsetSet == 0
                         respNF = respNF + 1;
                         response = [response 2];
-                        posRect = [posRect ; [posNF(j,1)-15, posNF(j,2)-15,posNF(j,3)+15,posNF(j,4)+15]];
+                        posRect = [posRect ; [posNF(j,1)-35, posNF(j,2)-35,posNF(j,3)+35,posNF(j,4)+35]];
                         orientRect = [orientRect ; orientNF(j)];
                         offsetSet = 1;
-                        break
+                        continue
                     end
                 end
                 
@@ -234,10 +234,10 @@ try
                     if insideFM == 1 && sum(buttons) == 1 && offsetSet == 0
                         respFM = respFM + 1;
                         response = [response 3];
-                        posRect = [posRect ; [posFM(y,1)-15, posFM(y,2)-15,posFM(y,3)+15,posFM(y,4)+15]];
+                        posRect = [posRect ; [posFM(y,1)-35, posFM(y,2)-35,posFM(y,3)+35,posFM(y,4)+35]];
                         orientRect = [orientRect ; orientFM(y)];
                         offsetSet = 1;
-                        break
+                        continue
                     end
                 end
                 
@@ -247,10 +247,10 @@ try
                     if insideNM == 1 && sum(buttons) == 1 && offsetSet == 0
                         respNM = respNM + 1;
                         response = [response 4];
-                        posRect = [posRect ; [posNM(z,1)-15, posNM(z,2)-15,posNM(z,3)+15,posNM(z,4)+15]];
+                        posRect = [posRect ; [posNM(z,1)-35, posNM(z,2)-35,posNM(z,3)+35,posNM(z,4)+35]];
                         orientRect = [orientRect ; orientNM(z)];
                         offsetSet = 1;
-                        break
+                        continue
                     end
                 end
                 

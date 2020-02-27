@@ -58,6 +58,8 @@ try
     
     %% Download the images
     
+    % Faces 
+    
     load('exp_images/WMN_img_rsvp.mat','WMN_img_rsvp');
     load('exp_images/WMF_img_rsvp.mat','WMF_img_rsvp');
     load('exp_images/WFN_img_rsvp.mat','WFN_img_rsvp');
@@ -76,6 +78,19 @@ try
     
     posCenter = [(screenXpixels-sizeImg(2))/2 (screenYpixels-sizeImg(1))/2 (screenXpixels+sizeImg(2))/2 (screenYpixels+sizeImg(1))/2];
     
+    % Rewards 
+    
+    smallRwdImg =imread('exp_images\cent.jpg');
+    largeRwdImg = imread('exp_images\euro.jpg');
+    smallRwd = Screen('MakeTexture', window, smallRwdImg); 
+    largeRwd = Screen('MakeTexture', window, largeRwdImg); 
+    
+    posSmallRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/2) (screenYpixels/10 - size(smallRwdImg,1)/2) ...
+        (screenXpixels/10*9.5 + size(smallRwdImg,2)/2) (screenYpixels/10 + size(smallRwdImg,1)/2)];
+    
+    posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/2) (screenYpixels/10 - size(largeRwdImg,1)/2) ...
+        (screenXpixels/10*9.5 + size(largeRwdImg,2)/2) (screenYpixels/10 + size(largeRwdImg,1)/2)];
+    
     %% Create Condition Matrix
     % (1 = DC_male, 2 = DC_female, 3 = CC_male,
     % 4 = CC_female, 5 = BC_male , 6 = BC_female)
@@ -87,7 +102,7 @@ try
     if training
         nBlocks = rsvp.nBlocksTrain;
         nTrials = rsvp.nTrialsTrain;
-        condition = ones(1,6); % the only condition for traning
+        condition = Shuffle(1:6); % the only condition for traning
         
         DrawFormattedText(window, instRSVP1, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
@@ -109,10 +124,10 @@ try
         nBlocks = rsvp.nBlocksExp;
         nTrials = rsvp.nTrialsExp;
         
-        % Complete shuffle
-        % condition = Shuffle(repmat([1:6],1,2));
-        % Semi shuffle for LR and HR
-        condition = [Shuffle(1:6), Shuffle(1:6)];
+        condition = zeros(nBlocks,nTrials*6);
+        for i = 1:nBlocks
+            condition(i,:) = Shuffle(repmat((1:6),1,nTrials));
+        end 
         
         DrawFormattedText(window, trainingFiniRSVP, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
@@ -126,9 +141,37 @@ try
     end
     
     %% Actual Experiment
-    a = 0;
+    a = 1; instr = 0;
     
     for block = 1:nBlocks
+        
+        if training
+            textRwd = trainReward;
+            imgRwd = smallRwd;
+            posRwd = posSmallRwd;
+            rwd = 0;
+        else
+            if rem(block,2) == 1
+                textRwd = smallReward;
+                imgRwd = smallRwd;
+                posRwd = posSmallRwd;
+                rwd = 1; %(1 = Small reward, 2 = Large reward)
+            elseif rem(block,2) == 0
+                textRwd = largeReward;
+                imgRwd = largeRwd;
+                posRwd = posLargeRwd;
+                rwd = 2; %(1 = Small reward, 2 = Large reward)
+            end
+        end
+        
+        Screen('TextSize', window, 50);
+        DrawFormattedText(window, textRwd , 'center', screenYpixels*0.35 , black);
+        Screen('TextSize', window, 30);
+        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        
+        Screen('DrawTexture', window, imgRwd );
+        Screen('Flip', window);
+        KbStrokeWait;
         
         for trial = 1:nTrials
             
@@ -143,10 +186,12 @@ try
             
             % Draw the fixation cross in black
             Screen('DrawLines', window, CoordsFix, lineWidthFix, black, [xCenter yCenter], 2);
+            Screen('DrawTexture', window, imgRwd, [], posRwd);
             vbl = Screen('Flip', window);
             
             for frame = 1:isiTimeFrames - 1
                 Screen('DrawLines', window, CoordsFix, lineWidthFix, black, [xCenter yCenter], 2)
+                Screen('DrawTexture', window, imgRwd, [], posRwd);
                 vbl = Screen('Flip', window, vbl + (waitframes -0.5) * ifi);
             end
             
@@ -170,15 +215,15 @@ try
             
             % Create the set of stimuli according to condition
             
-            if condition(block) == 1 % DC_male: fearful male D, neutral fem & male T
+            if condition(block,trial) == 1 % DC_male: fearful male D, neutral fem & male T
                 distractor = fear(2); % 2
                 target = neutral(randi(2)); % 3 or 4
                 
-            elseif condition(block) == 2 % DC_fem: fearful female D, neutral fem & male T
+            elseif condition(block,trial) == 2 % DC_fem: fearful female D, neutral fem & male T
                 distractor = fear(1); % 1
                 target = neutral(randi(2)); % 3 or 4
                 
-            elseif condition(block) == 3 % CC_male: neutral or fearful man D, neutral or fearful female T
+            elseif condition(block,trial) == 3 % CC_male: neutral or fearful man D, neutral or fearful female T
                 distractor = male(randi(2)); % 2 or 4
                 if distractor == male(1)
                     target = fear(randi(2)); % 1 or 2
@@ -186,7 +231,7 @@ try
                     target = neutral(randi(2)); % 3 or 4
                 end
                 
-            elseif condition(block) == 4 % CC_female
+            elseif condition(block,trial) == 4 % CC_female
                 distractor = fem(randi(2));
                 if distractor == fem(1)
                     target = fear(randi(2));
@@ -194,11 +239,11 @@ try
                     target = neutral(randi(2));
                 end
                 
-            elseif condition(block) == 5 % BC_male: neutral male D, fearful male or female T
+            elseif condition(block,trial) == 5 % BC_male: neutral male D, fearful male or female T
                 distractor = neutral(2); % 4
                 target = fear(randi(2)); % 1 or 2
                 
-            elseif condition(block) == 6 % BC_fem : neutral female D, fearful male or female T
+            elseif condition(block,trial) == 6 % BC_fem : neutral female D, fearful male or female T
                 distractor = neutral(1); % 3
                 target = fear(randi(2)); % 1 or 2
             end
@@ -212,30 +257,36 @@ try
                     imageDisplay(nbImage) = img_scramble(distractor,nbImage);
                 end
             end
-            
+            Screen('DrawTexture', window, imgRwd, [], posRwd);
             flipTime = Screen('Flip', window);
             for nbImage = 1: rsvp.setSize
                 Screen(window, 'FillRect', white);
                 Screen('DrawTexture', window, imageDisplay(nbImage), [],posCenter,0);
+                Screen('DrawTexture', window, imgRwd, [], posRwd);
                 flipTime = Screen('Flip', window, flipTime + rsvp.imageDuration - ifi,0);
             end
             Screen(window, 'FillRect', white);
+            Screen('DrawTexture', window, imgRwd, [], posRwd);
             startTime = Screen('Flip', window, flipTime + rsvp.imageDuration - ifi,0);
             
             while GetSecs - startTime < rsvp.trialTimeout
                 [~,~,keyCode] = KbCheck;
                 respTime = GetSecs;
                 
-                if condition(block) == 1 || condition(block) == 3 || condition(block) == 5
+                if condition(block,trial) == 1 || condition(block,trial) == 3 || condition(block,trial) == 5
+                    instr = 1;
                     Screen('TextSize', window, 50);
                     DrawFormattedText(window, femRSVP, 'center', screenYpixels*0.5, black);
                     DrawFormattedText(window, respRSVP, 'center', screenYpixels*0.65, black);
+                    Screen('DrawTexture', window, imgRwd, [], posRwd);
                     Screen('Flip', window);
                     
-                elseif condition(block) == 2 || condition(block) == 4 || condition(block) == 6
+                elseif condition(block,trial) == 2 || condition(block,trial) == 4 || condition(block,trial) == 6
+                    instr = 2;
                     Screen('TextSize', window, 50);
                     DrawFormattedText(window, maleRSVP, 'center', screenYpixels*0.5, black);
                     DrawFormattedText(window, respRSVP, 'center', screenYpixels*0.65, black);
+                    Screen('DrawTexture', window, imgRwd, [], posRwd);
                     Screen('Flip', window);
                 end
                 
@@ -261,20 +312,23 @@ try
             % Record the trial data into the data matrix
             a = a + 1;
             respMatRSVP(a).ID = ID;
-            respMatRSVP(a).training = training;
-            %respMatRSVP(a).reward = reward(block); %(1 = Small reward, 2 = Large reward)
-            respMatRSVP(a).condition = condition(block); %(0 = DC, 1 = CC, 2 = BC)
+            respMatRSVP(a).training = training; %(1 = training, 2 = no training)
+            respMatRSVP(a).reward = rwd; %(1 = Small reward, 2 = Large reward)
+            respMatRSVP(a).condition = condition(block,trial); %(0 = DC, 1 = CC, 2 = BC)
             respMatRSVP(a).block = block;
             respMatRSVP(a).trial = trial;
             respMatRSVP(a).RTs = rt;
+            respMatRSVP(a).instr = instr;
             respMatRSVP(a).response = response;
             respMatRSVP(a).posCritDist = posCritDist;
             respMatRSVP(a).posTarget = posTarget;
             respMatRSVP(a).distractor = distractor;
             respMatRSVP(a).target = target;
             
+            
             % Screen after trial
             Screen('FillRect', window, white);
+            Screen('DrawTexture', window, imgRwd, [], posRwd);
             Screen('Flip', window);
             WaitSecs(rsvp.timeBetweenTrials);
             
