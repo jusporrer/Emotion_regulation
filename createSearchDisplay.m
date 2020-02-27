@@ -20,4 +20,5 @@ for i = 1: setSize/4
     img(floor(posFM(i,2)+1:posFM(i,4)),floor(posFM(i,1)+1:posFM(i,3)),:) = 255-fearMale{i};
     img(floor(posNM(i,2)+1:posNM(i,4)),floor(posNM(i,1)+1:posNM(i,3)),:) = 255-neutralMale{i};
 end 
+img = ones(screenYpixels,screenXpixels,3);
 end 

@@ -1,8 +1,8 @@
 %% Settings for the Emotional Rapid Serial Visual Presentation Task
 
 % Number of trials per set size
-rsvp.nTrialsTrain = 1;
-rsvp.nTrialsExp = 1;
+rsvp.nTrialsTrain = 5;
+rsvp.nTrialsExp = 2;
 
 % Number of blocks
 rsvp.nBlocksTrain = 1;

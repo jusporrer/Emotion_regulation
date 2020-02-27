@@ -13,6 +13,9 @@ try
     xCenter = coorCenter(1);
     yCenter = coorCenter(2);
     
+    % Set up alpha-blending for smooth (anti-aliased) lines
+    Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+    
     %% Timing Information
     
     % Query the frame duration
@@ -163,7 +166,7 @@ try
                 orientFF, orientNF, orientFM, orientNM ] = ...
                 createPositions(positionMatrix, vs.setSize, sizeImg);
             
-            % Save pos for eye-tracking 
+            % Save pos 
             respMatVS(a).posFF = posFF;
             respMatVS(a).posNF = posNF;
             respMatVS(a).posFM = posFM;
@@ -174,15 +177,15 @@ try
 %             
 %             % Calculate image position (center of the screen)
 %             displaySize = size(img);
-%              posCenter = [(screenXpixels-displaySize(2))/2 (screenYpixels-displaySize(1))/2 (screenXpixels+displaySize(2))/2 (screenYpixels+displaySize(1))/2];
+%             posCenter = [(screenXpixels-displaySize(2))/2 (screenYpixels-displaySize(1))/2 (screenXpixels+displaySize(2))/2 (screenYpixels+displaySize(1))/2];
 %             imageDisplay = Screen('MakeTexture', window, img);
 %             Screen('DrawTexture', window, imageDisplay, [], posCenter);
 %             Screen('Flip', window);
 %             KbStrokeWait;
-            
-            % Initialise
-            fearFem = zeros(1,vs.imgSetSize); neutralFem = zeros(1,vs.imgSetSize);
-            fearMale = zeros(1,vs.imgSetSize); neutralMale = zeros(1,vs.imgSetSize);
+%             
+%             % Initialise
+%             fearFem = zeros(1,vs.imgSetSize); neutralFem = zeros(1,vs.imgSetSize);
+%             fearMale = zeros(1,vs.imgSetSize); neutralMale = zeros(1,vs.imgSetSize);
             
             % Select vs.setSize/4 new faces
             for nb_img = 1: vs.imgSetSize
@@ -198,7 +201,7 @@ try
             % Screen priority
             Priority(MaxPriority(window));
             Priority(2);
-            
+  
             while GetSecs - startTime < vs.trialTimeout
                 [~,~,keyCode] = KbCheck;
                 respTime = GetSecs;
@@ -276,7 +279,9 @@ try
                 end
                 
                 % Flip to the screen
-                Screen('DrawDots', window, [mx my], 15, [1 0 0], [], 1);
+%                 Screen('DrawDots', window, [mx my], 15, [1 0 0], [], 1);
+
+
                 Screen('Flip', window);
                 
                 % Release the button

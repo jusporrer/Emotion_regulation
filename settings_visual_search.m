@@ -5,8 +5,8 @@
 vs.fixationDuration = 0.5;
 
 % Number of trials
-vs.nTrialsTrain = 1;
-vs.nTrialsExp = 1;
+vs.nTrialsTrain = 5;
+vs.nTrialsExp = 2;
 
 % Number of blocks
 vs.nBlocksTrain = 1;
