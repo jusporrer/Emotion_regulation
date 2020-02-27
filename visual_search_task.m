@@ -39,6 +39,19 @@ try
     
     sizeImg = size(WMN_img_vs{1});
     
+        % Rewards 
+    
+    smallRwdImg =imread('exp_images\cent.jpg');
+    largeRwdImg = imread('exp_images\euro.jpg');
+    smallRwd = Screen('MakeTexture', window, smallRwdImg); 
+    largeRwd = Screen('MakeTexture', window, largeRwdImg); 
+    
+    posSmallRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/2) (screenYpixels/10 - size(smallRwdImg,1)/2) ...
+        (screenXpixels/10*9.5 + size(smallRwdImg,2)/2) (screenYpixels/10 + size(smallRwdImg,1)/2)];
+    
+    posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/2) (screenYpixels/10 - size(largeRwdImg,1)/2) ...
+        (screenXpixels/10*9.5 + size(largeRwdImg,2)/2) (screenYpixels/10 + size(largeRwdImg,1)/2)];
+    
     %% Fixation cross
     
     [CoordsFix, lineWidthFix] = create_fix_cross();
@@ -80,12 +93,15 @@ try
     % Matrix of positions
     positionMatrix = [reshape(ceil(x), 1, nbPosition); reshape(ceil(y), 1, nbPosition)];
     
+    % Leave place for the coin 
+    positionMatrix(:,13) = [];
+    
     %% Training or not
     
     if training
         nBlocks = vs.nBlocksTrain;
         nTrials = vs.nTrialsTrain;
-        condition = ones(1,6); % the only condition for training
+        condition = 3; % the only condition for training
         
         DrawFormattedText(window, instVS1, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
@@ -106,10 +122,10 @@ try
         nBlocks = vs.nBlocksExp;
         nTrials = vs.nTrialsExp;
         
-        % Complete shuffle
-        % condition = Shuffle(repmat([1:6],1,2));
-        % Semi shuffle for LR and HR
-        condition = [Shuffle(1:2:6), Shuffle(1:2:6)];
+        condition = zeros(nBlocks,nTrials*3); % 3 condtions
+        for i = 1:nBlocks
+            condition(i,:) = cell2mat(Shuffle({ones(1,nTrials), repmat(3,1,nTrials), repmat(5,1,nTrials)}));
+        end 
         
         DrawFormattedText(window, trainingFiniVS, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
@@ -127,20 +143,47 @@ try
     
     for block = 1:nBlocks
         
+        if training
+            textRwd = trainReward;
+            imgRwd = smallRwd;
+            posRwd = posSmallRwd;
+            rwd = 0;
+        else
+            if rem(block,2) == 1
+                textRwd = smallReward;
+                imgRwd = smallRwd;
+                posRwd = posSmallRwd;
+                rwd = 1; %(1 = Small reward, 2 = Large reward)
+            elseif rem(block,2) == 0
+                textRwd = largeReward;
+                imgRwd = largeRwd;
+                posRwd = posLargeRwd;
+                rwd = 2; %(1 = Small reward, 2 = Large reward)
+            end
+        end
         
-        if condition(block) == 1
+        Screen('TextSize', window, 50);
+        DrawFormattedText(window, textRwd , 'center', screenYpixels*0.35 , black);
+        Screen('TextSize', window, 30);
+        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        
+        Screen('DrawTexture', window, imgRwd);
+        Screen('Flip', window);
+        KbStrokeWait;
+        
+        if condition(block,trial) == 1
             text = DC_VS;
-        elseif condition(block) == 3
-            text = CC_fem_VS;
-        elseif condition(block) == 4 %% Need to add between subjects if loop 
-            text = CC_male_VS;
-        elseif condition(block) == 5
+        elseif condition(block,trial) == 3
+            CC = {CC_fem_VS, CC_male_VS};
+            text = CC{randi(2)};
+        elseif condition(block,trial) == 5
             text = BC_VS;
         end
         Screen('TextSize', window, 50);
         DrawFormattedText(window, text , 'center', 'center', black);
         Screen('TextSize', window, 30);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        Screen('DrawTexture', window, imgRwd, [], posRwd);
         Screen('Flip', window);
         KbStrokeWait;
         
@@ -159,6 +202,7 @@ try
             
             % Draw fixation cross
             Screen('DrawLines', window, CoordsFix, lineWidthFix, black, [xCenter yCenter], 2);
+            Screen('DrawTexture', window, imgRwd, [], posRwd);
             tFixation = Screen('Flip', window);
             Screen('Flip', window, tFixation + vs.fixationDuration - ifi, 0);
             
@@ -182,6 +226,7 @@ try
             end
             
             % Start Time
+            Screen('DrawTexture', window, imgRwd, [], posRwd);
             startTime = Screen('Flip', window);
             
             % Screen priority
@@ -265,6 +310,7 @@ try
                 end
                 
                 % Flip to the screen
+                Screen('DrawTexture', window, imgRwd, [], posRwd);
                 Screen('DrawDots', window, [mx my], 15, [1 0 0], [], 1);
                 Screen('Flip', window);
                 
@@ -278,12 +324,12 @@ try
             % Save data 
             respMatVS(a).ID = ID;
             respMatVS(a).training = training;
-            %respMatVS(a).reward = reward; %(0 = Small reward, 1 = Large reward)
+            respMatVS(a).reward = reward; %(1 = Small reward, 2 = Large reward)
             respMatVS(a).condition = condition(block); %(0 = DC, 1 = CC, 2 = BC)
-            respMatVS(a).setSize = vs.setSize;
             respMatVS(a).block = block;
             respMatVS(a).trial = trial;
             respMatVS(a).RTs = rt;
+            respMatVS(a).instr = text;
             respMatVS(a).order = response;
             respMatVS(a).respFF = respFF;
             respMatVS(a).respNF = respNF;
@@ -292,6 +338,7 @@ try
             
             % Screen after trial
             Screen('FillRect', window, white);
+            Screen('DrawTexture', window, imgRwd, [], posRwd);
             Screen('Flip', window);
             WaitSecs(vs.timeBetwTrial);
             

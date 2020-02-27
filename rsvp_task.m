@@ -102,7 +102,7 @@ try
     if training
         nBlocks = rsvp.nBlocksTrain;
         nTrials = rsvp.nTrialsTrain;
-        condition = Shuffle(1:6); % the only condition for traning
+        condition = Shuffle(1:6);
         
         DrawFormattedText(window, instRSVP1, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
@@ -314,7 +314,7 @@ try
             respMatRSVP(a).ID = ID;
             respMatRSVP(a).training = training; %(1 = training, 2 = no training)
             respMatRSVP(a).reward = rwd; %(1 = Small reward, 2 = Large reward)
-            respMatRSVP(a).condition = condition(block,trial); %(0 = DC, 1 = CC, 2 = BC)
+            respMatRSVP(a).condition = condition(block,trial); % (1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
             respMatRSVP(a).block = block;
             respMatRSVP(a).trial = trial;
             respMatRSVP(a).RTs = rt;
@@ -324,7 +324,6 @@ try
             respMatRSVP(a).posTarget = posTarget;
             respMatRSVP(a).distractor = distractor;
             respMatRSVP(a).target = target;
-            
             
             % Screen after trial
             Screen('FillRect', window, white);
