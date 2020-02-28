@@ -104,21 +104,14 @@ try
         nTrials = rsvp.nTrialsTrain;
         condition = Shuffle(1:6);
         
-        DrawFormattedText(window, instRSVP1, 'center', 'center', black);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        Screen('Flip', window);
-        KbStrokeWait;
+        instruction = {instRSVP1,instRSVP2,trainRSVP};
         
-        DrawFormattedText(window, instRSVP2, 'center', 'center', black);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        Screen('Flip', window);
-        KbStrokeWait;
-        
-        DrawFormattedText(window, trainRSVP, 'center', 'center', black);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        Screen('Flip', window);
-        KbStrokeWait;
-        
+        for i = 1:length(instruction)     
+            DrawFormattedText(window, instruction{i}, 'center', 'center', black);
+            DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+            Screen('Flip', window);
+            KbStrokeWait;
+        end 
         
     else
         nBlocks = rsvp.nBlocksExp;
@@ -312,8 +305,8 @@ try
             % Record the trial data into the data matrix
             a = a + 1;
             respMatRSVP(a).ID = ID;
-            respMatRSVP(a).training = training; %(1 = training, 2 = no training)
-            respMatRSVP(a).reward = rwd; %(1 = Small reward, 2 = Large reward)
+            respMatRSVP(a).training = training; %(1 = training, 0 = no training)
+            respMatRSVP(a).reward = rwd; %(0 = traning, 1 = Small reward, 2 = Large reward)
             respMatRSVP(a).condition = condition(block,trial); % (1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
             respMatRSVP(a).block = block;
             respMatRSVP(a).trial = trial;

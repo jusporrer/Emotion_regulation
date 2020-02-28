@@ -1,12 +1,12 @@
 %% Settings for the Emotional Rapid Serial Visual Presentation Task
 
 % Number of trials per set size
-rsvp.nTrialsTrain = 1;
-rsvp.nTrialsExp = 2;
+rsvp.nTrialsTrain = 1; 
+rsvp.nTrialsExp = 2; 
 
 % Number of blocks
-rsvp.nBlocksTrain = 1;
-rsvp.nBlocksExp = 8;
+rsvp.nBlocksTrain = 1; %2
+rsvp.nBlocksExp = 8; 
 
 % Number of trialsbefore a break
 rsvp.breakAfterTrials = 100;
@@ -28,8 +28,7 @@ rsvp.timeBetweenTrials = 2;
 respMatRSVP.ID = 0; 
 respMatRSVP.training = 0;
 respMatRSVP.reward = 0; %(1 = Small reward, 2 = Large reward)
-respMatRSVP.condition = 0; %(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 =
-% CC_female, 5 = BC_male , 6 = BC_female)
+respMatRSVP.condition = 0; %(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
 respMatRSVP.block = 0; 
 respMatRSVP.trial = 0; 
 respMatRSVP.RTs = 0; 
