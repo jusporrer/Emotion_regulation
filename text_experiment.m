@@ -1,7 +1,7 @@
 %% General Text
 
 bonjour = 'Bonjour ! \n\n Merci d’avoir accepté de participer à notre expérience.';
-reward = 'Vous allez jouer à deux jeux d’environ 20 min. \n\n Chaque jeu continent des blocs qui valent plus ou moins d’argent avec différentes sommes mises en jeu. \n\n \n\n  Par exemple,  il y a des blocs dont la récompense est de 0.5 euros et d’autres de 2 euros. \n\n Le gain de chaque bloc est proportionnel à votre performance. ( ??) ';
+reward = 'Vous allez jouer à deux jeux d’environ 20 min chacun. \n\n Chaque jeu continent des blocs qui valent plus ou moins d’argent avec différentes sommes mises en jeu. \n\n \n\n  Par exemple,  il y a des blocs dont la récompense est de 0.5 euros et d’autres de 2 euros. \n\n Le gain de chaque bloc est proportionnel à votre performance. ';
 trainReward = 'La somme d’argent que peut vous rapporter un bloc sera affichée à l’écran. \n Exemple :';
 smallReward = 'Pour ce bloc, la somme en jeu est: '; 
 largeReward = 'Pour ce bloc, la somme en jeu est: '; 

@@ -134,21 +134,24 @@ try
             imgRwd = smallRwd;
             posRwd = posSmallRwd;
             rwd = 0;
+            sizeText = 30;
         else
             if rem(block,2) == 1
                 textRwd = smallReward;
                 imgRwd = smallRwd;
                 posRwd = posSmallRwd;
                 rwd = 1; %(1 = Small reward, 2 = Large reward)
+                sizeText = 50;
             elseif rem(block,2) == 0
                 textRwd = largeReward;
                 imgRwd = largeRwd;
                 posRwd = posLargeRwd;
                 rwd = 2; %(1 = Small reward, 2 = Large reward)
+                sizeText = 50;
             end
         end
         
-        Screen('TextSize', window, 50);
+        Screen('TextSize', window, sizeText);
         DrawFormattedText(window, textRwd , 'center', screenYpixels*0.35 , black);
         Screen('TextSize', window, 30);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
