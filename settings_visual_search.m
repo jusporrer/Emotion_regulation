@@ -6,7 +6,7 @@ vs.fixationDuration = 0.5;
 
 % Number of trials 
 vs.nTrialsTrain = 9; % expected : 9 -> 3/condition
-vs.nTrialsExp = 6; % expected : 16
+vs.nTrialsExp = 48; % expected : 48 -> 16/condition
 
 % Number of blocks
 vs.nBlocksTrain = 1; % expected : 1
@@ -27,6 +27,7 @@ vs.timeBetwTrial = 2;
 
 %% Create Response Matrix
 
+respMatVS.cfg = [];
 respMatVS.ID = 0; 
 respMatVS.training = 0;
 respMatVS.reward = 0; %(0 = training, 1 = Small reward, 2 = Large reward)
@@ -44,5 +45,3 @@ respMatVS.posFF = [];
 respMatVS.posNF = [];
 respMatVS.posFM = [];
 respMatVS.posNM = [];
-
-

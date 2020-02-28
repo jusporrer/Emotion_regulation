@@ -2,7 +2,7 @@
 try
     %% Initialise screen
     Screen('Preference', 'SkipSyncTests', 1) % Need to be put to 0 when testing
-    Screen('Preference', 'SuppressAllWarnings', 1)
+    Screen('Preference', 'SuppressAllWarnings', 1) % supress warning screen
     Screen('Preference','VisualDebugLevel', 0);  % supress start screen
     
     HideCursor;
@@ -82,10 +82,10 @@ try
         
     else
         %Training Period
-%         [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
-%         
-%         %Experiment without Training
-%         [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
+        [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
+        
+        %Experiment without Training
+        [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
         
         Screen('TextSize', window, 30);
         DrawFormattedText(window, finiRSVP, 'center', 'center', black);
@@ -111,10 +111,10 @@ try
     else
         
         %Training Period
-        %[respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
+        [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
         
         %Experiment without Training
-        %[respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
+        [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
         
         Screen('TextSize', window, 30);
         DrawFormattedText(window, finiRSVP, 'center', 'center', black);
@@ -138,15 +138,15 @@ try
     data_visual_search = [respMat_training_visual_search, respMat_visual_search];
     save(fileNameVS, 'data_visual_search');
     
-%     fileNameRSVP = ['results/',num2str(ID),'_rsvp.mat'];
-%     data_rsvp = [respMat_training_rsvp, respMat_rsvp];
-%     save(fileNameRSVP, 'data_rsvp');
+    fileNameRSVP = ['results/',num2str(ID),'_rsvp.mat'];
+    data_rsvp = [respMat_training_rsvp, respMat_rsvp];
+    save(fileNameRSVP, 'data_rsvp');
     
     sca;
     
     % Check if file was saved -> if problem, save matrices manually
     
-    if  isfile(fileNameVS) %&& isfile(fileNameRSVP) 
+    if isfile(fileNameRSVP) && isfile(fileNameVS)
         warningMessage = sprintf([' End experiment: all data was saved correctly.                     \n ID : ', ...
             num2str(ID), '\n Date : ',datestr(datetime('now'))]);
         msg = msgbox(warningMessage);

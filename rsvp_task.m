@@ -51,15 +51,12 @@ try
     [CoordsFix, lineWidthFix] = create_fix_cross();
     
     %% Settings
-    % rsvp.rsvp.nTrialsExp, rsvp.rsvp.nTrialsTrain, nBlocksExp, nBlocksTrain,  ...
-    % rsvp.trialTimeout, timeBetweenTrials
     
     settings_rsvp;
     
     %% Download the images
     
     % Faces 
-    
     load('exp_images/WMN_img_rsvp.mat','WMN_img_rsvp');
     load('exp_images/WMF_img_rsvp.mat','WMF_img_rsvp');
     load('exp_images/WFN_img_rsvp.mat','WFN_img_rsvp');
@@ -91,18 +88,12 @@ try
     posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/2) (screenYpixels/10 - size(largeRwdImg,1)/2) ...
         (screenXpixels/10*9.5 + size(largeRwdImg,2)/2) (screenYpixels/10 + size(largeRwdImg,1)/2)];
     
-    %% Create Condition Matrix
-    % (1 = DC_male, 2 = DC_female, 3 = CC_male,
-    % 4 = CC_female, 5 = BC_male , 6 = BC_female)
-    
-    % the condition is created inside the training or not
-    
     %% Training or not
     
     if training
         nBlocks = rsvp.nBlocksTrain;
         nTrials = rsvp.nTrialsTrain;
-        condition = Shuffle(1:6);
+        condition = [Shuffle(1:6), Shuffle(1:6)];
         
         instruction = {instRSVP1,instRSVP2,trainRSVP};
         
@@ -180,19 +171,19 @@ try
             % Draw the fixation cross in black
             Screen('DrawLines', window, CoordsFix, lineWidthFix, black, [xCenter yCenter], 2);
             Screen('DrawTexture', window, imgRwd, [], posRwd);
-            vbl = Screen('Flip', window);
+            flipTime = Screen('Flip', window);
             
             for frame = 1:isiTimeFrames - 1
                 Screen('DrawLines', window, CoordsFix, lineWidthFix, black, [xCenter yCenter], 2)
                 Screen('DrawTexture', window, imgRwd, [], posRwd);
-                vbl = Screen('Flip', window, vbl + (waitframes -0.5) * ifi);
+                flipTime = Screen('Flip', window, flipTime + (waitframes -0.5) * ifi);
             end
             
             % Select new images every trial
-            img = [fearFemTexture{randi([1 size(fearFemTexture,2)])},... % 1
-                fearMaleTexture{randi([1 size(fearMaleTexture,2)])}, ... % 2
-                neutralFemTexture{randi([1 size(neutralFemTexture,2)])}, ... % 3
-                neutralMaleTexture{randi([1 size(neutralMaleTexture,2)])}]; % 4
+            img = [fearFemTexture{randi([1 size(fearFemTexture,2)],1,2)};... % 1
+                fearMaleTexture{randi([1 size(fearMaleTexture,2)],1,2)}; ... % 2
+                neutralFemTexture{randi([1 size(neutralFemTexture,2)],1,2)}; ... % 3
+                neutralMaleTexture{randi([1 size(neutralMaleTexture,2)],1,2)}]; % 4
             
             img_scramble = [fearFemScramble{randi([1 size(fearFemScramble,2)],1,rsvp.setSize)};... % 1
                 fearMaleScramble{randi([1 size(fearMaleScramble,2)],1,rsvp.setSize)}; ... % 2
@@ -204,32 +195,32 @@ try
             
             % Create new random position of D and T on each trial
             posCritDist = randi([4,8]);
-            posTarget = posCritDist + randi(2)*2; % either 200 ms or 400 ms after
+            posTarget = posCritDist + randi(2)*2; % either 200 ms or 400 ms after, position between 6 and 12
             
             % Create the set of stimuli according to condition
             
             if condition(block,trial) == 1 % DC_male: fearful male D, neutral fem & male T
-                distractor = fear(2); % 2
+                distractor = fear(2); % 2  
                 target = neutral(randi(2)); % 3 or 4
                 
             elseif condition(block,trial) == 2 % DC_fem: fearful female D, neutral fem & male T
                 distractor = fear(1); % 1
                 target = neutral(randi(2)); % 3 or 4
                 
-            elseif condition(block,trial) == 3 % CC_male: neutral or fearful man D, neutral or fearful female T
+            elseif condition(block,trial) == 3 % CC_male: neutral man D, neutral male or female T OR fearful man D, fearful male or female T
                 distractor = male(randi(2)); % 2 or 4
-                if distractor == male(1)
+                if distractor == male(1) % 2
                     target = fear(randi(2)); % 1 or 2
-                elseif distractor == male(2)
+                elseif distractor == male(2) % 4
                     target = neutral(randi(2)); % 3 or 4
                 end
                 
-            elseif condition(block,trial) == 4 % CC_female
-                distractor = fem(randi(2));
-                if distractor == fem(1)
-                    target = fear(randi(2));
-                elseif distractor == fem(2)
-                    target = neutral(randi(2));
+            elseif condition(block,trial) == 4 % CC_female: neutral female D, neutral male or female T OR fearful female D, fearful male or female T
+                distractor = fem(randi(2)); % 1 or 3
+                if distractor == fem(1) % 1
+                    target = fear(randi(2)); % 1 or 2
+                elseif distractor == fem(2) % 3
+                    target = neutral(randi(2)); % 3 or 4 
                 end
                 
             elseif condition(block,trial) == 5 % BC_male: neutral male D, fearful male or female T
@@ -243,21 +234,21 @@ try
             
             for nbImage = 1: rsvp.setSize
                 if nbImage == posCritDist
-                    imageDisplay(nbImage) = img(distractor);
+                    imageDisplay(nbImage) = img(distractor,1);
                 elseif nbImage == posTarget
-                    imageDisplay(nbImage) = img(target);
+                    imageDisplay(nbImage) = img(target,2);
                 else
                     imageDisplay(nbImage) = img_scramble(distractor,nbImage);
                 end
             end
-            Screen('DrawTexture', window, imgRwd, [], posRwd);
-            flipTime = Screen('Flip', window);
+            
             for nbImage = 1: rsvp.setSize
                 Screen(window, 'FillRect', white);
                 Screen('DrawTexture', window, imageDisplay(nbImage), [],posCenter,0);
                 Screen('DrawTexture', window, imgRwd, [], posRwd);
                 flipTime = Screen('Flip', window, flipTime + rsvp.imageDuration - ifi,0);
             end
+            
             Screen(window, 'FillRect', white);
             Screen('DrawTexture', window, imgRwd, [], posRwd);
             startTime = Screen('Flip', window, flipTime + rsvp.imageDuration - ifi,0);
@@ -304,6 +295,7 @@ try
             
             % Record the trial data into the data matrix
             a = a + 1;
+            respMatRSVP(a).cfg = rsvp;
             respMatRSVP(a).ID = ID;
             respMatRSVP(a).training = training; %(1 = training, 0 = no training)
             respMatRSVP(a).reward = rwd; %(0 = traning, 1 = Small reward, 2 = Large reward)

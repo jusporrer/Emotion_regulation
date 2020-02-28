@@ -59,7 +59,6 @@ try
     %% Settings
 
     settings_visual_search;
-    respMatVS.cfg = vs;
     
     %% Create Positions for the Faces
     
@@ -122,9 +121,9 @@ try
         end
         
         % Condition matrix (1 = DC, 3 = CC, 5 = BC)
-        condition = zeros(nBlocks,nTrials*3);
+        condition = zeros(nBlocks,nTrials);
         for i = 1:nBlocks
-            condition(i,:) = cell2mat(Shuffle({ones(1,nTrials), repmat(3,1,nTrials), repmat(5,1,nTrials)}));
+            condition(i,:) = cell2mat(Shuffle({ones(1,nTrials/3), repmat(3,1,nTrials/3), repmat(5,1,nTrials/3)}));
         end 
         
     end
@@ -309,6 +308,7 @@ try
             end
             
             % Save data 
+            respMatVS(a).cfg = vs;
             respMatVS(a).ID = ID;
             respMatVS(a).training = training;
             respMatVS(a).reward = rwd; %(1 = Small reward, 2 = Large reward)
