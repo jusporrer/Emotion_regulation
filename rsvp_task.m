@@ -82,11 +82,11 @@ try
     smallRwd = Screen('MakeTexture', window, smallRwdImg); 
     largeRwd = Screen('MakeTexture', window, largeRwdImg); 
     
-    posSmallRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/2) (screenYpixels/10 - size(smallRwdImg,1)/2) ...
-        (screenXpixels/10*9.5 + size(smallRwdImg,2)/2) (screenYpixels/10 + size(smallRwdImg,1)/2)];
+    posSmallRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/6) (screenYpixels/10 - size(smallRwdImg,1)/6) ...
+        (screenXpixels/10*9.5 + size(smallRwdImg,2)/6) (screenYpixels/10 + size(smallRwdImg,1)/6)];
     
-    posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/2) (screenYpixels/10 - size(largeRwdImg,1)/2) ...
-        (screenXpixels/10*9.5 + size(largeRwdImg,2)/2) (screenYpixels/10 + size(largeRwdImg,1)/2)];
+    posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/6) (screenYpixels/10 - size(largeRwdImg,1)/6) ...
+        (screenXpixels/10*9.5 + size(largeRwdImg,2)/6) (screenYpixels/10 + size(largeRwdImg,1)/6)];
     
     %% Training or not
     

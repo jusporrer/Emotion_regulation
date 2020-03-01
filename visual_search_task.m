@@ -46,11 +46,11 @@ try
     largeRwd = Screen('MakeTexture', window, largeRwdImg); 
     
     % Position in the top left corner
-    posSmallRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/2) (screenYpixels/10 - size(smallRwdImg,1)/2) ...
-        (screenXpixels/10*9.5 + size(smallRwdImg,2)/2) (screenYpixels/10 + size(smallRwdImg,1)/2)];
+    posSmallRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/8) (screenYpixels/10 - size(smallRwdImg,1)/8) ...
+        (screenXpixels/10*9.5 + size(smallRwdImg,2)/8) (screenYpixels/10 + size(smallRwdImg,1)/8)];
     
-    posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/2) (screenYpixels/10 - size(largeRwdImg,1)/2) ...
-        (screenXpixels/10*9.5 + size(largeRwdImg,2)/2) (screenYpixels/10 + size(largeRwdImg,1)/2)];
+    posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/12) (screenYpixels/10 - size(largeRwdImg,1)/12) ...
+        (screenXpixels/10*9.5 + size(largeRwdImg,2)/12) (screenYpixels/10 + size(largeRwdImg,1)/12)];
     
     %% Fixation cross
     
@@ -135,8 +135,8 @@ try
         
         if training
             textRwd = trainReward;
-            imgRwd = smallRwd;
-            posRwd = posSmallRwd;
+            imgRwd = largeRwd;
+            posRwd = posLargeRwd;
             rwd = 0;
             sizeText = 30;
         else
@@ -287,8 +287,9 @@ try
                     end
                 end
                 
+                Screenshot(window,'exp_images/visual_search_shot.jpg','jpg');
                 % Make the selected images disapear (white square over them) 
-                if posRect
+                if posRect                
                     Screen('FillRect', window, white , posRect');
                 end
                 
