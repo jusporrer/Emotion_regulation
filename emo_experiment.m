@@ -53,7 +53,6 @@ try
     %% Set Participant ID
     
     ID = ceil(100000*rand);
-    ID = 2;
     
     %% Start of the experiment 
     

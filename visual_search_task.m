@@ -46,11 +46,11 @@ try
     largeRwd = Screen('MakeTexture', window, largeRwdImg); 
     
     % Position in the top left corner
-    posSmallRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/8) (screenYpixels/10 - size(smallRwdImg,1)/8) ...
-        (screenXpixels/10*9.5 + size(smallRwdImg,2)/8) (screenYpixels/10 + size(smallRwdImg,1)/8)];
+    posSmallRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/2) (screenYpixels/10 - size(smallRwdImg,1)/2) ...
+        (screenXpixels/10*9.5 + size(smallRwdImg,2)/2) (screenYpixels/10 + size(smallRwdImg,1)/2)];
     
-    posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/12) (screenYpixels/10 - size(largeRwdImg,1)/12) ...
-        (screenXpixels/10*9.5 + size(largeRwdImg,2)/12) (screenYpixels/10 + size(largeRwdImg,1)/12)];
+    posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/12) (screenYpixels/10 - size(largeRwdImg,1)/2) ...
+        (screenXpixels/10*9.5 + size(largeRwdImg,2)/2) (screenYpixels/10 + size(largeRwdImg,1)/2)];
     
     %% Fixation cross
     
@@ -287,7 +287,7 @@ try
                     end
                 end
                 
-                Screenshot(window,'exp_images/visual_search_shot.jpg','jpg');
+                %Screenshot(window,'exp_images/visual_search_shot.jpg','jpg');
                 % Make the selected images disapear (white square over them) 
                 if posRect                
                     Screen('FillRect', window, white , posRect');
