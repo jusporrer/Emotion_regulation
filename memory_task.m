@@ -177,8 +177,48 @@ try
             flipTime = Screen('Flip', window);
             Screen('Flip', window, flipTime + memory.fixationDuration - ifi, 0);
             
+            condition = 3; 
+            
+            if condition(block,trial) == 1 % DC_male
+                setSizeFF = memory.setSize/2 * (1-memory.fearfulDC); 
+                setSizeNF = memory.setSize/2 * (1-memory.neutralDC); 
+                setSizeFM = memory.setSize/2 * (memory.fearfulDC); 
+                setSizeNM = memory.setSize/2 * (memory.neutralDC);  
+                
+            elseif condition(block,trial) == 2 % DC_fem
+                setSizeFF = memory.setSize/2 * (memory.fearfulCC); 
+                setSizeNF = memory.setSize/2 * (memory.neutralCC); 
+                setSizeFM = memory.setSize/2 * (1-memory.fearfulCC); 
+                setSizeNM = memory.setSize/2 * (1-memory.neutralCC);  
+                
+            elseif condition(block,trial) == 3 % CC_male
+                setSizeFF = memory.setSize/2 * (1-memory.fearfulCC); 
+                setSizeNF = memory.setSize/2 * (1-memory.neutralCC); 
+                setSizeFM = memory.setSize/2 * (memory.fearfulCC); 
+                setSizeNM = memory.setSize/2 * (memory.neutralCC);  
+                
+            elseif condition(block,trial) == 4 % CC_female
+                setSizeFF = memory.setSize/2 * (memory.fearfulCC);
+                setSizeNF = memory.setSize/2 * (memory.neutralCC);
+                setSizeFM = memory.setSize/2 * (1-memory.fearfulCC);
+                setSizeNM = memory.setSize/2 * (1-memory.neutralCC);
+                
+            elseif condition(block,trial) == 5 % BC_male
+                setSizeFF = memory.setSize/2 * (1-memory.fearfulBC); 
+                setSizeNF = memory.setSize/2 * (1-memory.neutralBC); 
+                setSizeFM = memory.setSize/2 * (memory.fearfulBC); 
+                setSizeNM = memory.setSize/2 * (memory.neutralBC);  
+                
+            elseif condition(block,trial) == 6 % BC_fem
+                setSizeFF = memory.setSize/2 * (memory.fearfulBC);
+                setSizeNF = memory.setSize/2 * (memory.neutralBC);
+                setSizeFM = memory.setSize/2 * (1-memory.fearfulBC);
+                setSizeNM = memory.setSize/2 * (1-memory.neutralBC);
+            end
+                    
             %Create position and orientation for search display (change every trial)
-            [posFF, posNF, posFM, posNM ] = createPositions(positionMatrix, memory.setSize, sizeImg);
+            [posFF, posNF, posFM, posNM ] = createPositionsMemory(positionMatrix, ...
+                memory.setSize,setSizeFF, setSizeNF, setSizeFM, setSizeNM, sizeImg);
             
             % Save pos for eye-tracking
             respMatMemory(a).posFF = posFF;
@@ -186,58 +226,32 @@ try
             respMatMemory(a).posFM = posFM;
             respMatMemory(a).posNM = posNM;
             
-            % Initialise
-            fearFemEXP = zeros(1,memory.setSize/4); neutralFemEXP = zeros(1,memory.setSize/4);
-            fearMaleEXP = zeros(1,memory.setSize/4); neutralMaleEXP = zeros(1,memory.setSize/4);
-            
-            if condition(block,trial) == 1 % DC_male: fearful male D, neutral fem & male T
-                
-            elseif condition(block,trial) == 2 % DC_fem: fearful female D, neutral fem & male T
-                
-            elseif condition(block,trial) == 3 % CC_male: neutral man D, neutral male or female T OR fearful man D, fearful male or female T
-                
-            elseif condition(block,trial) == 4 % CC_female: neutral female D, neutral male or female T OR fearful female D, fearful male or female T
-                
-            elseif condition(block,trial) == 5 % BC_male: neutral male D, fearful male or female T
-                
-            elseif condition(block,trial) == 6 % BC_fem : neutral female D, fearful male or female T
 
-            end
-            
-  
-            % Select memory.setSize/4 new faces
-            for nb_img = 1: memory.setSize/4
-                fearFemEXP(nb_img) = fearFemTexture{randi([1 size(fearFemTexture,2)])};
-                neutralFemEXP(nb_img) = neutralFemTexture{randi([1 size(neutralFemTexture,2)])};
-                fearMaleEXP(nb_img) = fearMaleTexture{randi([1 size(fearMaleTexture,2)])};
-                neutralMaleEXP(nb_img) = neutralMaleTexture{randi([1 size(neutralMaleTexture,2)])};
-            end
-                       
+            % Select new faces
+            fearFem = {fearFemTexture{randi([1 size(fearFemTexture,2)],1,setSizeFF)}};
+            neutralFem = {neutralFemTexture{randi([1 size(neutralFemTexture,2)],1,setSizeNF)}};
+            fearMale= {fearMaleTexture{randi([1 size(fearMaleTexture,2)],1,setSizeFM)}};
+            neutralMale = {neutralMaleTexture{randi([1 size(neutralMaleTexture,2)],1,setSizeNM)}};
+                    
             % Screen priority
             Priority(MaxPriority(window));
             Priority(2);
             
-            for i = 1: memory.setSize/4
-                Screen('DrawTexture', window, fearFemEXP(i), [], posFF(i,:));
-                Screen('DrawTexture', window, neutralFemEXP(i), [], posNF(i,:));
-                Screen('DrawTexture', window, fearMaleEXP(i), [], posFM(i,:));
-                Screen('DrawTexture', window, neutralMaleEXP(i), [], posNM(i,:));
-            end
             
             for i = 1: size(posFF,1)
-                Screen('DrawTexture', window, fearFem(i), [], posFF(i,:), orientFF(i));
+                Screen('DrawTexture', window, fearFem{i}, [], posFF(i,:));
             end
             
             for j = 1: size(posNF,1)
-                Screen('DrawTexture', window, neutralFem(j), [], posNF(j,:),orientNF(j));
+                Screen('DrawTexture', window, neutralFem{j}, [], posNF(j,:));
             end
             
             for y = 1: size(posFM,1)
-                Screen('DrawTexture', window, fearMale(y), [], posFM(y,:),orientFM(y));
+                Screen('DrawTexture', window, fearMale{y}, [], posFM(y,:));
             end
             
             for z = 1: size(posNM,1)
-                Screen('DrawTexture', window, neutralMale(z), [], posNM(z,:),orientNM(z));
+                Screen('DrawTexture', window, neutralMale{z}, [], posNM(z,:));
             end
 
             Screen('Flip', window);

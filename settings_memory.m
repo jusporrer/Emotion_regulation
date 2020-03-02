@@ -15,11 +15,11 @@ memory.setSize = 16;
 memory.fearfulCC = 0.75; 
 memory.neutralCC = 0.75; 
 
-memory.fearfulTargetBC = 0.90; 
-memory.neutralTagetBC = 0.60; 
+memory.fearfulBC = 0.90; 
+memory.neutralBC = 0.60; 
 
-memory.fearfulTargetDC = 0.60; 
-memory.neutralTagetDC = 0.90; 
+memory.fearfulDC = 0.60; 
+memory.neutralDC = 0.90; 
 
 
 % How long each image in the memory sequence is on screen(normally 100 ms so 0.1 s)
