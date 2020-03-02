@@ -113,19 +113,19 @@ try
             condition(i,:) = Shuffle(repmat((1:6),1,nTrials));
         end 
         
-        DrawFormattedText(window, trainingFiniRSVP, 'center', 'center', black);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        Screen('Flip', window);
-        KbStrokeWait;
+        experimentRSVP = {trainingFiniRSVP, RSVP}; 
         
-        DrawFormattedText(window, RSVP, 'center', 'center', black);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        Screen('Flip', window);
-        KbStrokeWait;
+        for i = 1:length(experimentRSVP)  
+            DrawFormattedText(window, experimentRSVP{i}, 'center', 'center', black);
+            DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+            Screen('Flip', window);
+            KbStrokeWait;
+        end
+        
     end
     
     %% Actual Experiment
-    a = 1; instr = 0;
+    a = 0; instr = 0;
     
     for block = 1:nBlocks
         
@@ -163,6 +163,7 @@ try
         for trial = 1:nTrials
             
             % Initialise RTs and response
+            a = a + 1;
             rt = 0;
             response = 0;
             imageDisplay = zeros(1,rsvp.setSize);
@@ -297,7 +298,6 @@ try
             end
             
             % Record the trial data into the data matrix
-            a = a + 1;
             respMatRSVP(a).cfg = rsvp;
             respMatRSVP(a).ID = ID;
             respMatRSVP(a).training = training; %(1 = training, 0 = no training)
