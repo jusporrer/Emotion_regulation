@@ -40,18 +40,19 @@ try
     topPriorityLevel = MaxPriority(window);
     
     %% Mouse position and keys
-    %Set the position of the mouse
-    %SetMouse(xCenter, yCenter, window);
     HideCursor;
     
     % Define the available keys to press
     escapeKey = KbName('ESCAPE');
     spaceKey = KbName('space');
     
+    % Response Keys
+    leftKey = KbName('LeftArrow');
+    rightKey = KbName('RightArrow');
+    
     % The only keys that will work to continue
-    KbCheckList = [escapeKey, spaceKey];
+    KbCheckList = [escapeKey, spaceKey, leftKey, rightKey];
     RestrictKeysForKbCheck(KbCheckList);
-    [keyIsDown,secs, keyCode] = KbCheck;
     
     %% Timing Information
     
@@ -73,6 +74,19 @@ try
     
     [fearFemTexture,fearMaleTexture, neutralFemTexture, neutralMaleTexture, ...
         sizeImg] = createImageTexture(WMN_img_vs, WMF_img_vs, WFN_img_vs, WFF_img_vs,window);
+    
+    % Rewards
+    
+    smallRwdImg =imread('exp_images\cent.jpg');
+    largeRwdImg = imread('exp_images\euro.jpg');
+    smallRwd = Screen('MakeTexture', window, smallRwdImg); 
+    largeRwd = Screen('MakeTexture', window, largeRwdImg); 
+    
+    posSmallRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/2) (screenYpixels/10 - size(smallRwdImg,1)/2) ...
+        (screenXpixels/10*9.5 + size(smallRwdImg,2)/2) (screenYpixels/10 + size(smallRwdImg,1)/2)];
+    
+    posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/2) (screenYpixels/10 - size(largeRwdImg,1)/2) ...
+        (screenXpixels/10*9.5 + size(largeRwdImg,2)/2) (screenYpixels/10 + size(largeRwdImg,1)/2)];
     
     %% Fixation cross
     
@@ -126,6 +140,28 @@ try
     
     for block = 1:nBlocks
         
+        if training
+            textRwd = trainReward;
+            imgRwd = smallRwd;
+            posRwd = posSmallRwd;
+            rwd = 0;
+            sizeText = 30;
+        else
+            if rem(block,2) == 1
+                textRwd = smallReward;
+                imgRwd = smallRwd;
+                posRwd = posSmallRwd;
+                rwd = 1; %(1 = Small reward, 2 = Large reward)
+                sizeText = 50;
+            elseif rem(block,2) == 0
+                textRwd = largeReward;
+                imgRwd = largeRwd;
+                posRwd = posLargeRwd;
+                rwd = 2; %(1 = Small reward, 2 = Large reward)
+                sizeText = 50;
+            end
+        end
+        
         for trial = 1:nTrials
             
             % Initialise response
@@ -138,8 +174,8 @@ try
             
             % Draw fixation cross
             Screen('DrawLines', window, CoordsFix, lineWidthFix, black, [xCenter yCenter], 2);
-            tFixation = Screen('Flip', window);
-            Screen('Flip', window, tFixation + memory.fixationDuration - ifi, 0);
+            flipTime = Screen('Flip', window);
+            Screen('Flip', window, flipTime + memory.fixationDuration - ifi, 0);
             
             %Create position and orientation for search display (change every trial)
             [posFF, posNF, posFM, posNM ] = createPositions(positionMatrix, memory.setSize, sizeImg);
@@ -154,6 +190,21 @@ try
             fearFemEXP = zeros(1,memory.setSize/4); neutralFemEXP = zeros(1,memory.setSize/4);
             fearMaleEXP = zeros(1,memory.setSize/4); neutralMaleEXP = zeros(1,memory.setSize/4);
             
+            if condition(block,trial) == 1 % DC_male: fearful male D, neutral fem & male T
+                
+            elseif condition(block,trial) == 2 % DC_fem: fearful female D, neutral fem & male T
+                
+            elseif condition(block,trial) == 3 % CC_male: neutral man D, neutral male or female T OR fearful man D, fearful male or female T
+                
+            elseif condition(block,trial) == 4 % CC_female: neutral female D, neutral male or female T OR fearful female D, fearful male or female T
+                
+            elseif condition(block,trial) == 5 % BC_male: neutral male D, fearful male or female T
+                
+            elseif condition(block,trial) == 6 % BC_fem : neutral female D, fearful male or female T
+
+            end
+            
+  
             % Select memory.setSize/4 new faces
             for nb_img = 1: memory.setSize/4
                 fearFemEXP(nb_img) = fearFemTexture{randi([1 size(fearFemTexture,2)])};
@@ -161,32 +212,49 @@ try
                 fearMaleEXP(nb_img) = fearMaleTexture{randi([1 size(fearMaleTexture,2)])};
                 neutralMaleEXP(nb_img) = neutralMaleTexture{randi([1 size(neutralMaleTexture,2)])};
             end
-            
-            % Start Time
-            flipTime = Screen('Flip', window);
-            
+                       
             % Screen priority
             Priority(MaxPriority(window));
             Priority(2);
             
-            for i = 1: size(posFF,1)
+            for i = 1: memory.setSize/4
                 Screen('DrawTexture', window, fearFemEXP(i), [], posFF(i,:));
                 Screen('DrawTexture', window, neutralFemEXP(i), [], posNF(i,:));
                 Screen('DrawTexture', window, fearMaleEXP(i), [], posFM(i,:));
                 Screen('DrawTexture', window, neutralMaleEXP(i), [], posNM(i,:));
             end
             
+            for i = 1: size(posFF,1)
+                Screen('DrawTexture', window, fearFem(i), [], posFF(i,:), orientFF(i));
+            end
+            
+            for j = 1: size(posNF,1)
+                Screen('DrawTexture', window, neutralFem(j), [], posNF(j,:),orientNF(j));
+            end
+            
+            for y = 1: size(posFM,1)
+                Screen('DrawTexture', window, fearMale(y), [], posFM(y,:),orientFM(y));
+            end
+            
+            for z = 1: size(posNM,1)
+                Screen('DrawTexture', window, neutralMale(z), [], posNM(z,:),orientNM(z));
+            end
+
+            Screen('Flip', window);
+            KbStrokeWait;
+            % Screen('Flip', window, flipTime + memory.imageDuration - ifi);
+          
             Screen(window, 'FillRect', white);
             Screen('DrawTexture', window, imgRwd, [], posRwd);
             startTime = Screen('Flip', window, flipTime + memory.imageDuration - ifi,0);
 
-            while GetSecs - startTime < rsvp.trialTimeout
+            while GetSecs - startTime < memory.trialTimeout
                 [~,~,keyCode] = KbCheck;
                 respTime = GetSecs;
                 
                 Screen('TextSize', window, 50);
-                DrawFormattedText(window, 'Was there more females or males?', 'center', screenYpixels*0.5, black);
-                DrawFormattedText(window, 'Female [F] / Male [M]]', 'center', screenYpixels*0.65, black);
+                DrawFormattedText(window, 'Were there more females or males?', 'center', screenYpixels*0.5, black);
+                DrawFormattedText(window, 'Female [F] / Male [M]', 'center', screenYpixels*0.65, black);
                 Screen('DrawTexture', window, imgRwd, [], posRwd);
                 Screen('Flip', window);
                                    
@@ -207,7 +275,6 @@ try
                     break;
                 end
 
-                Screen('Flip', window); 
             end
             
             % Save data

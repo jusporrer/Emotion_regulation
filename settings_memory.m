@@ -11,6 +11,17 @@ memory.nBlocksExp = 1; % expected : 8
 % Number of images around the target
 memory.setSize = 16;
 
+% Probabilities 
+memory.fearfulCC = 0.75; 
+memory.neutralCC = 0.75; 
+
+memory.fearfulTargetBC = 0.90; 
+memory.neutralTagetBC = 0.60; 
+
+memory.fearfulTargetDC = 0.60; 
+memory.neutralTagetDC = 0.90; 
+
+
 % How long each image in the memory sequence is on screen(normally 100 ms so 0.1 s)
 memory.imageDuration = 1;
 
