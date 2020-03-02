@@ -99,14 +99,14 @@ try
     %% Create Positions for the Faces
     % Use meshgrid to create equally spaced coordinates in the X and Y
     
-    nx = 4; % number of images in the x-axis
+    nx = 6; % number of images in the x-axis
     ny = 4; % number of images on the y-axis
     dx = (0.8/nx);
     dy = (0.8/ny);
     [x, y] = meshgrid(0.1:dx:(0.9-dx), (0.1:dy:(0.9-dy)));
     
     % Scale the grid so that it is in pixel coordinates
-    pixelScaleX = screenXpixels / (dx*2);
+    pixelScaleX = screenXpixels / (dx*3)-100;
     pixelScaleY = screenYpixels / (dy*2); % change this to 2 if 4 img of y
     x = x .* pixelScaleX;
     y = y .* pixelScaleY;
@@ -177,7 +177,7 @@ try
             flipTime = Screen('Flip', window);
             Screen('Flip', window, flipTime + memory.fixationDuration - ifi, 0);
             
-            condition = 3; 
+            %condition = 3; 
             
             if condition(block,trial) == 1 % DC_male
                 setSizeFF = memory.setSize/2 * (1-memory.fearfulDC); 
@@ -255,9 +255,9 @@ try
             end
 
             Screen('Flip', window);
-            KbStrokeWait;
-            % Screen('Flip', window, flipTime + memory.imageDuration - ifi);
-          
+            Screenshot(window,'exp_images/visual_search_shot.jpg','jpg');
+            Screen('Flip', window, flipTime + memory.imageDuration - ifi,0);
+            
             Screen(window, 'FillRect', white);
             Screen('DrawTexture', window, imgRwd, [], posRwd);
             startTime = Screen('Flip', window, flipTime + memory.imageDuration - ifi,0);
@@ -295,23 +295,22 @@ try
             %respMatMemory(a).ID = ID;
             %respMatMemory(a).training = training;
             %respMatMemory(a).reward = reward; %(0 = Small reward, 1 = Large reward)
-            %respMatMemory(a).condition = condition(block); %(0 = DC, 1 = CC, 2 = BC)
+            respMatMemory(a).condition = condition(block,trial); %(0 = DC, 1 = CC, 2 = BC)
             respMatMemory(a).block = block;
             respMatMemory(a).trial = trial;
             respMatMemory(a).RTs = rt;
-            respMatMemory(a).order = response;
-            respMatMemory(a).respFF = respFF;
-            respMatMemory(a).respNF = respNF;
-            respMatMemory(a).respFM = respFM;
-            respMatMemory(a).respNM = respNM;
+            respMatMemory(a).response = response;
+
             
             % Screen after trial
             Screen('FillRect', window, white);
             Screen('Flip', window);
-            WaitSecs(memory.timeBetwTrial);
+            WaitSecs(memory.timeBetweenTrials);
             
         end
     end
+    
+    sca;
     
 catch
     sca;

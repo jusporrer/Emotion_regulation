@@ -10,7 +10,7 @@ for i = 1:setSize
     a = randi(numel(positionMatrix(1,:))); 
     
     % Store the randomly selected coordinates and Add jitters 
-    positions(1,i) = positionMatrix(1,a) + ((positionMatrix(1,a)+50)-(positionMatrix(1,a)-50))*round(randn,1); 
+    positions(1,i) = positionMatrix(1,a) + ((positionMatrix(1,a)+20)-(positionMatrix(1,a)-20))*round(randn,1); 
     positions(2,i) = positionMatrix(2,a) + ((positionMatrix(2,a)+10)-(positionMatrix(2,a)-10))*round(randn,1);
         
     positions = ceil(positions);

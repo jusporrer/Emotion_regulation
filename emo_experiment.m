@@ -41,7 +41,7 @@ try
     topPriorityLevel = MaxPriority(window);
     
     %% Different Settings
-    settings_visual_search;
+    settings_memory;
     settings_rsvp;
     
     %% Define the text
@@ -53,6 +53,7 @@ try
     %% Set Participant ID
     
     ID = ceil(100000*rand);
+    ID = 2; 
     
     %% Start of the experiment 
     
