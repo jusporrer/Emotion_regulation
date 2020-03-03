@@ -226,7 +226,6 @@ try
                 end
             end
               
-            
             Screen('Flip', window);
             %Screenshot(window,'exp_images/memory_shot.jpg','jpg');
             Screen('Flip', window, flipTime + memory.imageDuration - ifi,0);
