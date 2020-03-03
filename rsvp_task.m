@@ -21,11 +21,11 @@ try
     spaceKey = KbName('space');
     
     % Response Keys
-    leftKey = KbName('LeftArrow');
-    rightKey = KbName('RightArrow');
+    ouiKey = KbName('o');
+    nonKey = KbName('n');
     
     % The only keys that will work to continue
-    KbCheckList = [escapeKey, spaceKey, leftKey, rightKey];
+    KbCheckList = [escapeKey, spaceKey, ouiKey, nonKey];
     RestrictKeysForKbCheck(KbCheckList);
     
     %% Timing Information
@@ -282,10 +282,10 @@ try
                 if keyCode(escapeKey) == 1
                     sca
                     return;
-                elseif keyCode(leftKey) == 1
+                elseif keyCode(ouiKey) == 1
                     response = 1;
                     rt = respTime - startTime;
-                elseif keyCode(rightKey) == 1
+                elseif keyCode(nonKey) == 1
                     response = 2;
                     rt = respTime - startTime;
                 end

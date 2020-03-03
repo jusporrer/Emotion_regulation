@@ -9,17 +9,17 @@ memory.nBlocksTrain = 1; % expected : 1
 memory.nBlocksExp = 1; % expected : 8 
 
 % Number of images around the target
-memory.setSize = 24;
+memory.setSize = 20;
 
 % Probabilities 
-memory.fearfulCC = 0.75; 
-memory.neutralCC = 0.75; 
+memory.fearfulCC = 0.60; 
+memory.neutralCC = 0.60; 
 
-memory.fearfulBC = 1; 
-memory.neutralBC = 0.50; 
+memory.fearfulBC = 0.8; 
+memory.neutralBC = 0.40; 
 
-memory.fearfulDC = 0.50; 
-memory.neutralDC = 1; 
+memory.fearfulDC = 0.40; 
+memory.neutralDC = 0.8; 
 
 
 % How long each image in the memory sequence is on screen(normally 100 ms so 0.1 s)

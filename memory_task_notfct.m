@@ -1,20 +1,43 @@
-function [respMatMemory] = memory_task(ID, window, colors, screenPixels, coorCenter, training)
+%function [respMat] = visual_search_task(ID, window, colors, screenPixels, coorCenter, training)
 
 try
     %% Initialise screen
+    Screen('Preference', 'SkipSyncTests', 1) % Need to be put to 0 when testing
+    Screen('Preference', 'SuppressAllWarnings', 1)
+    Screen('Preference','VisualDebugLevel', 0);  % supress start screen
     
-    % Colors according to the screen
-    white = colors(1);
-    black = colors(2);
+    %Initialise the workspace
+    sca;
+    close all;
+    clearvars;
+    
+    %default settings for setting up Psychtoolbox
+    PsychDefaultSetup(2);
+    
+    % Get the screen numbers.
+    screens = Screen('Screens');
+    screenNumber = max(screens);
+    
+    % Define black and white
+    white = WhiteIndex(screenNumber);
+    black = BlackIndex(screenNumber);
+    grey = white / 2;
+    colors = [white, black, grey];
+    
+    % Open screen window using PsychImaging and color it grey.
+    [window, windowRect] = PsychImaging('OpenWindow', screenNumber, white);
     
     % Get the size and centre of the window in pixels
-    screenXpixels = screenPixels(1);
-    screenYpixels = screenPixels(2);
-    xCenter = coorCenter(1);
-    yCenter = coorCenter(2);
+    [screenXpixels, screenYpixels] = Screen('WindowSize', window);
+    screenPixels = [screenXpixels, screenYpixels];
+    [xCenter, yCenter] = RectCenter(windowRect);
+    coorCenter = [xCenter, yCenter];
     
-    % Set up alpha-blending for smooth (anti-aliased) lines
-    Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+    % Enable alpha blending for anti-aliasing (important for face presentation)
+    Screen('BlendFunction', window, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    % Query the maximum priority level
+    topPriorityLevel = MaxPriority(window);
     
     %% Mouse position and keys
     HideCursor;
@@ -24,8 +47,8 @@ try
     spaceKey = KbName('space');
     
     % Response Keys
-    femKey = KbName('f');
-    hommeKey = KbName('h');
+    femKey = KbName('f'); 
+    hommeKey = KbName('h'); 
     
     % The only keys that will work to continue
     KbCheckList = [escapeKey, spaceKey, femKey, hommeKey];
@@ -41,7 +64,17 @@ try
     Screen('TextSize', window, 30);
     
     text_experiment;
-      
+    
+    DrawFormattedText(window, bonjour, 'center', 'center', black);
+    DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+    Screen('Flip', window);
+    KbStrokeWait;
+    
+    DrawFormattedText(window, reward, 'center', 'center', black);
+    DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+    Screen('Flip', window);
+    KbStrokeWait;
+    
     %% Download the images
     
     load('exp_images/WMN_img_vs.mat');
@@ -95,6 +128,7 @@ try
     
     %% Training or not
     
+    training = 1;
     if training
         nBlocks = memory.nBlocksTrain;
         nTrials = memory.nTrialsTrain;
@@ -152,6 +186,8 @@ try
             Screen('DrawLines', window, CoordsFix, lineWidthFix, black, [xCenter yCenter], 2);
             flipTime = Screen('Flip', window);
             Screen('Flip', window, flipTime + memory.fixationDuration - ifi, 0);
+            
+            condition = 3;
             
             if condition(block,trial) == 1 % DC_male
                 setSizeFF = memory.setSize/2 * (1-memory.fearfulDC);
@@ -266,8 +302,8 @@ try
             end
             
             % Save data
-            respMatMemory(a).ID = ID;
-            respMatMemory(a).training = training;
+            %respMatMemory(a).ID = ID;
+            %respMatMemory(a).training = training;
             respMatMemory(a).reward = rwd; %(0 = Small reward, 1 = Large reward)
             respMatMemory(a).condition = condition(block,trial); %(0 = DC, 1 = CC, 2 = BC)
             respMatMemory(a).block = block;
@@ -284,10 +320,11 @@ try
         end
     end
     
+    sca;
+    
 catch
     sca;
     fprintf('The last error in the visual search was : \n');
     psychrethrow(psychlasterror);
     
-end
 end

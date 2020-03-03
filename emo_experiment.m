@@ -67,16 +67,16 @@ try
     Screen('Flip', window);
     KbStrokeWait;
     
-    %% If last digit ID even -> VS first (odd -> RSVP first)
+    %% If last digit ID even -> memory first (odd -> RSVP first)
     
     if rem(ID,2)==0
         % Training Period
-        [respMat_training_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, true);
+        [respMat_training_memory] = memory_task(ID, window, colors, screenPixels, coorCenter, true);
 
         % Experiment without Training
-        [respMat_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, false);
+        [respMat_memory] = memory_task(ID, window, colors, screenPixels, coorCenter, false);
         
-        DrawFormattedText(window, finiVS, 'center', 'center', black);
+        DrawFormattedText(window, finiMemory, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
         Screen('Flip', window);
         KbStrokeWait;
@@ -95,17 +95,17 @@ try
         KbStrokeWait;
      end
     
-    %% If last digit ID even -> RSVP second (odd -> VS second)
+    %% If last digit ID even -> RSVP second (odd -> Memory second)
     
      if rem(ID,2)==1
         % Training Period
-        [respMat_training_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, true);
+        [respMat_training_memory] = memory_task(ID, window, colors, screenPixels, coorCenter, true);
         
         % Experiment without Training
-        [respMat_visual_search] = visual_search_task(ID, window, colors, screenPixels, coorCenter, false);
+        [respMat_memory] = memory_task(ID, window, colors, screenPixels, coorCenter, false);
         
         Screen('TextSize', window, 30);
-        DrawFormattedText(window, finiVS, 'center', 'center', black);
+        DrawFormattedText(window, finiMemory, 'center', 'center', black);
         DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
         Screen('Flip', window);
         KbStrokeWait;
@@ -135,9 +135,9 @@ try
         mkdir results
     end
     
-    fileNameVS = [ 'results/',num2str(ID), '_visual_search.mat'];
-    data_visual_search = [respMat_training_visual_search, respMat_visual_search];
-    save(fileNameVS, 'data_visual_search');
+    fileNameMemory = [ 'results/',num2str(ID), '_memory.mat'];
+    data_memory = [respMat_training_memory, respMat_memory];
+    save(fileNameMemory, 'data_memory');
     
     fileNameRSVP = ['results/',num2str(ID),'_rsvp.mat'];
     data_rsvp = [respMat_training_rsvp, respMat_rsvp];
@@ -147,7 +147,7 @@ try
     
     % Check if file was saved -> if problem, save matrices manually
     
-    if isfile(fileNameRSVP) && isfile(fileNameVS)
+    if isfile(fileNameRSVP) && isfile(fileNameMemory)
         warningMessage = sprintf([' End experiment: all data was saved correctly.                     \n ID : ', ...
             num2str(ID), '\n Date : ',datestr(datetime('now'))]);
         msg = msgbox(warningMessage);
