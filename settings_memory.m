@@ -1,7 +1,7 @@
 %% Settings for the Emotional Rapid Serial Visual Presentation Task
 
 % Number of trials per set size
-memory.nTrialsTrain = 1; % expected : 12 -> 2/condi mixed
+memory.nTrialsTrain = 3; % expected : 12 -> 2/condi mixed
 memory.nTrialsExp = 2; % expected : 24 -> 4/condi mixed 
 
 % Number of blocks
