@@ -1,4 +1,4 @@
-function [respMatRSVP] = rsvp_task(ID, window, colors, screenPixels, coorCenter, training)
+function [respMatRSVP] = rsvp_task(ID, window, colors, screenPixels, training, stimuli)
 
 try
     %% Initialise screen
@@ -11,8 +11,8 @@ try
     % Get the size and centre of the window in pixels
     screenXpixels = screenPixels(1);
     screenYpixels = screenPixels(2);
-    xCenter = coorCenter(1);
-    yCenter = coorCenter(2);
+    xCenter = screenXpixels/2;
+    yCenter = screenYpixels/2;
     
     %% Keyboard
     
@@ -39,13 +39,7 @@ try
     
     %Numer of frames to wait before re-drawing
     waitframes = 1;
-    
-    %% Defines the text
-    Screen('TextFont',window, 'Calibri');
-    Screen('TextSize', window, 30);
-    
-    text_experiment;
-    
+       
     %% Fixation cross
     
     [CoordsFix, lineWidthFix] = create_fix_cross();
@@ -74,20 +68,7 @@ try
         sizeImg] = createImageTexture(WMN_img_scramble, WMF_img_scramble, WFN_img_scramble, WFF_img_scramble,window);
     
     posCenter = [(screenXpixels-sizeImg(2))/2 (screenYpixels-sizeImg(1))/2 (screenXpixels+sizeImg(2))/2 (screenYpixels+sizeImg(1))/2];
-    
-    % Rewards 
-    
-    smallRwdImg =imread('exp_images\cent.jpg');
-    largeRwdImg = imread('exp_images\euro.jpg');
-    smallRwd = Screen('MakeTexture', window, smallRwdImg); 
-    largeRwd = Screen('MakeTexture', window, largeRwdImg); 
-    
-    posSmallRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/2) (screenYpixels/10 - size(smallRwdImg,1)/2) ...
-        (screenXpixels/10*9.5 + size(smallRwdImg,2)/2) (screenYpixels/10 + size(smallRwdImg,1)/2)];
-    
-    posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/2) (screenYpixels/10 - size(largeRwdImg,1)/2) ...
-        (screenXpixels/10*9.5 + size(largeRwdImg,2)/2) (screenYpixels/10 + size(largeRwdImg,1)/2)];
-    
+        
     %% Training or not
     
     if training
@@ -95,14 +76,11 @@ try
         nTrials = rsvp.nTrialsTrain;
         condition = [Shuffle(1:6), Shuffle(1:6)];
         
-        instructionRSVP = {instRSVP1,instRSVP2,trainRSVP};
-        
-        for i = 1:length(instructionRSVP)     
-            DrawFormattedText(window, instructionRSVP{i}, 'center', 'center', black);
-            DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        for i = 6:8
+            Screen('DrawTexture', window, stimuli.instTexture{i},[],stimuli.instPos,0);
             Screen('Flip', window);
             KbStrokeWait;
-        end 
+        end
         
     else
         nBlocks = rsvp.nBlocksExp;
@@ -113,11 +91,8 @@ try
             condition(i,:) = Shuffle(repmat((1:6),1,nTrials));
         end 
         
-        experimentRSVP = {trainFiniRSVP, RSVP}; 
-        
-        for i = 1:length(experimentRSVP)  
-            DrawFormattedText(window, experimentRSVP{i}, 'center', 'center', black);
-            DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        for i = 10
+            Screen('DrawTexture', window, stimuli.instTexture{i},[],stimuli.instPos,0);
             Screen('Flip', window);
             KbStrokeWait;
         end
@@ -130,33 +105,25 @@ try
     for block = 1:nBlocks
         
         if training
-            textRwd = trainReward;
-            imgRwd = smallRwd;
-            posRwd = posSmallRwd;
+            instRwd = stimuli.instTexture{3};
+            imgRwd = stimuli.smallRwd;
+            posRwd = stimuli.posSmallRwd;
             rwd = 0;
-            sizeText = 30;
         else
             if rem(block,2) == 1
-                textRwd = smallReward;
-                imgRwd = smallRwd;
-                posRwd = posSmallRwd;
+                instRwd = stimuli.instTexture{4};
+                imgRwd = stimuli.smallRwd;
+                posRwd = stimuli.posSmallRwd;
                 rwd = 1; %(1 = Small reward, 2 = Large reward)
-                sizeText = 50;
             elseif rem(block,2) == 0
-                textRwd = largeReward;
-                imgRwd = largeRwd;
-                posRwd = posLargeRwd;
+                instRwd = stimuli.instTexture{5};
+                imgRwd = stimuli.largeRwd;
+                posRwd = stimuli.posLargeRwd;
                 rwd = 2; %(1 = Small reward, 2 = Large reward)
-                sizeText = 50;
             end
         end
         
-        Screen('TextSize', window, sizeText);
-        DrawFormattedText(window, textRwd , 'center', screenYpixels*0.35 , black);
-        Screen('TextSize', window, 30);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        
-        Screen('DrawTexture', window, imgRwd );
+        Screen('DrawTexture', window, instRwd,[],stimuli.instPos,0);
         Screen('Flip', window);
         KbStrokeWait;
         
@@ -263,17 +230,13 @@ try
                 
                 if condition(block,trial) == 1 || condition(block,trial) == 3 || condition(block,trial) == 5
                     instr = 1;
-                    Screen('TextSize', window, 50);
-                    DrawFormattedText(window, femRSVP, 'center', screenYpixels*0.5, black);
-                    DrawFormattedText(window, respRSVP, 'center', screenYpixels*0.65, black);
+                    Screen('DrawTexture', window, stimuli.instTexture{11},[],stimuli.instPos,0);
                     Screen('DrawTexture', window, imgRwd, [], posRwd);
                     Screen('Flip', window);
                     
                 elseif condition(block,trial) == 2 || condition(block,trial) == 4 || condition(block,trial) == 6
                     instr = 2;
-                    Screen('TextSize', window, 50);
-                    DrawFormattedText(window, maleRSVP, 'center', screenYpixels*0.5, black);
-                    DrawFormattedText(window, respRSVP, 'center', screenYpixels*0.65, black);
+                    Screen('DrawTexture', window, stimuli.instTexture{12},[],stimuli.instPos,0);
                     Screen('DrawTexture', window, imgRwd, [], posRwd);
                     Screen('Flip', window);
                 end
@@ -320,6 +283,22 @@ try
             WaitSecs(rsvp.timeBetweenTrials);
             
         end
+    end
+    
+    %% End of Experiment 
+    
+    if training
+                
+        Screen('DrawTexture', window, stimuli.instTexture{9},[],stimuli.instPos,0);
+        Screen('Flip', window);
+        KbStrokeWait;
+        
+    else
+                
+        Screen('DrawTexture', window, stimuli.instTexture{13},[],stimuli.instPos,0);
+        Screen('Flip', window);
+        KbStrokeWait;
+        
     end
     
 catch

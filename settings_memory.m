@@ -1,8 +1,8 @@
 %% Settings for the Rememberance Task
 
 % Number of trials per set size
-memory.nTrialsTrain = 3; % expected : 12 -> 2/condi mixed
-memory.nTrialsExp = 2; % expected : 24 -> 4/condi mixed 
+memory.nTrialsTrain = 6; % expected : 12 -> 2/condi mixed
+memory.nTrialsExp = 6; % expected : 24 -> 4/condi mixed 
 
 % Number of blocks
 memory.nBlocksTrain = 1; % expected : 1 

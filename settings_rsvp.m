@@ -1,12 +1,12 @@
 %% Settings for the Emotional Rapid Serial Visual Presentation Task
 
 % Number of trials per set size
-rsvp.nTrialsTrain = 12; % expected : 12 -> 2/condi mixed
-rsvp.nTrialsExp = 24; % expected : 24 -> 4/condi mixed 
+rsvp.nTrialsTrain = 6; % expected : 12 -> 2/condi mixed
+rsvp.nTrialsExp = 6; % expected : 24 -> 4/condi mixed 
 
 % Number of blocks
 rsvp.nBlocksTrain = 1; % expected : 1 
-rsvp.nBlocksExp = 8; % expected : 8 
+rsvp.nBlocksExp = 1; % expected : 8 
 
 % Number of trialsbefore a break
 rsvp.breakAfterTrials = 100;

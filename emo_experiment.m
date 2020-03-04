@@ -40,15 +40,51 @@ try
     % Query the maximum priority level
     topPriorityLevel = MaxPriority(window);
     
+    %% Keyboard
+    
+    % Define the available keys to press
+    escapeKey = KbName('ESCAPE');
+    spaceKey = KbName('space');
+    
+    % Response Keys
+    leftKey = KbName('leftarrow');
+    rightKey = KbName('rightarrow');
+    
+    % The only keys that will work to continue
+    KbCheckList = [escapeKey, spaceKey, leftKey, rightKey];
+    RestrictKeysForKbCheck(KbCheckList);
+    
     %% Different Settings
     settings_memory;
     settings_rsvp;
+       
+    %% Slides with instructions 
+    instFolderName = 'instructions/instructionsDiapo/'; 
+    instFolder = dir(instFolderName); 
+     
+    inst = cell(1,(length(instFolder)-2));
+    stimuli.instTexture = cell(1,(length(instFolder)-2);
     
-    %% Define the text
-    Screen('TextFont',window, 'Calibri');
-    Screen('TextSize', window, 30);
+    for i = 3:length(instFolder)
+        inst{i-2} = imread([instFolderName, 'Diapositive', num2str(i-2), '.JPG']);
+        stimuli.instTexture{i-2} = Screen('MakeTexture', window, inst{i-2});
+    end
     
-    text_experiment;
+    stimuli.instPos = [(screenXpixels-size(inst{1},2))/2 (screenYpixels-size(inst{1},1))/2 ...
+        (screenXpixels+size(inst{1},2))/2 (screenYpixels+size(inst{1},1))/2];
+        
+    %% Download reward 
+    
+    smallRwdImg =imread('exp_images\cent.jpg');
+    largeRwdImg = imread('exp_images\euro.jpg');
+    stimuli.smallRwd = Screen('MakeTexture', window, smallRwdImg); 
+    stimuli.largeRwd = Screen('MakeTexture', window, largeRwdImg); 
+    
+    stimuli.posSmallRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/2) (screenYpixels/10 - size(smallRwdImg,1)/2) ...
+        (screenXpixels/10*9.5 + size(smallRwdImg,2)/2) (screenYpixels/10 + size(smallRwdImg,1)/2)];
+    
+    stimuli.posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/2) (screenYpixels/10 - size(largeRwdImg,1)/2) ...
+        (screenXpixels/10*9.5 + size(largeRwdImg,2)/2) (screenYpixels/10 + size(largeRwdImg,1)/2)];
     
     %% Set Participant ID
     
@@ -57,79 +93,53 @@ try
     
     %% Start of the experiment 
     
-    DrawFormattedText(window, bonjour, 'center', 'center', black);
-    DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-    Screen('Flip', window);
-    KbStrokeWait;
-    
-    DrawFormattedText(window, reward, 'center', 'center', black);
-    DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-    Screen('Flip', window);
-    KbStrokeWait;
+    for i = 1:2
+        Screen('DrawTexture', window, stimuli.instTexture{i},[],stimuli.instPos,0);
+        Screen('Flip', window);
+        KbStrokeWait;
+    end 
     
     %% If last digit ID even -> memory first (odd -> RSVP first)
     
     if rem(ID,2)==0
         % Training Period
-        [respMat_training_memory] = memory_task(ID, window, colors, screenPixels, coorCenter, true);
+        [respMat_training_memory] = memory_task(ID, window, colors, screenPixels, true, stimuli);
 
         % Experiment without Training
-        [respMat_memory] = memory_task(ID, window, colors, screenPixels, coorCenter, false);
-        
-        DrawFormattedText(window, finiMemory, 'center', 'center', black);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        Screen('Flip', window);
-        KbStrokeWait;
-        
+        [respMat_memory] = memory_task(ID, window, colors, screenPixels, false, stimuli);
+           
     else
         %Training Period
-        [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
+        [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, true, stimuli);
         
         %Experiment without Training
-        [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
+        [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, false, stimuli);
         
-        Screen('TextSize', window, 30);
-        DrawFormattedText(window, finiRSVP, 'center', 'center', black);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        Screen('Flip', window);
-        KbStrokeWait;
      end
     
     %% If last digit ID even -> RSVP second (odd -> Memory second)
     
      if rem(ID,2)==1
         % Training Period
-        [respMat_training_memory] = memory_task(ID, window, colors, screenPixels, coorCenter, true);
+        [respMat_training_memory] = memory_task(ID, window, colors, screenPixels, true, stimuli);
         
         % Experiment without Training
-        [respMat_memory] = memory_task(ID, window, colors, screenPixels, coorCenter, false);
+        [respMat_memory] = memory_task(ID, window, colors, screenPixels, false, stimuli);
         
-        Screen('TextSize', window, 30);
-        DrawFormattedText(window, finiMemory, 'center', 'center', black);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        Screen('Flip', window);
-        KbStrokeWait;
     else
         
         %Training Period
-        [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, true);
+        [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, true, stimuli);
         
         %Experiment without Training
-        [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, coorCenter, false);
-        
-        Screen('TextSize', window, 30);
-        DrawFormattedText(window, finiRSVP, 'center', 'center', black);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        Screen('Flip', window);
-        KbStrokeWait;
+        [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, false, stimuli);
+
     end
     
     %% End of the experiment (Save results)
-    Screen('TextSize', window, 30);
-    DrawFormattedText(window, fini, 'center', 'center', black);
+    Screen('DrawTexture', window, stimuli.instTexture{20},[],stimuli.instPos,0);
     Screen('Flip', window);
     KbStrokeWait;
-    
     
     if ~isfolder('results')
         mkdir results

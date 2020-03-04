@@ -1,4 +1,4 @@
-function [respMatMemory] = memory_task(ID, window, colors, screenPixels, coorCenter, training)
+function [respMatMemory] = memory_task(ID, window, colors, screenPixels, training, stimuli)
 
 try
     %% Initialise screen
@@ -10,8 +10,8 @@ try
     % Get the size and centre of the window in pixels
     screenXpixels = screenPixels(1);
     screenYpixels = screenPixels(2);
-    xCenter = coorCenter(1);
-    yCenter = coorCenter(2);
+    xCenter = screenXpixels/2;
+    yCenter = screenYpixels/2;
     
     % Set up alpha-blending for smooth (anti-aliased) lines
     Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
@@ -35,13 +35,7 @@ try
     
     % Query the frame duration
     ifi = Screen('GetFlipInterval', window);
-    
-    %% Defines the text
-    Screen('TextFont',window, 'Calibri');
-    Screen('TextSize', window, 30);
-    
-    text_experiment;
-      
+          
     %% Download the images
     
     load('exp_images/WMN_img_vs.mat');
@@ -51,20 +45,7 @@ try
     
     [fearFemTexture,fearMaleTexture, neutralFemTexture, neutralMaleTexture, ...
         sizeImg] = createImageTexture(WMN_img_vs, WMF_img_vs, WFN_img_vs, WFF_img_vs,window);
-    
-    % Rewards
-    
-    smallRwdImg =imread('exp_images\cent.jpg');
-    largeRwdImg = imread('exp_images\euro.jpg');
-    smallRwd = Screen('MakeTexture', window, smallRwdImg);
-    largeRwd = Screen('MakeTexture', window, largeRwdImg);
-    
-    posSmallRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/2) (screenYpixels/10 - size(smallRwdImg,1)/2) ...
-        (screenXpixels/10*9.5 + size(smallRwdImg,2)/2) (screenYpixels/10 + size(smallRwdImg,1)/2)];
-    
-    posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/2) (screenYpixels/10 - size(largeRwdImg,1)/2) ...
-        (screenXpixels/10*9.5 + size(largeRwdImg,2)/2) (screenYpixels/10 + size(largeRwdImg,1)/2)];
-    
+       
     %% Fixation cross
     
     [CoordsFix, lineWidthFix] = create_fix_cross();
@@ -98,31 +79,42 @@ try
     if training
         nBlocks = memory.nBlocksTrain;
         nTrials = memory.nTrialsTrain;
-        condition = [Shuffle(1:6), Shuffle(1:6)];
         
-        instructionMemory = {instMemory1,instMemory2,trainMemory};
+        % Randomised order of trials from mixed conditions 
+        % condition = [Shuffle(1:6), Shuffle(1:6)];
         
-        for i = 1:length(instructionMemory)     
-            DrawFormattedText(window, instructionMemory{i}, 'center', 'center', black);
-            DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        % Randomised order of condition blocks  
+        condition = zeros(nBlocks,nTrials);
+        for i = 1:nBlocks
+            condition(i,:) = cell2mat(Shuffle({ones(1,nTrials/6), repmat(2,1,nTrials/6), repmat(3,1,nTrials/6), ...
+                repmat(4,1,nTrials/6), repmat(5,1,nTrials/6), repmat(6,1,nTrials/6)}));
+        end 
+        
+        for i = 14:15
+            Screen('DrawTexture', window, stimuli.instTexture{i},[],stimuli.instPos,0);
             Screen('Flip', window);
             KbStrokeWait;
-        end 
+        end
         
     else
         nBlocks = memory.nBlocksExp;
         nTrials = memory.nTrialsExp;
         
-        condition = zeros(nBlocks,nTrials*6);
+%         % Randomised order of trials from mixed conditions 
+%         condition = zeros(nBlocks,nTrials*6);
+%         for i = 1:nBlocks
+%             condition(i,:) = Shuffle(repmat((1:6),1,nTrials));
+%         end
+        
+        % Randomised order of condition blocks  
+        condition = zeros(nBlocks,nTrials);
         for i = 1:nBlocks
-            condition(i,:) = Shuffle(repmat((1:6),1,nTrials));
-        end
+            condition(i,:) = cell2mat(Shuffle({ones(1,nTrials/6), repmat(2,1,nTrials/6), repmat(3,1,nTrials/6), ...
+                repmat(4,1,nTrials/6), repmat(5,1,nTrials/6), repmat(6,1,nTrials/6)}));
+        end 
         
-       experimentMemory = {trainFiniMemory, Memory}; 
-        
-        for i = 1:length(experimentMemory)  
-            DrawFormattedText(window, experimentMemory{i}, 'center', 'center', black);
-            DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        for i = 17
+            Screen('DrawTexture', window, stimuli.instTexture{i},[],stimuli.instPos,0);
             Screen('Flip', window);
             KbStrokeWait;
         end
@@ -135,38 +127,30 @@ try
     for block = 1:nBlocks
         
         if training
-            textRwd = trainReward;
-            imgRwd = smallRwd;
-            posRwd = posSmallRwd;
+            instRwd = stimuli.instTexture{3};
+            imgRwd = stimuli.smallRwd;
+            posRwd = stimuli.posSmallRwd;
             rwd = 0;
-            sizeText = 30;
         else
             if rem(block,2) == 1
-                textRwd = smallReward;
-                imgRwd = smallRwd;
-                posRwd = posSmallRwd;
+                instRwd = stimuli.instTexture{4};
+                imgRwd = stimuli.smallRwd;
+                posRwd = stimuli.posSmallRwd;
                 rwd = 1; %(1 = Small reward, 2 = Large reward)
-                sizeText = 50;
             elseif rem(block,2) == 0
-                textRwd = largeReward;
-                imgRwd = largeRwd;
-                posRwd = posLargeRwd;
+                instRwd = stimuli.instTexture{5};
+                imgRwd = stimuli.largeRwd;
+                posRwd = stimuli.posLargeRwd;
                 rwd = 2; %(1 = Small reward, 2 = Large reward)
-                sizeText = 50;
             end
         end
         
-        Screen('TextSize', window, sizeText);
-        DrawFormattedText(window, textRwd , 'center', screenYpixels*0.35 , black);
-        Screen('TextSize', window, 30);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        
-        Screen('DrawTexture', window, imgRwd );
+        Screen('DrawTexture', window, instRwd,[],stimuli.instPos,0);
         Screen('Flip', window);
         KbStrokeWait;
         
         for trial = 1:nTrials
-            
+                        
             % Initialise response
             a = a + 1;
             rt = 0;
@@ -264,9 +248,7 @@ try
                 [~,~,keyCode] = KbCheck;
                 respTime = GetSecs;
                 
-                Screen('TextSize', window, 50);
-                DrawFormattedText(window, questMemory , 'center', screenYpixels*0.45, black);
-                DrawFormattedText(window, respMemory, 'center', screenYpixels*0.6, black);
+                Screen('DrawTexture', window, stimuli.instTexture{18},[],stimuli.instPos,0);
                 Screen('DrawTexture', window, imgRwd, [], posRwd);
                 Screen('Flip', window);
                 
@@ -310,6 +292,20 @@ try
             WaitSecs(memory.timeBetweenTrials);
             
         end
+    end
+    
+    if training
+                
+        Screen('DrawTexture', window, stimuli.instTexture{16},[],stimuli.instPos,0);
+        Screen('Flip', window);
+        KbStrokeWait;
+        
+    else
+                
+        Screen('DrawTexture', window, stimuli.instTexture{19},[],stimuli.instPos,0);
+        Screen('Flip', window);
+        KbStrokeWait;
+        
     end
     
 catch
