@@ -35,17 +35,7 @@ try
     
     % Query the frame duration
     ifi = Screen('GetFlipInterval', window);
-          
-    %% Download the images
-    
-    load('exp_images/WMN_img_vs.mat');
-    load('exp_images/WMF_img_vs.mat');
-    load('exp_images/WFN_img_vs.mat');
-    load('exp_images/WFF_img_vs.mat');
-    
-    [fearFemTexture,fearMaleTexture, neutralFemTexture, neutralMaleTexture, ...
-        sizeImg] = createImageTexture(WMN_img_vs, WMF_img_vs, WFN_img_vs, WFF_img_vs,window);
-       
+                
     %% Fixation cross
     
     [CoordsFix, lineWidthFix] = create_fix_cross();
@@ -155,10 +145,6 @@ try
             a = a + 1;
             rt = 0;
             response = [];
-            setSizeFF = 0; setSizeNF = 0;
-            setSizeFM = 0; setSizeNM = 0;
-            probaFF = 0; probaNF = 0;
-            probaFM = 0; probaNM = 0;
             
             % Draw fixation cross
             Screen('DrawLines', window, CoordsFix, lineWidthFix, black, [xCenter yCenter], 2);
@@ -209,7 +195,7 @@ try
             
             %Create position and orientation for search display (change every trial)
             [posFF, posNF, posFM, posNM ] = createPositionsMemory(positionMatrix, ...
-                memory.setSize,setSizeFF, setSizeNF, setSizeFM, setSizeNM, sizeImg);
+                memory.setSize,setSizeFF, setSizeNF, setSizeFM, setSizeNM, stimuli.sizeImgMemory);
             
             % Save pos for eye-tracking (is it really useful ?) 
             respMatMemory(a).posFF = posFF;
@@ -218,10 +204,10 @@ try
             respMatMemory(a).posNM = posNM;
             
             % Select new faces
-            fearFem = [fearFemTexture{randi([1 size(fearFemTexture,2)],1,setSizeFF)}];
-            neutralFem = [neutralFemTexture{randi([1 size(neutralFemTexture,2)],1,setSizeNF)}];
-            fearMale= [fearMaleTexture{randi([1 size(fearMaleTexture,2)],1,setSizeFM)}];
-            neutralMale = [neutralMaleTexture{randi([1 size(neutralMaleTexture,2)],1,setSizeNM)}];
+            fearFem = [stimuli.fearFemMemory{randi([1 size(stimuli.fearFemMemory,2)],1,setSizeFF)}];
+            neutralFem = [stimuli.neutralFemMemory{randi([1 size(stimuli.neutralFemMemory,2)],1,setSizeNF)}];
+            fearMale= [stimuli.fearMaleMemory{randi([1 size(stimuli.fearMaleMemory,2)],1,setSizeFM)}];
+            neutralMale = [stimuli.neutralMaleMemory{randi([1 size(stimuli.neutralMaleMemory,2)],1,setSizeNM)}];
             
             % Screen priority
             Priority(MaxPriority(window));

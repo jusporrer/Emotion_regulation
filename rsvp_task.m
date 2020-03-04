@@ -47,28 +47,7 @@ try
     %% Settings
     
     settings_rsvp;
-    
-    %% Download the images
-    
-    % Faces 
-    load('exp_images/WMN_img_rsvp.mat','WMN_img_rsvp');
-    load('exp_images/WMF_img_rsvp.mat','WMF_img_rsvp');
-    load('exp_images/WFN_img_rsvp.mat','WFN_img_rsvp');
-    load('exp_images/WFF_img_rsvp.mat','WFF_img_rsvp');
-    
-    load('exp_images/WMN_img_scramble.mat','WMN_img_scramble');
-    load('exp_images/WMF_img_scramble.mat','WMF_img_scramble');
-    load('exp_images/WFN_img_scramble.mat','WFN_img_scramble');
-    load('exp_images/WFF_img_scramble.mat','WFF_img_scramble');
-    
-    [fearFemTexture,fearMaleTexture, neutralFemTexture, neutralMaleTexture ...
-        ] = createImageTexture(WMN_img_rsvp, WMF_img_rsvp, WFN_img_rsvp, WFF_img_rsvp,window);
-    
-    [fearFemScramble,fearMaleScramble, neutralFemScramble, neutralMaleScramble, ...
-        sizeImg] = createImageTexture(WMN_img_scramble, WMF_img_scramble, WFN_img_scramble, WFF_img_scramble,window);
-    
-    posCenter = [(screenXpixels-sizeImg(2))/2 (screenYpixels-sizeImg(1))/2 (screenXpixels+sizeImg(2))/2 (screenYpixels+sizeImg(1))/2];
-        
+           
     %% Training or not
     
     if training
@@ -151,15 +130,15 @@ try
             end
             
             % Select new images every trial
-            img = [fearFemTexture{randi([1 size(fearFemTexture,2)],1,2)};... % 1
-                fearMaleTexture{randi([1 size(fearMaleTexture,2)],1,2)}; ... % 2
-                neutralFemTexture{randi([1 size(neutralFemTexture,2)],1,2)}; ... % 3
-                neutralMaleTexture{randi([1 size(neutralMaleTexture,2)],1,2)}]; % 4
+            img = [stimuli.fearFemRSVP{randi([1 size(stimuli.fearFemRSVP,2)],1,2)};... % 1
+                stimuli.fearMaleRSVP{randi([1 size(stimuli.fearMaleRSVP,2)],1,2)}; ... % 2
+                stimuli.neutralFemRSVP{randi([1 size(stimuli.neutralFemRSVP,2)],1,2)}; ... % 3
+                stimuli.neutralMaleRSVP{randi([1 size(stimuli.neutralMaleRSVP,2)],1,2)}]; % 4
             
-            img_scramble = [fearFemScramble{randi([1 size(fearFemScramble,2)],1,rsvp.setSize)};... % 1
-                fearMaleScramble{randi([1 size(fearMaleScramble,2)],1,rsvp.setSize)}; ... % 2
-                neutralFemScramble{randi([1 size(neutralFemScramble,2)],1,rsvp.setSize)}; ... %3
-                neutralMaleScramble{randi([1 size(neutralMaleScramble,2)],1,rsvp.setSize)}]; %4
+            img_scramble = [stimuli.fearFemScramble{randi([1 size(stimuli.fearFemScramble,2)],1,rsvp.setSize)};... % 1
+                stimuli.fearMaleScramble{randi([1 size(stimuli.fearMaleScramble,2)],1,rsvp.setSize)}; ... % 2
+                stimuli.neutralFemScramble{randi([1 size(stimuli.neutralFemScramble,2)],1,rsvp.setSize)}; ... %3
+                stimuli.neutralMaleScramble{randi([1 size(stimuli.neutralMaleScramble,2)],1,rsvp.setSize)}]; %4
             
             % Indexing of img
             fem = [1,3]; male = [2,4]; fear = [1,2]; neutral = [3,4];
@@ -215,7 +194,7 @@ try
             
             for nbImage = 1: rsvp.setSize
                 Screen(window, 'FillRect', white);
-                Screen('DrawTexture', window, imageDisplay(nbImage), [],posCenter,0);
+                Screen('DrawTexture', window, imageDisplay(nbImage), [],stimuli.posRSVP,0);
                 Screen('DrawTexture', window, imgRwd, [], posRwd);
                 flipTime = Screen('Flip', window, flipTime + rsvp.imageDuration - ifi,0);
             end

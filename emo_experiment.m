@@ -63,7 +63,7 @@ try
     instFolder = dir(instFolderName); 
      
     inst = cell(1,(length(instFolder)-2));
-    stimuli.instTexture = cell(1,(length(instFolder)-2);
+    stimuli.instTexture = cell(1,(length(instFolder)-2));
     
     for i = 3:length(instFolder)
         inst{i-2} = imread([instFolderName, 'Diapositive', num2str(i-2), '.JPG']);
@@ -86,10 +86,40 @@ try
     stimuli.posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/2) (screenYpixels/10 - size(largeRwdImg,1)/2) ...
         (screenXpixels/10*9.5 + size(largeRwdImg,2)/2) (screenYpixels/10 + size(largeRwdImg,1)/2)];
     
+    %% Download images for RSVP 
+     
+    load('exp_images/WMN_img_rsvp.mat','WMN_img_rsvp');
+    load('exp_images/WMF_img_rsvp.mat','WMF_img_rsvp');
+    load('exp_images/WFN_img_rsvp.mat','WFN_img_rsvp');
+    load('exp_images/WFF_img_rsvp.mat','WFF_img_rsvp');
+    
+    load('exp_images/WMN_img_scramble.mat','WMN_img_scramble');
+    load('exp_images/WMF_img_scramble.mat','WMF_img_scramble');
+    load('exp_images/WFN_img_scramble.mat','WFN_img_scramble');
+    load('exp_images/WFF_img_scramble.mat','WFF_img_scramble');
+    
+    [stimuli.fearFemRSVP,stimuli.fearMaleRSVP, stimuli.neutralFemRSVP, stimuli.neutralMaleRSVP ...
+        ] = createImageTexture(WMN_img_rsvp, WMF_img_rsvp, WFN_img_rsvp, WFF_img_rsvp,window);
+    
+    [stimuli.fearFemScramble,stimuli.fearMaleScramble, stimuli.neutralFemScramble, stimuli.neutralMaleScramble, ...
+        stimuli.sizeImgRSVP] = createImageTexture(WMN_img_scramble, WMF_img_scramble, WFN_img_scramble, WFF_img_scramble,window);
+    
+    stimuli.posRSVP = [(screenXpixels - stimuli.sizeImgRSVP(2))/2 (screenYpixels - stimuli.sizeImgRSVP(1))/2 ...
+        (screenXpixels + stimuli.sizeImgRSVP(2))/2 (screenYpixels + stimuli.sizeImgRSVP(1))/2];
+    
+    %% Download Images for Memory task 
+    
+    load('exp_images/WMN_img_vs.mat');
+    load('exp_images/WMF_img_vs.mat');
+    load('exp_images/WFN_img_vs.mat');
+    load('exp_images/WFF_img_vs.mat');
+    
+    [stimuli.fearFemMemory,stimuli.fearMaleMemory, stimuli.neutralFemMemory, stimuli.neutralMaleMemory, ...
+        stimuli.sizeImgMemory] = createImageTexture(WMN_img_vs, WMF_img_vs, WFN_img_vs, WFF_img_vs,window);
+    
     %% Set Participant ID
     
     ID = ceil(100000*rand);
-    ID = 2; 
     
     %% Start of the experiment 
     
