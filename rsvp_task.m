@@ -248,7 +248,7 @@ try
             respMatRSVP(a).block = block;
             respMatRSVP(a).trial = trial;
             respMatRSVP(a).RTs = rt;
-            respMatRSVP(a).instr = instr;
+            respMatRSVP(a).instr = instr; % (1 = femquest, 2 = homquest) 
             respMatRSVP(a).response = response;
             respMatRSVP(a).posCritDist = posCritDist;
             respMatRSVP(a).posTarget = posTarget;
