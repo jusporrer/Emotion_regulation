@@ -1,4 +1,4 @@
-%% Settings for the Rememberance Task
+%% Settings for the memory Task
 
 % Number of trials per set size
 memory.nTrialsTrain = 6; % expected : 12 -> 2/condi mixed
