@@ -54,13 +54,28 @@ target = [data_rsvp(nTrain+1:end).target];
 
 %% Basic information 
 
+nTrial = 1:length(trial); % allows the indexing 
+
 if length(trial) == cfg_training.nTrialsExp * cfg_training.nBlocksExp
-    disp(['No data loss: There were ',num2str(length(trial)), ' trials']);
+    disp(['No data loss: There were ',num2str(length(trial)), ' trials.']);
 else 
     disp(['Problem: There were only ',num2str(length(trial)), ' trials. Out of the normal ', ...
-        num2str(cfg_training.nTrialsExp * cfg_training.nBlocksExp), 'trial expected']);
+        num2str(cfg_training.nTrialsExp * cfg_training.nBlocksExp), 'trial expected.']);
 end
  
+%% Performance 
+
+% correctFem = nTrial(response == 1 && instr == 1 && target == 1 || target == 3);
+% correctHom = nTrial(response == 1 && instr == 2 && target == 2 || target == 4);
+% 
+% correctNotFem = nTrial(response == 2 && instr == 1 && target == 2 || target == 4);
+% correctNotHom = nTrial(response == 2 && instr == 2 && target == 1 || target == 3);
+% 
+% nCorrect = correctFem + correctHom + correctNotFem + correctNotHom; 
+% 
+% performance = nCorrect/nTrial*100;
+
+
 
 
 
