@@ -95,10 +95,10 @@ try
         nTrials = rsvp.nTrialsTrain;
         condition = [Shuffle(1:6), Shuffle(1:6)];
         
-        instruction = {instRSVP1,instRSVP2,trainRSVP};
+        instructionRSVP = {instRSVP1,instRSVP2,trainRSVP};
         
-        for i = 1:length(instruction)     
-            DrawFormattedText(window, instruction{i}, 'center', 'center', black);
+        for i = 1:length(instructionRSVP)     
+            DrawFormattedText(window, instructionRSVP{i}, 'center', 'center', black);
             DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
             Screen('Flip', window);
             KbStrokeWait;
@@ -113,7 +113,7 @@ try
             condition(i,:) = Shuffle(repmat((1:6),1,nTrials));
         end 
         
-        experimentRSVP = {trainingFiniRSVP, RSVP}; 
+        experimentRSVP = {trainFiniRSVP, RSVP}; 
         
         for i = 1:length(experimentRSVP)  
             DrawFormattedText(window, experimentRSVP{i}, 'center', 'center', black);
@@ -301,7 +301,7 @@ try
             respMatRSVP(a).cfg = rsvp;
             respMatRSVP(a).ID = ID;
             respMatRSVP(a).training = training; %(1 = training, 0 = no training)
-            respMatRSVP(a).reward = rwd; %(0 = traning, 1 = Small reward, 2 = Large reward)
+            respMatRSVP(a).reward = rwd; %(0 = training, 1 = Small reward, 2 = Large reward)
             respMatRSVP(a).condition = condition(block,trial); % (1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
             respMatRSVP(a).block = block;
             respMatRSVP(a).trial = trial;

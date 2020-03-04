@@ -100,6 +100,15 @@ try
         nTrials = memory.nTrialsTrain;
         condition = [Shuffle(1:6), Shuffle(1:6)];
         
+        instructionMemory = {instMemory1,instMemory2,trainMemory};
+        
+        for i = 1:length(instructionMemory)     
+            DrawFormattedText(window, instructionMemory{i}, 'center', 'center', black);
+            DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+            Screen('Flip', window);
+            KbStrokeWait;
+        end 
+        
     else
         nBlocks = memory.nBlocksExp;
         nTrials = memory.nTrialsExp;
@@ -107,6 +116,15 @@ try
         condition = zeros(nBlocks,nTrials*6);
         for i = 1:nBlocks
             condition(i,:) = Shuffle(repmat((1:6),1,nTrials));
+        end
+        
+       experimentMemory = {trainFiniMemory, Memory}; 
+        
+        for i = 1:length(experimentMemory)  
+            DrawFormattedText(window, experimentMemory{i}, 'center', 'center', black);
+            DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+            Screen('Flip', window);
+            KbStrokeWait;
         end
         
     end
@@ -138,12 +156,20 @@ try
             end
         end
         
+        Screen('TextSize', window, sizeText);
+        DrawFormattedText(window, textRwd , 'center', screenYpixels*0.35 , black);
+        Screen('TextSize', window, 30);
+        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        
+        Screen('DrawTexture', window, imgRwd );
+        Screen('Flip', window);
+        KbStrokeWait;
+        
         for trial = 1:nTrials
             
-                        % Initialise response
+            % Initialise response
             a = a + 1;
             rt = 0;
-            posRect = [];
             response = [];
             setSizeFF = 0; setSizeNF = 0;
             setSizeFM = 0; setSizeNM = 0;
@@ -264,15 +290,19 @@ try
             end
             
             % Save data
+            respMatMemory(a).cfg = memory;
             respMatMemory(a).ID = ID;
-            respMatMemory(a).training = training;
-            respMatMemory(a).reward = rwd; %(0 = Small reward, 1 = Large reward)
-            respMatMemory(a).condition = condition(block,trial); %(0 = DC, 1 = CC, 2 = BC)
+            respMatMemory(a).training = training;  %(1 = training, 0 = no training)
+            respMatMemory(a).reward = rwd; %(0 = training, 1 = Small reward, 2 = Large reward)
+            respMatMemory(a).condition = condition(block,trial); % (1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
             respMatMemory(a).block = block;
             respMatMemory(a).trial = trial;
             respMatMemory(a).RTs = rt;
-            respMatMemory(a).response = response;
-            
+            respMatMemory(a).response = response; % (1 = femKey/f; 2=hommeKey/h)
+            respMatMemory(a).setSizeFF = setSizeFF;
+            respMatMemory(a).setSizeNF = setSizeNF ;
+            respMatMemory(a).setSizeFM = setSizeFM ;
+            respMatMemory(a).setSizeNM = setSizeNM; 
             
             % Screen after trial
             Screen('FillRect', window, white);
