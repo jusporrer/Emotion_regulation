@@ -5,6 +5,7 @@
 clearvars;
 
 ID              = 35923; % 85841; % % 10016;
+figure          = 1; 
 
 %% =================== Load the data                    ===================
 resp_folder     = '../results';
@@ -81,19 +82,19 @@ end
 %% =================== Performance - Correct Trials     ===================
 
 % Correctly detect fem when fem was target 
-correct_Fem     = (response(nTrial) == 1 & instr(nTrial) == 1 ...               % all fem targets
+correct_Fem     = (response(nTrial) == 1 & instr(nTrial) == 1 ...                           % all fem targets
     & (target(nTrial) == 1 | target(nTrial) == 3));
-correct_FearFem = (response(nTrial) == 1 & instr(nTrial) == 1 ...           % fearful fem targets 
+correct_FearFem = (response(nTrial) == 1 & instr(nTrial) == 1 ...                           % fearful fem targets 
     & target(nTrial) == 1);
-correct_NeutralFem  = (response(nTrial) == 1 & instr(nTrial) == 1 ...        % neutral fem targets 
+correct_NeutralFem  = (response(nTrial) == 1 & instr(nTrial) == 1 ...                       % neutral fem targets 
     & target(nTrial) == 3);
 
 % Correctly detect hom when hom was target 
-correct_Hom     = (response(nTrial) == 1 & instr(nTrial) == 2 ...               % all hom targets 
+correct_Hom     = (response(nTrial) == 1 & instr(nTrial) == 2 ...                           % all hom targets 
     & (target(nTrial) == 2 | target(nTrial) == 4));
-correct_FearHom = (response(nTrial) == 1 & instr(nTrial) == 2 ...           % fearful hom targets 
+correct_FearHom = (response(nTrial) == 1 & instr(nTrial) == 2 ...                           % fearful hom targets 
     & target(nTrial) == 2);
-correct_NeutralHom  = (response(nTrial) == 1 & instr(nTrial) == 2 ...        % neutral hom taregts 
+correct_NeutralHom  = (response(nTrial) == 1 & instr(nTrial) == 2 ...                       % neutral hom taregts 
     & target(nTrial) == 4);
 
 % Correctly reject fem when hom was target 
@@ -186,11 +187,11 @@ disp(['Performance : ',num2str(ceil(perf_incorrect)), ...
 
 %% =================== Performance - Rewards            ===================
 
-smallRwd        = (reward == 1); 
+smallRwd        = (reward(nTrial) == 1); 
 correct_smallRwd= (correct(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1); 
 smallRwd_rate   = sum(correct_smallRwd)/sum(smallRwd)*100; 
 
-largeRwd        = (reward == 2);
+largeRwd        = (reward(nTrial) == 2);
 correct_largeRwd= (correct(1:length(nTrial)) == 1 & largeRwd(1:length(nTrial)) == 1);
 largeRwd_rate   = sum(correct_largeRwd)/sum(largeRwd)*100; 
 
@@ -201,34 +202,34 @@ disp(['Reward : ',num2str(ceil(smallRwd_rate)), '% were correct for small rwd & 
 %(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
 
 % Detrimental condition 
-DC_hom          = (condition == 1);
+DC_hom          = (condition(nTrial) == 1);
 correct_DC_hom  = (correct(1:length(nTrial)) == 1 & DC_hom(1:length(nTrial)) == 1);
 incorrect_DC_hom= (incorrect(1:length(nTrial)) == 1 & DC_hom(1:length(nTrial)) == 1);
 DC_hom_rate     = sum(correct_DC_hom)/sum(DC_hom)*100;
 
-DC_fem          = (condition == 2); 
+DC_fem          = (condition(nTrial) == 2); 
 correct_DC_fem  = (correct(1:length(nTrial)) == 1 & DC_fem(1:length(nTrial)) == 1);
 incorrect_DC_fem= (incorrect(1:length(nTrial)) == 1 & DC_fem(1:length(nTrial)) == 1);
 DC_fem_rate     = sum(correct_DC_fem)/sum(DC_fem)*100;
 
 % Control Conditions 
-CC_hom          = (condition == 3); 
+CC_hom          = (condition(nTrial) == 3); 
 correct_CC_hom  = (correct(1:length(nTrial)) == 1 & CC_hom(1:length(nTrial)) == 1);
 incorrect_CC_hom= (incorrect(1:length(nTrial)) == 1 & CC_hom(1:length(nTrial)) == 1);
 CC_hom_rate     = sum(correct_CC_hom)/sum(CC_hom)*100;
 
-CC_fem          = (condition == 4); 
+CC_fem          = (condition(nTrial) == 4); 
 correct_CC_fem  = (correct(1:length(nTrial)) == 1 & CC_fem(1:length(nTrial)) == 1);
 incorrect_CC_fem= (incorrect(1:length(nTrial)) == 1 & CC_fem(1:length(nTrial)) == 1);
 CC_fem_rate     = sum(correct_CC_fem)/sum(CC_fem)*100;
 
 % Beneficial Conditions 
-BC_hom          = (condition == 5); 
+BC_hom          = (condition(nTrial) == 5); 
 correct_BC_hom  = (correct(1:length(nTrial)) == 1 & BC_hom(1:length(nTrial)) == 1);
 incorrect_BC_hom= (incorrect(1:length(nTrial)) == 1 & BC_hom(1:length(nTrial)) == 1);
 BC_hom_rate     = sum(correct_BC_hom)/sum(BC_hom)*100;
 
-BC_fem          = (condition == 6); 
+BC_fem          = (condition(nTrial) == 6); 
 correct_BC_fem  = (correct(1:length(nTrial)) == 1 & BC_fem(1:length(nTrial)) == 1);
 incorrect_BC_fem= (correct(1:length(nTrial)) == 1 & BC_fem(1:length(nTrial)) == 1);
 BC_fem_rate     = sum(correct_BC_fem)/sum(BC_fem)*100;
@@ -343,10 +344,59 @@ rt_hom          = (mean(rt_DC_hom) + mean(rt_CC_hom) + mean(rt_BC_hom)) / 3;
 disp(['RTs Gender: ',num2str(rt_fem), ' s for condition femme & ', ...
     num2str(rt_hom), ' s for condition homme ']);
 
+%% =================== Learning Cruve                   ===================
+
+LC              = zeros(1,cfg_exp.nBlocksExp);
+for i = 1:cfg_exp.nBlocksExp
+    LC(i)       = (sum(correct(block(nTrial) == i)))/(length(nTrial)/cfg_exp.nBlocksExp)*100; 
+end    
+    
+LC_smallRwd     = zeros(1,cfg_exp.nBlocksExp);
+for i = 1:cfg_exp.nBlocksExp
+    LC_smallRwd(i) = (sum(correct_smallRwd(block(nTrial) == i)))/(length(nTrial)/cfg_exp.nBlocksExp)*100; 
+end
+
+LC_largeRwd     = zeros(1,cfg_exp.nBlocksExp);
+for i = 1:cfg_exp.nBlocksExp
+    LC_largeRwd(i) = (sum(correct_largeRwd(block(nTrial) == i)))/(length(nTrial)/cfg_exp.nBlocksExp)*100; 
+end
 
 
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 %end 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
