@@ -1,12 +1,12 @@
 % JS initial script analysis for the effect of inentives on emotion regulation
 % February 2020
 
-%function []    = Individual_Analysis_RSVP(ID)
+%function []    = Individual_Analysis_RSVP(ID, figure)
 clearvars;
 
 ID              = 35923; % 85841; % % 10016;
 
-%% Load the data (on an individual level)
+%% =================== Load the data                    ===================
 resp_folder     = '../results';
 
 resp_rsvp       = [num2str(ID),'_rsvp.mat'];
@@ -25,39 +25,29 @@ if ~isfile(resp_file_rsvp)
     uiwait(msgbox(warningMessage));
 end
 
-%% Initialise 
+%% =================== Initialise                       ===================
 
 cfg_training    = data_rsvp(1).cfg;
-
 nTrain          = cfg_training.nTrialsTrain * cfg_training.nBlocksTrain; 
-
 cfg_exp         = data_rsvp(nTrain+1).cfg;
-
 %(0 = training, 1 = Small reward, 2 = Large reward)
-reward          = [data_rsvp(nTrain+1:end).reward];
-
+reward          = [data_rsvp(nTrain+1:end).reward]; 
 %(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
-condition       = [data_rsvp(nTrain+1:end).condition];
-
+condition       = [data_rsvp(nTrain+1:end).condition]; 
 block           = [data_rsvp(nTrain+1:end).block];
 trial           = [data_rsvp(nTrain+1:end).trial];
-
 rt              = [data_rsvp(nTrain+1:end).RTs];
-
 % (1 = femquest, 2 = homquest) 
-instr           = [data_rsvp(nTrain+1:end).instr];
-
+instr           = [data_rsvp(nTrain+1:end).instr]; 
 % (1 = [o] / oui; 2 = [n] / non)
-response        = [data_rsvp(nTrain+1:end).response];
-
+response        = [data_rsvp(nTrain+1:end).response]; 
 posCritDist     = [data_rsvp(nTrain+1:end).posCritDist];
 posTarget       = [data_rsvp(nTrain+1:end).posTarget];
-
 % 1 = fearFem, 2 = fearMale, 3 = neutralFem, 4 = neutralMale) 
-distractor      = [data_rsvp(nTrain+1:end).distractor];
+distractor      = [data_rsvp(nTrain+1:end).distractor]; 
 target          = [data_rsvp(nTrain+1:end).target];
 
-%% Basic information 
+%% =================== Basic Information                ===================
 
 nTrial          = 1:length(trial); % allows the indexing 
 
@@ -68,13 +58,13 @@ else
         num2str(cfg_exp.nTrialsExp * cfg_exp.nBlocksExp), 'trial expected']);
 end
  
-%% Reaction Time 
+%% =================== Exclude 3 STD RTs                ===================
 
 rtExp           = rt(nTrial);  
 mean_RtExp      = mean(rtExp) ;
 std_RtExp       = std(rtExp)*3 ;
 
-% Recalculate nTrial with only non-outlier RT trials:
+% Recalculate nTrial with only non-outlier RT trials
 low_RtExp       = mean_RtExp-std_RtExp ;
 up_RtExp        = mean_RtExp+std_RtExp ;
 
@@ -88,7 +78,7 @@ if length(nTrial) < length(trial)
         ' trial(s) had to be excluded because the RTs were over or under 3 STD']);
 end
 
-%% Performance // correctness 
+%% =================== Performance - Correct Trials     ===================
 
 % Correctly detect fem when fem was target 
 correct_Fem     = (response(nTrial) == 1 & instr(nTrial) == 1 ...               % all fem targets
@@ -127,7 +117,7 @@ correct         = (correct_Fem) + (correct_Hom) + (correct_NotFem) + (correct_No
 nCorrect        = sum(correct);
 
 % SDT: correct hit 
-hit     = (correct_Fem) + (correct_Hom); 
+hit             = (correct_Fem) + (correct_Hom); 
 hit_rate        = (sum(hit)/nCorrect)*100; 
 
 % SDT: correct rejection
@@ -141,22 +131,22 @@ disp(['Performance : ',num2str(ceil(performance)), ...
         '% correct trials with ',num2str(ceil(hit_rate)), '% hits & ', ...
         num2str(ceil(reject_rate)), '% rejections' ]);
 
-%% Performance // Incorrectness 
+%% =================== Performance - Incorrect Trials   ===================
 
-% Incorrectly detect hom when fem was target ( false alarm: says present when not present)
-incorrect_Fem = (response(nTrial) == 2 & instr(nTrial) == 1 ...               % all fem targets
+% Incorrectly not detect fem when fem was target ( false alarm: says present when not present)
+incorrect_Fem = (response(nTrial) == 2 & instr(nTrial) == 1 ...                             % all fem targets
     & (target(nTrial) == 1 | target(nTrial) == 3));
-incorrect_FearFem = (response(nTrial) == 2 & instr(nTrial) == 1 ...           % fearful fem targets 
+incorrect_FearFem = (response(nTrial) == 2 & instr(nTrial) == 1 ...                         % fearful fem targets 
     & target(nTrial) == 1);
-incorrect_NeutralFem = (response(nTrial) == 2 & instr(nTrial) == 1 ...        % neutral fem targets 
+incorrect_NeutralFem = (response(nTrial) == 2 & instr(nTrial) == 1 ...                      % neutral fem targets 
     & target(nTrial) == 3);
 
-% Incorrectly detect fem when hom was target 
-incorrect_Hom = (response(nTrial) == 2 & instr(nTrial) == 2 ...               % all hom targets 
+% Incorrectly not detect hom when hom was target 
+incorrect_Hom = (response(nTrial) == 2 & instr(nTrial) == 2 ...                             % all hom targets 
     & (target(nTrial) == 2 | target(nTrial) == 4));
-incorrect_FearHom = (response(nTrial) == 2 & instr(nTrial) == 2 ...           % fearful hom targets 
+incorrect_FearHom = (response(nTrial) == 2 & instr(nTrial) == 2 ...                         % fearful hom targets 
     & target(nTrial) == 2);
-incorrect_NeutralHom = (response(nTrial) == 2 & instr(nTrial) == 2 ...        % neutral hom taregts 
+incorrect_NeutralHom = (response(nTrial) == 2 & instr(nTrial) == 2 ...                      % neutral hom taregts 
     & target(nTrial) == 4);
 
 % Incorrectly reject hom when hom was target ( miss: says not preset when present)
@@ -194,38 +184,21 @@ disp(['Performance : ',num2str(ceil(perf_incorrect)), ...
         '% incorrect trials with ',num2str(ceil(falseAlarm_rate)), '% false alarms & ', ...
         num2str(ceil(miss_rate)), '% misses' ]);
 
-%% Effect of reward on performance 
+%% =================== Performance - Rewards            ===================
 
 smallRwd        = (reward == 1); 
-correct_smallRwd = (correct(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1); 
+correct_smallRwd= (correct(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1); 
 smallRwd_rate   = sum(correct_smallRwd)/sum(smallRwd)*100; 
 
 largeRwd        = (reward == 2);
-correct_largeRwd = (correct(1:length(nTrial)) == 1 & largeRwd(1:length(nTrial)) == 1);
+correct_largeRwd= (correct(1:length(nTrial)) == 1 & largeRwd(1:length(nTrial)) == 1);
 largeRwd_rate   = sum(correct_largeRwd)/sum(largeRwd)*100; 
 
 disp(['Reward : ',num2str(ceil(smallRwd_rate)), '% were correct for small rwd & ', ...
         num2str(ceil(largeRwd_rate)), '% were correct for large rwd' ]);
 
-    
-%% Size of the elapse (lap 2 = 200 ms, lap 4 = 400 ms) 
-
-lap             = posTarget-posCritDist; 
-
-lap2            = (lap(nTrial) == 2); 
-nLap2           = sum(lap2);
-correct_lap2    = (correct(1:length(nTrial)) == 1 & lap2(1:length(nTrial)) == 1); 
-lap2_rate       = sum(correct_lap2)/nCorrect*100; 
-
-lap4            = (lap(nTrial) == 4); 
-nLap4           = sum(lap4);
-correct_lap4    = (correct(1:length(nTrial)) == 1 & lap4(1:length(nTrial)) == 1); 
-lap4_rate       = sum(correct_lap4)/nCorrect*100; 
-
-disp(['Elapse : ',num2str(ceil(lap2_rate)), '% were correct after a lag 2 & ', ...
-        num2str(ceil(lap4_rate)), '% were correct after a lag 4' ]);
-
-%% Conditions (1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
+%% =================== Performance - Conditions         ===================
+%(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
 
 % Detrimental condition 
 DC_hom          = (condition == 1);
@@ -262,7 +235,7 @@ BC_fem_rate     = sum(correct_BC_fem)/sum(BC_fem)*100;
 
 % Number of trials in each conditions
 if sum(DC_hom) == sum(DC_fem) == sum(CC_hom) == sum(CC_fem) == sum(BC_hom) ==  sum(BC_fem)
-    disp(['All conditions have ',num2str(sum(DC_hom)), 'trials']); 
+    disp(['All conditions have ',num2str(cfg_exp.nTrialsExp*cfg_exp.nBlocksExp/6), 'trials']); 
 else 
     disp(['Warning, not all condition have ',num2str(cfg_exp.nTrialsExp*cfg_exp.nBlocksExp/6), ' trials']); 
 end 
@@ -275,6 +248,9 @@ perf_BC         = (BC_hom_rate + BC_fem_rate) / 2;
 disp(['Performance Emotion : ',num2str(ceil(perf_DC)), '% for detrimental condition, ', ...
     num2str(ceil(perf_CC)), '% for control condition & ',num2str(ceil(perf_BC)), '% for beneficial condition']); 
 
+inabi_inhibit   = perf_CC - perf_DC; 
+abi_enhance     = perf_BC - perf_CC; 
+
 % Condition Gender 
 perf_fem        = (DC_fem_rate + CC_fem_rate + BC_fem_rate) / 3;
 perf_hom        = (DC_hom_rate + CC_hom_rate + BC_hom_rate) / 3;
@@ -282,7 +258,24 @@ perf_hom        = (DC_hom_rate + CC_hom_rate + BC_hom_rate) / 3;
 disp(['Performance Gender: ',num2str(ceil(perf_fem)), '% for condition femme & ', ...
     num2str(ceil(perf_CC)), '% for condition homme ']); 
 
-%% RTs means for correct and incorrect trials 
+%% =================== Performance - Lags               ===================
+
+lag             = posTarget-posCritDist; 
+
+lag2            = (lag(nTrial) == 2); 
+nlag2           = sum(lag2);
+correct_lag2    = (correct(1:length(nTrial)) == 1 & lag2(1:length(nTrial)) == 1); 
+lag2_rate       = sum(correct_lag2)/nCorrect*100; 
+
+lag4            = (lag(nTrial) == 4); 
+nlag4           = sum(lag4);
+correct_lag4    = (correct(1:length(nTrial)) == 1 & lag4(1:length(nTrial)) == 1); 
+lag4_rate       = sum(correct_lag4)/nCorrect*100; 
+
+disp(['Performance Lag : ',num2str(ceil(lag2_rate)), '% were correct after a lag 2 & ', ...
+        num2str(ceil(lag4_rate)), '% were correct after a lag 4' ]);
+
+%% =================== RTs - Correct & Incorrect Trials ===================
 
 rt_correct      = rt(correct == 1); 
 rt_hit          = rt(hit == 1);
@@ -298,7 +291,18 @@ disp(['RTs correct : ',num2str(mean(rt_correct)), ' s for correct trials includi
 disp(['RTs incorrect : ',num2str(mean(rt_incorrect)), ' s for incorrect trials including ', ...
     num2str(mean(rt_falseAlarm)), ' s for false alarms & ', num2str(mean(rt_miss)), ' s for misses']); 
 
-%% RTs means for differentes conditions 
+%% =================== RTs - Rewards                    ===================
+
+rt_smallRwd     = rt(smallRwd); 
+rt_smallRwd_correct = rt(correct_smallRwd == 1); 
+
+rt_largeRwd     = rt(largeRwd); 
+rt_largeRwd_correct = rt(correct_largeRwd == 1); 
+
+disp(['RTs reward : ',num2str(mean(rt_smallRwd)), ' s for small rewards & ', ...
+    num2str(mean(rt_largeRwd)), ' s for large rewards ']); 
+
+%% =================== RTs - Conditions                 ===================
 
 rt_DC_hom       = rt(DC_hom == 1); 
 rt_DC_hom_correct= rt(correct_DC_hom == 1);
@@ -338,6 +342,7 @@ rt_hom          = (mean(rt_DC_hom) + mean(rt_CC_hom) + mean(rt_BC_hom)) / 3;
 
 disp(['RTs Gender: ',num2str(rt_fem), ' s for condition femme & ', ...
     num2str(rt_hom), ' s for condition homme ']);
+
 
 
     
