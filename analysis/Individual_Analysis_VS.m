@@ -19,22 +19,17 @@ end
 
 %% Start minimal analysis RSVP 
 
-for i = 1:size(data_visual_search, 1)
-    if data_visual_search(i,2) == 1 
-        training_vs = data_visual_search(i,:);
-    elseif data_visual_search(i,2) == 0 
-        exp_vs = data_visual_search(i,:);
-    end 
-end 
+training = [data_rsvp.training];
+reward = [data_rsvp.reward];
+condition = [data_rsvp.condition];
+block = [data_rsvp.block];
+trial = [data_rsvp.trial];
+RTs = [data_rsvp.RTs];
+response = [data_rsvp.response];
+setSizeFF = [data_rsvp.setSizeFF];
+setSizeNF = [data_rsvp.setSizeNF];
+setSizeFM = [data_rsvp.setSizeFM];
+setSizeNM= [data_rsvp.setSizeNM];
 
-% To make sure no trial was lost. 
-if size(exp_vs,1) < 180 %nb of decided trials 
-    disp(['Warning : There were only ', num2str(size(exp_vs,1)),' trials']); 
-end 
-
-% Attribute each column a name 
-
-% respMatColumnsVS = ["ID", "Training", "Reward", "Condition", ...
-  %  "Nb Block","Nb Trial", "RTs", "ResponseFF", "ResponseNF", "ResponseFM", "ResponseNM"];
 
 end

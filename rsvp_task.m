@@ -1,4 +1,4 @@
-function [respMatRSVP] = rsvp_task(ID, window, colors, screenPixels, coorCenter, training)
+function [respMatRSVP] = rsvp_task(ID, window, colors, screenPixels, training, stimuli)
 
 try
     %% Initialise screen
@@ -11,8 +11,8 @@ try
     % Get the size and centre of the window in pixels
     screenXpixels = screenPixels(1);
     screenYpixels = screenPixels(2);
-    xCenter = coorCenter(1);
-    yCenter = coorCenter(2);
+    xCenter = screenXpixels/2;
+    yCenter = screenYpixels/2;
     
     %% Keyboard
     
@@ -21,11 +21,11 @@ try
     spaceKey = KbName('space');
     
     % Response Keys
-    leftKey = KbName('LeftArrow');
-    rightKey = KbName('RightArrow');
+    ouiKey = KbName('o');
+    nonKey = KbName('n');
     
     % The only keys that will work to continue
-    KbCheckList = [escapeKey, spaceKey, leftKey, rightKey];
+    KbCheckList = [escapeKey, spaceKey, ouiKey, nonKey];
     RestrictKeysForKbCheck(KbCheckList);
     
     %% Timing Information
@@ -39,13 +39,7 @@ try
     
     %Numer of frames to wait before re-drawing
     waitframes = 1;
-    
-    %% Defines the text
-    Screen('TextFont',window, 'Calibri');
-    Screen('TextSize', window, 30);
-    
-    text_experiment;
-    
+       
     %% Fixation cross
     
     [CoordsFix, lineWidthFix] = create_fix_cross();
@@ -53,41 +47,7 @@ try
     %% Settings
     
     settings_rsvp;
-    
-    %% Download the images
-    
-    % Faces 
-    load('exp_images/WMN_img_rsvp.mat','WMN_img_rsvp');
-    load('exp_images/WMF_img_rsvp.mat','WMF_img_rsvp');
-    load('exp_images/WFN_img_rsvp.mat','WFN_img_rsvp');
-    load('exp_images/WFF_img_rsvp.mat','WFF_img_rsvp');
-    
-    load('exp_images/WMN_img_scramble.mat','WMN_img_scramble');
-    load('exp_images/WMF_img_scramble.mat','WMF_img_scramble');
-    load('exp_images/WFN_img_scramble.mat','WFN_img_scramble');
-    load('exp_images/WFF_img_scramble.mat','WFF_img_scramble');
-    
-    [fearFemTexture,fearMaleTexture, neutralFemTexture, neutralMaleTexture ...
-        ] = createImageTexture(WMN_img_rsvp, WMF_img_rsvp, WFN_img_rsvp, WFF_img_rsvp,window);
-    
-    [fearFemScramble,fearMaleScramble, neutralFemScramble, neutralMaleScramble, ...
-        sizeImg] = createImageTexture(WMN_img_scramble, WMF_img_scramble, WFN_img_scramble, WFF_img_scramble,window);
-    
-    posCenter = [(screenXpixels-sizeImg(2))/2 (screenYpixels-sizeImg(1))/2 (screenXpixels+sizeImg(2))/2 (screenYpixels+sizeImg(1))/2];
-    
-    % Rewards 
-    
-    smallRwdImg =imread('exp_images\cent.jpg');
-    largeRwdImg = imread('exp_images\euro.jpg');
-    smallRwd = Screen('MakeTexture', window, smallRwdImg); 
-    largeRwd = Screen('MakeTexture', window, largeRwdImg); 
-    
-    posSmallRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/6) (screenYpixels/10 - size(smallRwdImg,1)/6) ...
-        (screenXpixels/10*9.5 + size(smallRwdImg,2)/6) (screenYpixels/10 + size(smallRwdImg,1)/6)];
-    
-    posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/6) (screenYpixels/10 - size(largeRwdImg,1)/6) ...
-        (screenXpixels/10*9.5 + size(largeRwdImg,2)/6) (screenYpixels/10 + size(largeRwdImg,1)/6)];
-    
+           
     %% Training or not
     
     if training
@@ -95,14 +55,11 @@ try
         nTrials = rsvp.nTrialsTrain;
         condition = [Shuffle(1:6), Shuffle(1:6)];
         
-        instruction = {instRSVP1,instRSVP2,trainRSVP};
-        
-        for i = 1:length(instruction)     
-            DrawFormattedText(window, instruction{i}, 'center', 'center', black);
-            DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
+        for i = 6:8
+            Screen('DrawTexture', window, stimuli.instTexture{i},[],stimuli.instPos,0);
             Screen('Flip', window);
             KbStrokeWait;
-        end 
+        end
         
     else
         nBlocks = rsvp.nBlocksExp;
@@ -113,56 +70,46 @@ try
             condition(i,:) = Shuffle(repmat((1:6),1,nTrials));
         end 
         
-        DrawFormattedText(window, trainingFiniRSVP, 'center', 'center', black);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        Screen('Flip', window);
-        KbStrokeWait;
+        for i = 10
+            Screen('DrawTexture', window, stimuli.instTexture{i},[],stimuli.instPos,0);
+            Screen('Flip', window);
+            KbStrokeWait;
+        end
         
-        DrawFormattedText(window, RSVP, 'center', 'center', black);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        Screen('Flip', window);
-        KbStrokeWait;
     end
     
     %% Actual Experiment
-    a = 1; instr = 0;
+    a = 0; instr = 0;
     
     for block = 1:nBlocks
         
         if training
-            textRwd = trainReward;
-            imgRwd = smallRwd;
-            posRwd = posSmallRwd;
+            instRwd = stimuli.instTexture{3};
+            imgRwd = stimuli.smallRwd;
+            posRwd = stimuli.posSmallRwd;
             rwd = 0;
-            sizeText = 30;
         else
             if rem(block,2) == 1
-                textRwd = smallReward;
-                imgRwd = smallRwd;
-                posRwd = posSmallRwd;
+                instRwd = stimuli.instTexture{4};
+                imgRwd = stimuli.smallRwd;
+                posRwd = stimuli.posSmallRwd;
                 rwd = 1; %(1 = Small reward, 2 = Large reward)
-                sizeText = 50;
             elseif rem(block,2) == 0
-                textRwd = largeReward;
-                imgRwd = largeRwd;
-                posRwd = posLargeRwd;
+                instRwd = stimuli.instTexture{5};
+                imgRwd = stimuli.largeRwd;
+                posRwd = stimuli.posLargeRwd;
                 rwd = 2; %(1 = Small reward, 2 = Large reward)
-                sizeText = 50;
             end
         end
         
-        Screen('TextSize', window, sizeText);
-        DrawFormattedText(window, textRwd , 'center', screenYpixels*0.35 , black);
-        Screen('TextSize', window, 30);
-        DrawFormattedText(window, continuer, 'center', screenYpixels*0.9 , black);
-        
-        Screen('DrawTexture', window, imgRwd );
+        Screen('DrawTexture', window, instRwd,[],stimuli.instPos,0);
         Screen('Flip', window);
         KbStrokeWait;
         
         for trial = 1:nTrials
             
             % Initialise RTs and response
+            a = a + 1;
             rt = 0;
             response = 0;
             imageDisplay = zeros(1,rsvp.setSize);
@@ -183,15 +130,15 @@ try
             end
             
             % Select new images every trial
-            img = [fearFemTexture{randi([1 size(fearFemTexture,2)],1,2)};... % 1
-                fearMaleTexture{randi([1 size(fearMaleTexture,2)],1,2)}; ... % 2
-                neutralFemTexture{randi([1 size(neutralFemTexture,2)],1,2)}; ... % 3
-                neutralMaleTexture{randi([1 size(neutralMaleTexture,2)],1,2)}]; % 4
+            img = [stimuli.fearFemRSVP{randi([1 size(stimuli.fearFemRSVP,2)],1,2)};... % 1
+                stimuli.fearMaleRSVP{randi([1 size(stimuli.fearMaleRSVP,2)],1,2)}; ... % 2
+                stimuli.neutralFemRSVP{randi([1 size(stimuli.neutralFemRSVP,2)],1,2)}; ... % 3
+                stimuli.neutralMaleRSVP{randi([1 size(stimuli.neutralMaleRSVP,2)],1,2)}]; % 4
             
-            img_scramble = [fearFemScramble{randi([1 size(fearFemScramble,2)],1,rsvp.setSize)};... % 1
-                fearMaleScramble{randi([1 size(fearMaleScramble,2)],1,rsvp.setSize)}; ... % 2
-                neutralFemScramble{randi([1 size(neutralFemScramble,2)],1,rsvp.setSize)}; ... %3
-                neutralMaleScramble{randi([1 size(neutralMaleScramble,2)],1,rsvp.setSize)}]; %4
+            img_scramble = [stimuli.fearFemScramble{randi([1 size(stimuli.fearFemScramble,2)],1,rsvp.setSize)};... % 1
+                stimuli.fearMaleScramble{randi([1 size(stimuli.fearMaleScramble,2)],1,rsvp.setSize)}; ... % 2
+                stimuli.neutralFemScramble{randi([1 size(stimuli.neutralFemScramble,2)],1,rsvp.setSize)}; ... %3
+                stimuli.neutralMaleScramble{randi([1 size(stimuli.neutralMaleScramble,2)],1,rsvp.setSize)}]; %4
             
             % Indexing of img
             fem = [1,3]; male = [2,4]; fear = [1,2]; neutral = [3,4];
@@ -247,7 +194,7 @@ try
             
             for nbImage = 1: rsvp.setSize
                 Screen(window, 'FillRect', white);
-                Screen('DrawTexture', window, imageDisplay(nbImage), [],posCenter,0);
+                Screen('DrawTexture', window, imageDisplay(nbImage), [],stimuli.posRSVP,0);
                 Screen('DrawTexture', window, imgRwd, [], posRwd);
                 flipTime = Screen('Flip', window, flipTime + rsvp.imageDuration - ifi,0);
             end
@@ -262,17 +209,13 @@ try
                 
                 if condition(block,trial) == 1 || condition(block,trial) == 3 || condition(block,trial) == 5
                     instr = 1;
-                    Screen('TextSize', window, 50);
-                    DrawFormattedText(window, femRSVP, 'center', screenYpixels*0.5, black);
-                    DrawFormattedText(window, respRSVP, 'center', screenYpixels*0.65, black);
+                    Screen('DrawTexture', window, stimuli.instTexture{11},[],stimuli.instPos,0);
                     Screen('DrawTexture', window, imgRwd, [], posRwd);
                     Screen('Flip', window);
                     
                 elseif condition(block,trial) == 2 || condition(block,trial) == 4 || condition(block,trial) == 6
                     instr = 2;
-                    Screen('TextSize', window, 50);
-                    DrawFormattedText(window, maleRSVP, 'center', screenYpixels*0.5, black);
-                    DrawFormattedText(window, respRSVP, 'center', screenYpixels*0.65, black);
+                    Screen('DrawTexture', window, stimuli.instTexture{12},[],stimuli.instPos,0);
                     Screen('DrawTexture', window, imgRwd, [], posRwd);
                     Screen('Flip', window);
                 end
@@ -281,10 +224,10 @@ try
                 if keyCode(escapeKey) == 1
                     sca
                     return;
-                elseif keyCode(leftKey) == 1
+                elseif keyCode(ouiKey) == 1
                     response = 1;
                     rt = respTime - startTime;
-                elseif keyCode(rightKey) == 1
+                elseif keyCode(nonKey) == 1
                     response = 2;
                     rt = respTime - startTime;
                 end
@@ -297,16 +240,15 @@ try
             end
             
             % Record the trial data into the data matrix
-            a = a + 1;
             respMatRSVP(a).cfg = rsvp;
             respMatRSVP(a).ID = ID;
             respMatRSVP(a).training = training; %(1 = training, 0 = no training)
-            respMatRSVP(a).reward = rwd; %(0 = traning, 1 = Small reward, 2 = Large reward)
+            respMatRSVP(a).reward = rwd; %(0 = training, 1 = Small reward, 2 = Large reward)
             respMatRSVP(a).condition = condition(block,trial); % (1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
             respMatRSVP(a).block = block;
             respMatRSVP(a).trial = trial;
             respMatRSVP(a).RTs = rt;
-            respMatRSVP(a).instr = instr;
+            respMatRSVP(a).instr = instr; % (1 = femquest, 2 = homquest) 
             respMatRSVP(a).response = response;
             respMatRSVP(a).posCritDist = posCritDist;
             respMatRSVP(a).posTarget = posTarget;
@@ -320,6 +262,22 @@ try
             WaitSecs(rsvp.timeBetweenTrials);
             
         end
+    end
+    
+    %% End of Experiment 
+    
+    if training
+                
+        Screen('DrawTexture', window, stimuli.instTexture{9},[],stimuli.instPos,0);
+        Screen('Flip', window);
+        KbStrokeWait;
+        
+    else
+                
+        Screen('DrawTexture', window, stimuli.instTexture{13},[],stimuli.instPos,0);
+        Screen('Flip', window);
+        KbStrokeWait;
+        
     end
     
 catch
