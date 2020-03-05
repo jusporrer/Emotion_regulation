@@ -57,11 +57,11 @@ try
     %% Different Settings
     settings_memory;
     settings_rsvp;
-       
-    %% Slides with instructions 
-    instFolderName = 'instructions/instructionsDiapo/'; 
-    instFolder = dir(instFolderName); 
-     
+    
+    %% Slides with instructions
+    instFolderName = 'instructions/instructionsDiapo/';
+    instFolder = dir(instFolderName);
+    
     inst = cell(1,(length(instFolder)-2));
     stimuli.instTexture = cell(1,(length(instFolder)-2));
     
@@ -72,13 +72,13 @@ try
     
     stimuli.instPos = [(screenXpixels-size(inst{1},2))/2 (screenYpixels-size(inst{1},1))/2 ...
         (screenXpixels+size(inst{1},2))/2 (screenYpixels+size(inst{1},1))/2];
-        
-    %% Download reward 
+    
+    %% Download reward
     
     smallRwdImg =imread('exp_images\cent.jpg');
     largeRwdImg = imread('exp_images\euro.jpg');
-    stimuli.smallRwd = Screen('MakeTexture', window, smallRwdImg); 
-    stimuli.largeRwd = Screen('MakeTexture', window, largeRwdImg); 
+    stimuli.smallRwd = Screen('MakeTexture', window, smallRwdImg);
+    stimuli.largeRwd = Screen('MakeTexture', window, largeRwdImg);
     
     stimuli.posSmallRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/2) (screenYpixels/10 - size(smallRwdImg,1)/2) ...
         (screenXpixels/10*9.5 + size(smallRwdImg,2)/2) (screenYpixels/10 + size(smallRwdImg,1)/2)];
@@ -86,8 +86,8 @@ try
     stimuli.posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/2) (screenYpixels/10 - size(largeRwdImg,1)/2) ...
         (screenXpixels/10*9.5 + size(largeRwdImg,2)/2) (screenYpixels/10 + size(largeRwdImg,1)/2)];
     
-    %% Download images for RSVP 
-     
+    %% Download images for RSVP
+    
     load('exp_images/WMN_img_rsvp.mat','WMN_img_rsvp');
     load('exp_images/WMF_img_rsvp.mat','WMF_img_rsvp');
     load('exp_images/WFN_img_rsvp.mat','WFN_img_rsvp');
@@ -107,7 +107,7 @@ try
     stimuli.posRSVP = [(screenXpixels - stimuli.sizeImgRSVP(2))/2 (screenYpixels - stimuli.sizeImgRSVP(1))/2 ...
         (screenXpixels + stimuli.sizeImgRSVP(2))/2 (screenYpixels + stimuli.sizeImgRSVP(1))/2];
     
-    %% Download Images for Memory task 
+    %% Download Images for Memory task
     
     load('exp_images/WMN_img_vs.mat');
     load('exp_images/WMF_img_vs.mat');
@@ -120,25 +120,25 @@ try
     %% Set Participant ID
     
     ID = ceil(100000*rand);
-    ID = 2;
+    %ID = 2;
     
-    %% Start of the experiment 
+    %% Start of the experiment
     
     for i = 1:2
         Screen('DrawTexture', window, stimuli.instTexture{i},[],stimuli.instPos,0);
         Screen('Flip', window);
         KbStrokeWait;
-    end 
+    end
     
     %% If last digit ID even -> memory first (odd -> RSVP first)
     
     if rem(ID,2)==0
         % Training Period
         [respMat_training_memory] = memory_task(ID, window, colors, screenPixels, true, stimuli);
-
+        
         % Experiment without Training
         [respMat_memory] = memory_task(ID, window, colors, screenPixels, false, stimuli);
-           
+        
     else
         %Training Period
         [respMat_training_rsvp] = rsvp_task(ID, window, colors, screenPixels, true, stimuli);
@@ -146,11 +146,11 @@ try
         %Experiment without Training
         [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, false, stimuli);
         
-     end
+    end
     
     %% If last digit ID even -> RSVP second (odd -> Memory second)
     
-     if rem(ID,2)==1
+    if rem(ID,2)==1
         % Training Period
         [respMat_training_memory] = memory_task(ID, window, colors, screenPixels, true, stimuli);
         
@@ -164,7 +164,7 @@ try
         
         %Experiment without Training
         [respMat_rsvp] = rsvp_task(ID, window, colors, screenPixels, false, stimuli);
-
+        
     end
     
     %% End of the experiment (Save results)
