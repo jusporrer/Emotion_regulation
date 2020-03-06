@@ -274,6 +274,7 @@ try
             
             % Screen after trial
             Screen('FillRect', window, white);
+            Screen('DrawTexture', window, imgRwd, [], posRwd);
             Screen('Flip', window);
             WaitSecs(memory.timeBetweenTrials);
             

@@ -74,7 +74,7 @@ kept_RtExp      = intersect(find(rt(nTrial) > low_RtExp), find(rt(nTrial) < up_R
 excl_RtExp      = [find(rt(nTrial) < low_RtExp) find(rt(nTrial) > up_RtExp)];
 
 nTrial          = nTrial(kept_RtExp);
-rt              = rt(nTrial); 
+rt              = log(rt(nTrial)); 
 
 if length(nTrial) < length(trial)
     disp(['RTs warning : ',num2str(length(excl_RtExp)), ...
