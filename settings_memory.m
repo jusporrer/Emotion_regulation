@@ -2,7 +2,7 @@
 
 % Number of trials per set size
 memory.nTrialsTrain = 6; % expected : 12 -> 2/condi mixed
-memory.nTrialsExp = 24; % expected : 24 -> 4/condi mixed 
+memory.nTrialsExp = 12; % expected : 24 -> 4/condi mixed 
 
 % Number of blocks
 memory.nBlocksTrain = 1; % expected : 1 
@@ -22,7 +22,7 @@ memory.fearfulDC = 0.40;
 memory.neutralDC = 0.8; 
 
 % How long each image in the memory sequence is on screen(normally 100 ms so 0.1 s)
-memory.imageDuration = 1;
+memory.imageDuration = 1.5;
 
 % Length of fixation in seconds
 memory.fixationDuration = 0.5;

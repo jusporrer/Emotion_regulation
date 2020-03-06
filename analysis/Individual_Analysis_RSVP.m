@@ -259,27 +259,27 @@ perf_fem        = (DC_fem_rate + CC_fem_rate + BC_fem_rate) / 3;
 perf_hom        = (DC_hom_rate + CC_hom_rate + BC_hom_rate) / 3;
 
 disp(['Performance Gender: ',num2str(ceil(perf_fem)), '% for condition femme & ', ...
-    num2str(ceil(perf_CC)), '% for condition homme ']);
+    num2str(ceil(perf_hom)), '% for condition homme ']);
 
 %% =================== Performance - Conditions & Rewards===================
 
-perf_DC_smallRwd = ((sum(correct_DC_hom(smallRwd ==1))/sum(DC_hom(smallRwd ==1)))*100 ...
-    + (sum(correct_DC_fem(smallRwd ==1))/sum(DC_fem(smallRwd ==1)))*100) / 2;
+perf_DC_smallRwd = ((sum(correct_DC_hom(smallRwd == 1))/sum(DC_hom(smallRwd == 1)))*100 ...
+    + (sum(correct_DC_fem(smallRwd == 1))/sum(DC_fem(smallRwd == 1)))*100) / 2;
 
 perf_DC_largeRwd = ((sum(correct_DC_hom(largeRwd ==1))/sum(DC_hom(largeRwd ==1)))*100 ...
-    + (sum(correct_DC_fem(largeRwd ==1))/sum(DC_fem(largeRwd ==1)))*100) / 2;
+    + (sum(correct_DC_fem(largeRwd == 1))/sum(DC_fem(largeRwd == 1)))*100) / 2;
 
-perf_CC_smallRwd = ((sum(correct_CC_hom(smallRwd ==1))/sum(CC_hom(smallRwd ==1)))*100 ...
-    + (sum(correct_CC_fem(smallRwd ==1))/sum(CC_fem(smallRwd ==1)))*100) / 2;
+perf_CC_smallRwd = ((sum(correct_CC_hom(smallRwd == 1))/sum(CC_hom(smallRwd == 1)))*100 ...
+    + (sum(correct_CC_fem(smallRwd == 1))/sum(CC_fem(smallRwd == 1)))*100) / 2;
 
-perf_CC_largeRwd = ((sum(correct_CC_hom(largeRwd ==1))/sum(CC_hom(largeRwd ==1)))*100 ...
-    + (sum(correct_CC_fem(largeRwd ==1))/sum(CC_fem(largeRwd ==1)))*100) / 2;
+perf_CC_largeRwd = ((sum(correct_CC_hom(largeRwd == 1))/sum(CC_hom(largeRwd == 1)))*100 ...
+    + (sum(correct_CC_fem(largeRwd == 1))/sum(CC_fem(largeRwd == 1)))*100) / 2;
 
-perf_BC_smallRwd = ((sum(correct_BC_hom(smallRwd ==1))/sum(BC_hom(smallRwd ==1)))*100 ...
+perf_BC_smallRwd = ((sum(correct_BC_hom(smallRwd == 1))/sum(BC_hom(smallRwd == 1)))*100 ...
     + (sum(correct_BC_fem(smallRwd ==1))/sum(BC_fem(smallRwd ==1)))*100) / 2;
 
-perf_BC_largeRwd = ((sum(correct_BC_hom(largeRwd ==1))/sum(BC_hom(largeRwd ==1)))*100 ...
-    + (sum(correct_BC_fem(largeRwd ==1))/sum(BC_fem(largeRwd ==1)))*100) / 2;
+perf_BC_largeRwd = ((sum(correct_BC_hom(largeRwd == 1))/sum(BC_hom(largeRwd == 1)))*100 ...
+    + (sum(correct_BC_fem(largeRwd == 1))/sum(BC_fem(largeRwd == 1)))*100) / 2;
 
 %% =================== Performance - Lags               ===================
 
@@ -542,6 +542,24 @@ if fig == 1
         box on
         hold off
     end
+    
+        % Performance par genre & conditions
+    subplot(2,1,2)
+    hold on;
+    bar([DC_fem_rate 0 0 0 0 0],'FaceColor',[0.65 0.35 0.45]);
+    bar([0 DC_hom_rate 0 0 0 0],'FaceColor',[0.45 0.15 0.25]);
+    bar([0 0 CC_fem_rate 0 0 0],'FaceColor',[0.85 0.85 0.85]);
+    bar([0 0 0 CC_hom_rate 0 0],'FaceColor',[0.65 0.65 0.65]);
+    bar([0 0 0 0 BC_fem_rate 0],'FaceColor',[0.50 0.65 0.50]);
+    bar([0 0 0 0 0 BC_hom_rate],'FaceColor',[0.30 0.45 0.30]);
+    xticks([1 2 3 4 5 6])
+    xticklabels({'DC Fem','DC Hom','CC Fem','CC Hom','BC Fem','BC Hom'})
+    ylabel('Performance','fontsize', 10)
+    title('Performance according to gender & conditions','fontsize', 10)
+    axis([0 7 40 100])
+    grid minor
+    box on
+    hold off
         
 end
 
