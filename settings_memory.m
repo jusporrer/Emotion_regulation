@@ -2,11 +2,11 @@
 
 % Number of trials per set size
 memory.nTrialsTrain = 6; % expected : 12 -> 2/condi mixed
-memory.nTrialsExp = 6; % expected : 24 -> 4/condi mixed 
+memory.nTrialsExp = 24; % expected : 24 -> 4/condi mixed 
 
 % Number of blocks
 memory.nBlocksTrain = 1; % expected : 1 
-memory.nBlocksExp = 1; % expected : 8 
+memory.nBlocksExp = 8; % expected : 8 
 
 % Number of images around the target
 memory.setSize = 20;

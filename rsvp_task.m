@@ -51,9 +51,9 @@ try
     %% Training or not
     
     if training
-        nBlocks = rsvp.nBlocksTrain;
-        nTrials = rsvp.nTrialsTrain;
-        condition = [Shuffle(1:6), Shuffle(1:6)];
+        nBlocks     = rsvp.nBlocksTrain;
+        nTrials     = rsvp.nTrialsTrain;
+        condition   = [Shuffle(1:6), Shuffle(1:6)];
         
         for i = 6:8
             Screen('DrawTexture', window, stimuli.instTexture{i},[],stimuli.instPos,0);
@@ -65,9 +65,9 @@ try
         nBlocks = rsvp.nBlocksExp;
         nTrials = rsvp.nTrialsExp;
         
-        condition = zeros(nBlocks,nTrials*6);
+        condition = zeros(nBlocks,nTrials);
         for i = 1:nBlocks
-            condition(i,:) = Shuffle(repmat((1:6),1,nTrials));
+            condition(i,:) = Shuffle(repmat((1:6),1,nTrials/6));
         end 
         
         for i = 10

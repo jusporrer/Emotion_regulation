@@ -1,10 +1,11 @@
-% JS initial script analysis for the effect of inentives on emotion regulation
-% February 2020
+% JS initial script analysis for the effect of incentives on emotion regulation 
+% in a RSVP Task
+% Creation : February 2020
 
 %function []    = Individual_Analysis_RSVP(ID, fig)
 clearvars;
 
-ID              = 85841 % 35923; % 85841; % % 10016;
+ID              = 5034 % 35923; %85841 % 35923; % 85841; % % 10016;
 fig             = 1;
 
 %% =================== Load the data                    ===================
@@ -73,6 +74,7 @@ kept_RtExp      = intersect(find(rt(nTrial) > low_RtExp), find(rt(nTrial) < up_R
 excl_RtExp      = [find(rt(nTrial) < low_RtExp) find(rt(nTrial) > up_RtExp)];
 
 nTrial          = nTrial(kept_RtExp);
+rt              = rt(nTrial); 
 
 if length(nTrial) < length(trial)
     disp(['RTs warning : ',num2str(length(excl_RtExp)), ...
@@ -279,7 +281,6 @@ perf_BC_smallRwd = ((sum(correct_BC_hom(smallRwd ==1))/sum(BC_hom(smallRwd ==1))
 perf_BC_largeRwd = ((sum(correct_BC_hom(largeRwd ==1))/sum(BC_hom(largeRwd ==1)))*100 ...
     + (sum(correct_BC_fem(largeRwd ==1))/sum(BC_fem(largeRwd ==1)))*100) / 2;
 
-
 %% =================== Performance - Lags               ===================
 
 lag             = posTarget-posCritDist;
@@ -365,7 +366,21 @@ rt_hom          = (mean(rt_DC_hom) + mean(rt_CC_hom) + mean(rt_BC_hom)) / 3;
 disp(['RTs Gender: ',num2str(rt_fem), ' s for condition femme & ', ...
     num2str(rt_hom), ' s for condition homme ']);
 
-%% =================== Learning Cruve                   ===================
+%% =================== RTs - Conditions & Rewards       ===================
+
+rt_DC_smallRwd = (mean(rt(smallRwd == 1 & DC_hom == 1)) + mean(rt(smallRwd == 1 & DC_fem == 1)))/ 2;
+
+rt_DC_largeRwd = (mean(rt(largeRwd == 1 & DC_hom == 1)) + mean(rt(largeRwd == 1 & DC_fem == 1)))/ 2;
+
+rt_CC_smallRwd = (mean(rt(smallRwd == 1 & CC_hom == 1)) + mean(rt(smallRwd == 1 & CC_fem == 1)))/ 2;
+
+rt_CC_largeRwd = (mean(rt(largeRwd == 1 & CC_hom == 1)) + mean(rt(largeRwd == 1 & CC_fem == 1)))/ 2;
+
+rt_BC_smallRwd = (mean(rt(smallRwd == 1 & BC_hom == 1)) + mean(rt(smallRwd == 1 & BC_fem == 1)))/ 2;
+
+rt_BC_largeRwd = (mean(rt(largeRwd == 1 & BC_hom == 1)) + mean(rt(largeRwd == 1 & BC_fem == 1)))/ 2;
+
+%% =================== Learning Curve                   ===================
 
 LC              = zeros(1,cfg_exp.nBlocksExp);
 for i = 1:cfg_exp.nBlocksExp
@@ -385,6 +400,7 @@ end
 %% =================== PLOT PART                        ===================
 if fig == 1
     
+    %% Performance Plots
     % Performance par conditions 
     figure('Name', 'Performance Plots');
     subplot(2,2,1)
@@ -433,7 +449,58 @@ if fig == 1
     box on 
     hold off
 
-    % Learning curve   
+    %% RTs Plots 
+    % RTs par conditions 
+    figure('Name', 'RTs Plots');
+    subplot(2,2,1)
+    hold on;
+    bar([rt_DC 0 0],'FaceColor',[0.75 0.45 0.55]);
+    bar([0 rt_CC 0],'FaceColor',[0.75 0.75 0.75]);
+    bar([0 0 rt_BC],'FaceColor',[0.40 0.55 0.40]);
+    xticks([1 2 3 4])
+    xticklabels({'DC','CC', 'BC'})
+    ylabel('RTs','fontsize', 10)
+    title('RTs according to conditions','fontsize', 10)
+    axis([0 4 0 2])
+    grid minor 
+    box on 
+    hold off
+    
+    % RTs par rewards 
+    subplot(2,2,2)
+    hold on;
+    bar([mean(rt_smallRwd) 0],'FaceColor',[0.75, 0.85, 0.90]);
+    bar([0 mean(rt_largeRwd)],'FaceColor',[0.35, 0.50, 0.60]);
+    errorbar(1, mean(rt_smallRwd), std(rt_smallRwd), 'k.','LineWidth',1.5);
+    errorbar(2, mean(rt_largeRwd), std(rt_largeRwd), 'k.','LineWidth',1.5);
+    xticks([1 2])
+    xticklabels({'Small Reward','Large Reward'})
+    ylabel('RTs','fontsize', 10)
+    title('RTs according to reward','fontsize', 10)
+    axis([0 3 0 2])
+    grid minor 
+    box on 
+    hold off
+
+    % RTs par conditions & rewards 
+    subplot(2,1,2)
+    hold on;
+    bar([rt_DC_smallRwd 0 0 0 0 0],'FaceColor',[0.65 0.35 0.45]);
+    bar([0 rt_DC_largeRwd 0 0 0 0],'FaceColor',[0.45 0.15 0.25]);
+    bar([0 0 rt_CC_smallRwd 0 0 0],'FaceColor',[0.85 0.85 0.85]);
+    bar([0 0 0 rt_CC_largeRwd 0 0],'FaceColor',[0.65 0.65 0.65]);
+    bar([0 0 0 0 rt_BC_smallRwd 0],'FaceColor',[0.50 0.65 0.50]);
+    bar([0 0 0 0 0 rt_BC_largeRwd],'FaceColor',[0.30 0.45 0.30]);
+    xticks([1 2 3 4 5 6])
+    xticklabels({'DC Small Rwd','DC Large Rwd','CC Small Rwd','CC Large Rwd','CC Small Rwd',' CC Large Rwd'})
+    ylabel('RTs','fontsize', 10)
+    title('RTs according to reward & conditions','fontsize', 10)
+    axis([0 7 0 2])
+    grid minor 
+    box on 
+    hold off
+    
+    %% Learning Curves Plots 
     figure('Name', 'Learning Curve Plots');
     LC_plots = {LC, LC_smallRwd(1:2:end), LC_largeRwd(2:2:end)};
     LC_titles = {'Learning Curve Experiment', 'Learning Curve for Small Rewards', 'Learning Curve for Large Rewards'};
@@ -450,26 +517,33 @@ if fig == 1
         box on
     end
     
+    %% Gender Plots 
     
+    % Performance par gender 
+    figure('Name', 'Gender Plots');
     
+    gender_fem = {perf_fem, rt_fem};
+    gender_hom = {perf_hom, rt_hom};
+    gender_labels ={'Performance','RTs'};
+    gender_titles ={'Performance according to gender', 'RTs according to gender'};
+    gender_axis = {[0 3 50 100], [0 3 0 2]};
     
+    for i = 1:2
+        subplot(2,2,i)
+        hold on;
+        bar([gender_fem{i} 0],'FaceColor',[0.85 0.55 0.65]);
+        bar([0 gender_hom{i}],'FaceColor',[0.45, 0.60, 0.70]);
+        xticks([1 2])
+        xticklabels({'Female','Male'})
+        ylabel(gender_labels{i},'fontsize', 10)
+        title(gender_titles{i},'fontsize', 10)
+        axis(gender_axis{i})
+        grid minor
+        box on
+        hold off
+    end
+        
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 %end
