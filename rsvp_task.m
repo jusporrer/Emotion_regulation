@@ -53,9 +53,11 @@ try
     if training
         nBlocks     = rsvp.nBlocksTrain;
         nTrials     = rsvp.nTrialsTrain;
-        condition   = [Shuffle(1:6), Shuffle(1:6)];
         
-        for i = 6:8
+        % Randomised order of trials
+        condition   = Shuffle(repmat((1:6),1,nTrials/6));
+        
+        for i = 8:10
             Screen('DrawTexture', window, stimuli.instTexture{i},[],stimuli.instPos,0);
             Screen('Flip', window);
             KbStrokeWait;
@@ -65,12 +67,16 @@ try
         nBlocks = rsvp.nBlocksExp;
         nTrials = rsvp.nTrialsExp;
         
+        % Randomised order of trials from mixed conditions
         condition = zeros(nBlocks,nTrials);
         for i = 1:nBlocks
-            condition(i,:) = Shuffle(repmat((1:6),1,nTrials/6));
-        end 
+            condiDC        = repmat((1:2),1,nTrials/6);
+            condiCC        = repmat((3:4),1,nTrials/6);
+            condiBC        = repmat((5:6),1,nTrials/6);
+            condition(i,:) = cell2mat(Shuffle({ Shuffle([condiDC, condiCC(1:nTrials/6)]), Shuffle([condiBC, condiCC(nTrials/6+1:end)])}));
+        end
         
-        for i = 10
+        for i = 12
             Screen('DrawTexture', window, stimuli.instTexture{i},[],stimuli.instPos,0);
             Screen('Flip', window);
             KbStrokeWait;
@@ -84,21 +90,29 @@ try
     for block = 1:nBlocks
         
         if training
-            instRwd = stimuli.instTexture{3};
-            imgRwd = stimuli.smallRwd;
-            posRwd = stimuli.posSmallRwd;
-            rwd = 0;
+            instRwd     = stimuli.instTexture{3};
+            imgRwd      = stimuli.smallRwd;
+            imgInst     = stimuli.instDC; 
+            rwd         = 0;
         else
             if rem(block,2) == 1
-                instRwd = stimuli.instTexture{4};
-                imgRwd = stimuli.smallRwd;
-                posRwd = stimuli.posSmallRwd;
-                rwd = 1; %(1 = Small reward, 2 = Large reward)
+                if condition(block) == 1 || condition(block) == 2 % DC condition
+                    instRwd     = stimuli.instTexture{4};
+                    imgInst     = stimuli.instDC; 
+                else %if condition(block) == 5 || condition(block) == 6 % BC condition
+                    instRwd     = stimuli.instTexture{5};
+                    imgInst     = stimuli.instBC; 
+                end
+                imgRwd          = stimuli.smallRwd;
+                rwd             = 1; %(1 = Small reward, 2 = Large reward)
             elseif rem(block,2) == 0
-                instRwd = stimuli.instTexture{5};
-                imgRwd = stimuli.largeRwd;
-                posRwd = stimuli.posLargeRwd;
-                rwd = 2; %(1 = Small reward, 2 = Large reward)
+                if condition(block) == 1 || condition(block) == 2 % DC condition
+                    instRwd     = stimuli.instTexture{6};
+                else %if condition(block) == 5 || condition(block) == 6 % BC condition
+                    instRwd     = stimuli.instTexture{7};
+                end
+                imgRwd          = stimuli.largeRwd;
+                rwd             = 2; %(1 = Small reward, 2 = Large reward)
             end
         end
         
@@ -120,12 +134,14 @@ try
             
             % Draw the fixation cross in black
             Screen('DrawLines', window, CoordsFix, lineWidthFix, black, [xCenter yCenter], 2);
-            Screen('DrawTexture', window, imgRwd, [], posRwd);
+            Screen('DrawTexture', window, imgInst, [], stimuli.posInst);
+            Screen('DrawTexture', window, imgRwd, [], stimuli.posRwd);
             flipTime = Screen('Flip', window);
             
             for frame = 1:isiTimeFrames - 1
                 Screen('DrawLines', window, CoordsFix, lineWidthFix, black, [xCenter yCenter], 2)
-                Screen('DrawTexture', window, imgRwd, [], posRwd);
+                Screen('DrawTexture', window, imgInst, [], stimuli.posInst);
+                Screen('DrawTexture', window, imgRwd, [], stimuli.posRwd);
                 flipTime = Screen('Flip', window, flipTime + (waitframes -0.5) * ifi);
             end
             
@@ -195,12 +211,14 @@ try
             for nbImage = 1: rsvp.setSize
                 Screen(window, 'FillRect', white);
                 Screen('DrawTexture', window, imageDisplay(nbImage), [],stimuli.posRSVP,0);
-                Screen('DrawTexture', window, imgRwd, [], posRwd);
+                Screen('DrawTexture', window, imgInst, [], stimuli.posInst);
+                Screen('DrawTexture', window, imgRwd, [], stimuli.posRwd);
                 flipTime = Screen('Flip', window, flipTime + rsvp.imageDuration - ifi,0);
             end
             
             Screen(window, 'FillRect', white);
-            Screen('DrawTexture', window, imgRwd, [], posRwd);
+            Screen('DrawTexture', window, imgInst, [], stimuli.posInst);
+            Screen('DrawTexture', window, imgRwd, [], stimuli.posRwd);
             startTime = Screen('Flip', window, flipTime + rsvp.imageDuration - ifi,0);
             
             while GetSecs - startTime < rsvp.trialTimeout
@@ -209,14 +227,16 @@ try
                 
                 if condition(block,trial) == 1 || condition(block,trial) == 3 || condition(block,trial) == 5
                     instr = 1;
-                    Screen('DrawTexture', window, stimuli.instTexture{11},[],stimuli.instPos,0);
-                    Screen('DrawTexture', window, imgRwd, [], posRwd);
+                    Screen('DrawTexture', window, stimuli.instTexture{13},[],stimuli.instPos,0); % au moins une femme 
+                    Screen('DrawTexture', window, imgInst, [], stimuli.posInst);
+                    Screen('DrawTexture', window, imgRwd, [], stimuli.posRwd);
                     Screen('Flip', window);
                     
                 elseif condition(block,trial) == 2 || condition(block,trial) == 4 || condition(block,trial) == 6
                     instr = 2;
-                    Screen('DrawTexture', window, stimuli.instTexture{12},[],stimuli.instPos,0);
-                    Screen('DrawTexture', window, imgRwd, [], posRwd);
+                    Screen('DrawTexture', window, stimuli.instTexture{14},[],stimuli.instPos,0); % au moins un homme 
+                    Screen('DrawTexture', window, imgInst, [], stimuli.posInst);
+                    Screen('DrawTexture', window, imgRwd, [], stimuli.posRwd);
                     Screen('Flip', window);
                 end
                 
@@ -257,7 +277,8 @@ try
             
             % Screen after trial
             Screen('FillRect', window, white);
-            Screen('DrawTexture', window, imgRwd, [], posRwd);
+            Screen('DrawTexture', window, imgInst, [], stimuli.posInst);
+            Screen('DrawTexture', window, imgRwd, [], stimuli.posRwd);
             Screen('Flip', window);
             WaitSecs(rsvp.timeBetweenTrials);
             
@@ -268,13 +289,13 @@ try
     
     if training
                 
-        Screen('DrawTexture', window, stimuli.instTexture{9},[],stimuli.instPos,0);
+        Screen('DrawTexture', window, stimuli.instTexture{11},[],stimuli.instPos,0);
         Screen('Flip', window);
         KbStrokeWait;
         
     else
                 
-        Screen('DrawTexture', window, stimuli.instTexture{13},[],stimuli.instPos,0);
+        Screen('DrawTexture', window, stimuli.instTexture{15},[],stimuli.instPos,0);
         Screen('Flip', window);
         KbStrokeWait;
         

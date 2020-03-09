@@ -5,7 +5,7 @@
 %function []    = Individual_Analysis_RSVP(ID, fig)
 clearvars;
 
-ID              = 5034 % 35923; %85841 % 35923; % 85841; % % 10016;
+ID              = 35923; % 5034; % 85841; % % 10016;
 fig             = 1;
 
 %% =================== Load the data                    ===================
@@ -288,12 +288,12 @@ lag             = posTarget-posCritDist;
 lag2            = (lag(nTrial) == 2);
 nlag2           = sum(lag2);
 correct_lag2    = (correct(1:length(nTrial)) == 1 & lag2(1:length(nTrial)) == 1);
-lag2_rate       = sum(correct_lag2)/nCorrect*100;
+lag2_rate       = sum(correct_lag2)/nlag2*100;
 
 lag4            = (lag(nTrial) == 4);
 nlag4           = sum(lag4);
 correct_lag4    = (correct(1:length(nTrial)) == 1 & lag4(1:length(nTrial)) == 1);
-lag4_rate       = sum(correct_lag4)/nCorrect*100;
+lag4_rate       = sum(correct_lag4)/nlag4*100;
 
 disp(['Performance Lag : ',num2str(ceil(lag2_rate)), '% were correct after a lag 2 & ', ...
     num2str(ceil(lag4_rate)), '% were correct after a lag 4' ]);

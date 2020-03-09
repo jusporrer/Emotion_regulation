@@ -75,16 +75,24 @@ try
     
     %% Download reward
     
-    smallRwdImg =imread('exp_images\cent.jpg');
-    largeRwdImg = imread('exp_images\euro.jpg');
+    smallRwdImg =imread('instructions\cent.jpg');
+    largeRwdImg = imread('instructions\euro.jpg');
     stimuli.smallRwd = Screen('MakeTexture', window, smallRwdImg);
     stimuli.largeRwd = Screen('MakeTexture', window, largeRwdImg);
     
-    stimuli.posSmallRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/2) (screenYpixels/10 - size(smallRwdImg,1)/2) ...
-        (screenXpixels/10*9.5 + size(smallRwdImg,2)/2) (screenYpixels/10 + size(smallRwdImg,1)/2)];
+    stimuli.posRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/3) (screenYpixels/10 - size(smallRwdImg,1)/3) ...
+        (screenXpixels/10*9.5 + size(smallRwdImg,2)/3) (screenYpixels/10 + size(smallRwdImg,1)/3)];
     
-    stimuli.posLargeRwd = [(screenXpixels/10*9.5 - size(largeRwdImg,2)/2) (screenYpixels/10 - size(largeRwdImg,1)/2) ...
-        (screenXpixels/10*9.5 + size(largeRwdImg,2)/2) (screenYpixels/10 + size(largeRwdImg,1)/2)];
+    %% Download instruction img 
+    
+    instBCImg =imread('instructions\instBC.jpg');
+    instDCImg = imread('instructions\instDC.jpg');
+    stimuli.instBC = Screen('MakeTexture', window, instBCImg);
+    stimuli.instDC = Screen('MakeTexture', window, instDCImg);
+    
+    stimuli.posInst = [(screenXpixels/10*8.5 - size(instBCImg,2)/3) (screenYpixels/10 - size(instBCImg,1)/3) ...
+        (screenXpixels/10*8.5 + size(instBCImg,2)/3) (screenYpixels/10 + size(instBCImg,1)/3)];
+    
     
     %% Download images for RSVP
     
@@ -168,7 +176,7 @@ try
     end
     
     %% End of the experiment (Save results)
-    Screen('DrawTexture', window, stimuli.instTexture{20},[],stimuli.instPos,0);
+    Screen('DrawTexture', window, stimuli.instTexture{22},[],stimuli.instPos,0);
     Screen('Flip', window);
     KbStrokeWait;
     
