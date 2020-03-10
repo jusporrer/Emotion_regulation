@@ -98,6 +98,7 @@ try
     %% Creation of condition matrix 
     
     condition   = zeros(nBlocks,nTrials);
+    % 1,1 SR DCinst; 1,2 SR BCinst; 2,1 LR DCinst; 2,2 LR BCinst 
     condiRwd    = Shuffle([repmat({[1,1]},1,nBlocks/4), repmat({[1,2]},1,nBlocks/4), ...
         repmat({[2,1]},1,nBlocks/4), repmat({[2,2]},1,nBlocks/4)]);
     for i = 1:nBlocks
@@ -120,22 +121,22 @@ try
             imgRwd      = stimuli.smallRwd;
             imgInst     = stimuli.instDC; 
         else
-            if condiRwd{block}(2) == 1 % Small Rwd 
-                if condiRwd{block}(1) == 1 % DC condition
+            if condiRwd{block}(2)           == 1 % Small Rwd 
+                if condiRwd{block}(1)       == 1 % DC condition
                     instRwd     = stimuli.instTexture{4};
                     imgInst     = stimuli.instDC; 
-                elseif condiRwd{block}(1) == 2 % BC condition 
+                elseif condiRwd{block}(1)   == 2 % BC condition 
                     instRwd     = stimuli.instTexture{5};
                     imgInst     = stimuli.instBC; 
                 end
                 imgRwd          = stimuli.smallRwd;
                 
-            elseif condiRwd{block}(2) == 2 % large rwd 
-                if condiRwd{block}(1) == 1 % DC condition
-                    instRwd     = stimuli.instTexture{4};
+            elseif condiRwd{block}(2)       == 2 % large rwd 
+                if condiRwd{block}(1)       == 1 % DC condition
+                    instRwd     = stimuli.instTexture{6};
                     imgInst     = stimuli.instDC; 
-                elseif condiRwd{block}(1) == 2 % BC condition 
-                    instRwd     = stimuli.instTexture{5};
+                elseif condiRwd{block}(1)   == 2 % BC condition 
+                    instRwd     = stimuli.instTexture{7};
                     imgInst     = stimuli.instBC; 
                 end
                 imgRwd          = stimuli.largeRwd;
@@ -167,37 +168,37 @@ try
                 flipTime = Screen('Flip', window, flipTime + (waitframes -0.5) * ifi);
             end
             
-            if condition(block,trial) == 1 % DC_male
+            if condition(block,trial)       == 1 % DC_male
                 probaFF = 1 - memory.fearfulDC;
                 probaNF = 1 - memory.neutralDC;
                 probaFM = memory.fearfulDC;
                 probaNM = memory.neutralDC;
                 
-            elseif condition(block,trial) == 2 % DC_fem
+            elseif condition(block,trial)   == 2 % DC_fem
                 probaFF = memory.fearfulDC;
                 probaNF = memory.neutralDC;
                 probaFM = 1 - memory.fearfulDC;
                 probaNM = 1 - memory.neutralDC;
                 
-            elseif condition(block,trial) == 3 % CC_male
+            elseif condition(block,trial)   == 3 % CC_male
                 probaFF = 1 - memory.fearfulCC;
                 probaNF = 1 - memory.neutralCC;
                 probaFM = memory.fearfulCC;
                 probaNM = memory.neutralCC;
                 
-            elseif condition(block,trial) == 4 % CC_female
+            elseif condition(block,trial)   == 4 % CC_female
                 probaFF = memory.fearfulCC;
                 probaNF = memory.neutralCC;
                 probaFM = 1 - memory.fearfulCC;
                 probaNM = 1 - memory.neutralCC;
                 
-            elseif condition(block,trial) == 5 % BC_male
+            elseif condition(block,trial)   == 5 % BC_male
                 probaFF = 1 - memory.fearfulBC;
                 probaNF = 1 - memory.neutralBC;
                 probaFM = memory.fearfulBC;
                 probaNM = memory.neutralBC;
                 
-            elseif condition(block,trial) == 6 % BC_fem
+            elseif condition(block,trial)   == 6 % BC_fem
                 probaFF = memory.fearfulBC;
                 probaNF = memory.neutralBC;
                 probaFM = 1 - memory.fearfulBC;
@@ -281,6 +282,7 @@ try
             respMatMemory(a).training   = training;  %(1 = training, 0 = no training)
             respMatMemory(a).reward     = condiRwd{block}(2); %(0 = training, 1 = Small reward, 2 = Large reward)
             respMatMemory(a).condition  = condition(block,trial); % (1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
+            respMatMemory(a).instCondit = condiRwd{block}(1); % (1 = DC inst, 2 = BC inst) 
             respMatMemory(a).block      = block;
             respMatMemory(a).trial      = trial;
             respMatMemory(a).RTs        = rt;
