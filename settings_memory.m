@@ -6,7 +6,7 @@ memory.nTrialsExp           = 15; % expected : 15 -> 5/condi mixed  // min = 3
 
 % Number of blocks
 memory.nBlocksTrain         = 4; % expected : 4*3 -> 2/condi mixed
-memory.nBlocksExp           = 16; % expected : 20/25 // min = 4 (multiple de 4)
+memory.nBlocksExp           = 12; % expected : 20/25 // min = 4 (multiple de 4)
 
 % Number of images around the target
 memory.setSize              = 20;

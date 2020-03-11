@@ -6,7 +6,7 @@ rsvp.nTrialsExp             = 15; % expected : 24 -> 4/condi mixed
 
 % Number of blocks
 rsvp.nBlocksTrain           = 4; % expected : 1 
-rsvp.nBlocksExp             = 16; % expected : 8 
+rsvp.nBlocksExp             = 12; % expected : 8 
 
 % Number of trialsbefore a break
 rsvp.breakAfterTrials       = 100;

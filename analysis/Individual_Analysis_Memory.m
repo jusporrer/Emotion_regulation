@@ -5,7 +5,7 @@
 %function []    = Individual_Analysis_Memory(ID, fig)
 clearvars;
 
-ID              = 56560 %72605 %11310 %9022 %81731 % 19279; %46700; 5034 ; %10016;
+ID              = 33222 % 56560 %72605 %11310 %9022 %81731 % 19279; %46700; 5034 ; %10016;
 fig             = 1;
 
 %% =================== Load the data                    ===================
@@ -203,7 +203,7 @@ perf_BC_smallRwd = ((sum(correct_BC_hom(smallRwd == 1))/sum(BC_hom(smallRwd == 1
 perf_BC_largeRwd = ((sum(correct_BC_hom(largeRwd == 1))/sum(BC_hom(largeRwd == 1)))*100 ...
     + (sum(correct_BC_fem(largeRwd == 1))/sum(BC_fem(largeRwd == 1)))*100) / 2;
 
-%% =================== Performance - Lags               ===================
+%% =================== Performance - Img Duration        ===================
 
 imgShort        = (imageDuration(nTrial) == 1.5);
 nimgShort       = sum(imgShort);

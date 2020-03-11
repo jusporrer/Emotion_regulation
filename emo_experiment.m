@@ -80,8 +80,8 @@ try
     stimuli.smallRwd = Screen('MakeTexture', window, smallRwdImg);
     stimuli.largeRwd = Screen('MakeTexture', window, largeRwdImg);
     
-    stimuli.posRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/3) (screenYpixels/10 - size(smallRwdImg,1)/3) ...
-        (screenXpixels/10*9.5 + size(smallRwdImg,2)/3) (screenYpixels/10 + size(smallRwdImg,1)/3)];
+    stimuli.posRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/2.5) (screenYpixels/10 - size(smallRwdImg,1)/2.5) ...
+        (screenXpixels/10*9.5 + size(smallRwdImg,2)/2.5) (screenYpixels/10 + size(smallRwdImg,1)/2.5)];
     
     %% Download instruction img 
     
@@ -90,8 +90,8 @@ try
     stimuli.instBC = Screen('MakeTexture', window, instBCImg);
     stimuli.instDC = Screen('MakeTexture', window, instDCImg);
     
-    stimuli.posInst = [(screenXpixels/10*8.5 - size(instBCImg,2)/3) (screenYpixels/10 - size(instBCImg,1)/3) ...
-        (screenXpixels/10*8.5 + size(instBCImg,2)/3) (screenYpixels/10 + size(instBCImg,1)/3)];
+    stimuli.posInst = [(screenXpixels/10*8.5 - size(instBCImg,2)/2.5) (screenYpixels/10 - size(instBCImg,1)/2.5) ...
+        (screenXpixels/10*8.5 + size(instBCImg,2)/2.5) (screenYpixels/10 + size(instBCImg,1)/2.5)];
     
     
     %% Download images for RSVP
