@@ -5,7 +5,7 @@
 %function []    = Individual_Analysis_RSVP(ID, fig)
 clearvars;
 
-ID              = 35923; % 5034; % 85841; % % 10016;
+ID              = 53999; %35923; % 5034; % 85841; % % 10016;
 fig             = 1;
 
 %% =================== Load the data                    ===================
@@ -40,7 +40,7 @@ block           = [data_rsvp(nTrain+1:end).block];
 trial           = [data_rsvp(nTrain+1:end).trial];
 rt              = [data_rsvp(nTrain+1:end).RTs];
 % (1 = femquest, 2 = homquest)
-instr           = [data_rsvp(nTrain+1:end).instr];
+instQuest       = [data_rsvp(nTrain+1:end).instQuest];
 % (1 = [o] / oui; 2 = [n] / non)
 response        = [data_rsvp(nTrain+1:end).response];
 posCritDist     = [data_rsvp(nTrain+1:end).posCritDist];
@@ -84,35 +84,35 @@ end
 %% =================== Performance - Correct Trials     ===================
 
 % Correctly detect fem when fem was target
-correct_Fem     = (response(nTrial) == 1 & instr(nTrial) == 1 ...                           % all fem targets
+correct_Fem     = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...                           % all fem targets
     & (target(nTrial) == 1 | target(nTrial) == 3));
-correct_FearFem = (response(nTrial) == 1 & instr(nTrial) == 1 ...                           % fearful fem targets
+correct_FearFem = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...                           % fearful fem targets
     & target(nTrial) == 1);
-correct_NeutralFem  = (response(nTrial) == 1 & instr(nTrial) == 1 ...                       % neutral fem targets
+correct_NeutralFem  = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...                       % neutral fem targets
     & target(nTrial) == 3);
 
 % Correctly detect hom when hom was target
-correct_Hom     = (response(nTrial) == 1 & instr(nTrial) == 2 ...                           % all hom targets
+correct_Hom     = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...                           % all hom targets
     & (target(nTrial) == 2 | target(nTrial) == 4));
-correct_FearHom = (response(nTrial) == 1 & instr(nTrial) == 2 ...                           % fearful hom targets
+correct_FearHom = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...                           % fearful hom targets
     & target(nTrial) == 2);
-correct_NeutralHom  = (response(nTrial) == 1 & instr(nTrial) == 2 ...                       % neutral hom taregts
+correct_NeutralHom  = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...                       % neutral hom taregts
     & target(nTrial) == 4);
 
 % Correctly reject fem when hom was target
-correct_NotFem  = (response(nTrial) == 2 & instr(nTrial) == 1 ...
+correct_NotFem  = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...
     & (target(nTrial) == 2 | target(nTrial) == 4));
-correct_NotFem_FearHom = (response(nTrial) == 2 & instr(nTrial) == 1 ...
+correct_NotFem_FearHom = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...
     & target(nTrial) == 2);
-correct_NotFem_NeutralHom = (response(nTrial) == 2 & instr(nTrial) == 1 ...
+correct_NotFem_NeutralHom = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...
     & target(nTrial) == 4);
 
 % Correctly reject hom when fem was target
-correct_NotHom  = (response(nTrial) == 2 & instr(nTrial) == 2 ...
+correct_NotHom  = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...
     & (target(nTrial) == 1 | target(nTrial) == 3));
-correct_NotHom_FearFem = (response(nTrial) == 2 & instr(nTrial) == 2 ...
+correct_NotHom_FearFem = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...
     & target(nTrial) == 1);
-correct_NotHom_NeutralFem = (response(nTrial) == 2 & instr(nTrial) == 2 ...
+correct_NotHom_NeutralFem = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...
     & target(nTrial) == 3);
 
 % Sum of all the correct trials
@@ -137,35 +137,35 @@ disp(['Performance : ',num2str(ceil(performance)), ...
 %% =================== Performance - Incorrect Trials   ===================
 
 % Incorrectly not detect fem when fem was target ( false alarm: says present when not present)
-incorrect_Fem = (response(nTrial) == 2 & instr(nTrial) == 1 ...                             % all fem targets
+incorrect_Fem = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...                             % all fem targets
     & (target(nTrial) == 1 | target(nTrial) == 3));
-incorrect_FearFem = (response(nTrial) == 2 & instr(nTrial) == 1 ...                         % fearful fem targets
+incorrect_FearFem = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...                         % fearful fem targets
     & target(nTrial) == 1);
-incorrect_NeutralFem = (response(nTrial) == 2 & instr(nTrial) == 1 ...                      % neutral fem targets
+incorrect_NeutralFem = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...                      % neutral fem targets
     & target(nTrial) == 3);
 
 % Incorrectly not detect hom when hom was target
-incorrect_Hom = (response(nTrial) == 2 & instr(nTrial) == 2 ...                             % all hom targets
+incorrect_Hom = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...                             % all hom targets
     & (target(nTrial) == 2 | target(nTrial) == 4));
-incorrect_FearHom = (response(nTrial) == 2 & instr(nTrial) == 2 ...                         % fearful hom targets
+incorrect_FearHom = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...                         % fearful hom targets
     & target(nTrial) == 2);
-incorrect_NeutralHom = (response(nTrial) == 2 & instr(nTrial) == 2 ...                      % neutral hom taregts
+incorrect_NeutralHom = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...                      % neutral hom taregts
     & target(nTrial) == 4);
 
 % Incorrectly reject hom when hom was target ( miss: says not preset when present)
-incorrect_NotFem = (response(nTrial) == 1 & instr(nTrial) == 1 ...
+incorrect_NotFem = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...
     & (target(nTrial) == 2 | target(nTrial) == 4));
-incorrect_NotFem_FearHom = (response(nTrial) == 1 & instr(nTrial) == 1 ...
+incorrect_NotFem_FearHom = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...
     & target(nTrial) == 2);
-incorrect_NotFem_NeutralHom = (response(nTrial) == 1 & instr(nTrial) == 1 ...
+incorrect_NotFem_NeutralHom = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...
     & target(nTrial) == 4);
 
 % Incorrectly reject fem when fem was target
-incorrect_NotHom = (response(nTrial) == 1 & instr(nTrial) == 2 ...
+incorrect_NotHom = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...
     & (target(nTrial) == 1 | target(nTrial) == 3));
-incorrect_NotHom_FearFem = (response(nTrial) == 1 & instr(nTrial) == 2 ...
+incorrect_NotHom_FearFem = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...
     & target(nTrial) == 1);
-incorrect_NotHom_NeutralFem = (response(nTrial) == 1 & instr(nTrial) == 2 ...
+incorrect_NotHom_NeutralFem = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...
     & target(nTrial) == 3);
 
 % Sum of all the incorrect trials
@@ -441,7 +441,7 @@ if fig == 1
     bar([0 0 0 0 perf_BC_smallRwd 0],'FaceColor',[0.50 0.65 0.50]);
     bar([0 0 0 0 0 perf_BC_largeRwd],'FaceColor',[0.30 0.45 0.30]);
     xticks([1 2 3 4 5 6])
-    xticklabels({'DC Small Rwd','DC Large Rwd','CC Small Rwd','CC Large Rwd','CC Small Rwd',' CC Large Rwd'})
+    xticklabels({'DC Small Rwd','DC Large Rwd','CC Small Rwd','CC Large Rwd','BC Small Rwd',' BC Large Rwd'})
     ylabel('Performance','fontsize', 10)
     title('Performance according to reward & conditions','fontsize', 10)
     axis([0 7 50 100])

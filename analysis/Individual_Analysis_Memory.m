@@ -5,7 +5,7 @@
 %function []    = Individual_Analysis_Memory(ID, fig)
 clearvars;
 
-ID              = 19279; %46700; 5034 ; %10016;
+ID              = 72605 %11310 %9022 %81731 % 19279; %46700; 5034 ; %10016;
 fig             = 1;
 
 %% =================== Load the data                    ===================
@@ -31,6 +31,7 @@ cfg_exp         = data_memory(nTrain+1).cfg;
 reward          = [data_memory(nTrain+1:end).reward];
 %(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
 condition       = [data_memory(nTrain+1:end).condition];
+instCondit      = [data_memory(nTrain+1:end).instCondit];
 block           = [data_memory(nTrain+1:end).block];
 trial           = [data_memory(nTrain+1:end).trial];
 rt              = [data_memory(nTrain+1:end).RTs];
@@ -275,12 +276,12 @@ for i = 1:cfg_exp.nBlocksExp
 end
 
 LC_smallRwd     = zeros(1,cfg_exp.nBlocksExp);
-for i = 1:2:cfg_exp.nBlocksExp
+for i = 1:cfg_exp.nBlocksExp
     LC_smallRwd(i) = (sum(correct_smallRwd(block(nTrial) == i)))/(length(nTrial)/cfg_exp.nBlocksExp)*100;
 end
 
 LC_largeRwd     = zeros(1,cfg_exp.nBlocksExp);
-for i = 2:2:cfg_exp.nBlocksExp
+for i = 1:cfg_exp.nBlocksExp
     LC_largeRwd(i) = (sum(correct_largeRwd(block(nTrial) == i)))/(length(nTrial)/cfg_exp.nBlocksExp)*100;
 end
 
@@ -328,7 +329,7 @@ if fig == 1
     bar([0 0 0 0 perf_BC_smallRwd 0],'FaceColor',[0.50 0.65 0.50]);
     bar([0 0 0 0 0 perf_BC_largeRwd],'FaceColor',[0.30 0.45 0.30]);
     xticks([1 2 3 4 5 6])
-    xticklabels({'DC Small Rwd','DC Large Rwd','CC Small Rwd','CC Large Rwd','CC Small Rwd',' CC Large Rwd'})
+    xticklabels({'DC Small Rwd','DC Large Rwd','CC Small Rwd','CC Large Rwd','BC Small Rwd',' BC Large Rwd'})
     ylabel('Performance','fontsize', 10)
     title('Performance according to reward & conditions','fontsize', 10)
     axis([0 7 50 100])
@@ -389,7 +390,7 @@ if fig == 1
     
     %% Learning Curves Plots
     figure('Name', 'Learning Curve Plots');
-    LC_plots = {LC, LC_smallRwd(1:2:end), LC_largeRwd(2:2:end)};
+    LC_plots = {LC, LC_smallRwd, LC_largeRwd};
     LC_titles = {'Learning Curve Experiment', 'Learning Curve for Small Rewards', 'Learning Curve for Large Rewards'};
     for i = 1:3
         subplot(2,2,i)

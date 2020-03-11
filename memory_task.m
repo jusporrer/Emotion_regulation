@@ -101,6 +101,7 @@ try
     % 1,1 SR DCinst; 1,2 SR BCinst; 2,1 LR DCinst; 2,2 LR BCinst 
     condiRwd    = Shuffle([repmat({[1,1]},1,nBlocks/4), repmat({[1,2]},1,nBlocks/4), ...
         repmat({[2,1]},1,nBlocks/4), repmat({[2,2]},1,nBlocks/4)]);
+    
     for i = 1:nBlocks
         condiCC    = repmat((3:4),1,nTrials/3);
         condiDC    = Shuffle([repmat((1:2),1,nTrials/3), condiCC(1:nTrials/3)]);
@@ -111,6 +112,9 @@ try
             condition(i,:) = condiBC;
         end
     end
+    
+    condition
+    celldisp(condiRwd)
     
     %% Actual Experiemen
     a = 0;
@@ -210,29 +214,23 @@ try
             setSizeFM   = ceil(memory.setSize/2 * probaFM);
             setSizeNM   = ceil(memory.setSize/2 * probaNM);
             
+            % Select new faces
+            faces = createFaceArray(stimuli, setSizeFF, setSizeNF, setSizeFM, setSizeNM);
+            
             %Create position and orientation for search display (change every trial)
-            [posFF, posNF, posFM, posNM ] = createPositionsMemory(positionMatrix, ...
+            faces_pos = createPositionsMemory(positionMatrix, ...
                 memory.setSize,setSizeFF, setSizeNF, setSizeFM, setSizeNM, stimuli.sizeImgMemory);
             
             % Save pos for eye-tracking (is it really useful ?)
-            respMatMemory(a).posFF = posFF;
-            respMatMemory(a).posNF = posNF;
-            respMatMemory(a).posFM = posFM;
-            respMatMemory(a).posNM = posNM;
-            
-            % Select new faces
-            fearFem     = [stimuli.fearFemMemory{randi([1 size(stimuli.fearFemMemory,2)],1,setSizeFF)}];
-            neutralFem  = [stimuli.neutralFemMemory{randi([1 size(stimuli.neutralFemMemory,2)],1,setSizeNF)}];
-            fearMale    = [stimuli.fearMaleMemory{randi([1 size(stimuli.fearMaleMemory,2)],1,setSizeFM)}];
-            neutralMale = [stimuli.neutralMaleMemory{randi([1 size(stimuli.neutralMaleMemory,2)],1,setSizeNM)}];
-            
+            respMatMemory(a).posFF = faces_pos{1};
+            respMatMemory(a).posNF = faces_pos{2};
+            respMatMemory(a).posFM = faces_pos{3};
+            respMatMemory(a).posNM = faces_pos{4};
+                        
             % Screen priority
             Priority(MaxPriority(window));
             Priority(2);
-            
-            faces       = {fearFem, neutralFem, fearMale, neutralMale};
-            faces_pos   = {posFF, posNF, posFM, posNM};
-            
+                        
             for nb_faces = 1:length(faces)
                 for nb_img = 1: size(faces_pos{nb_faces},1)
                     Screen('DrawTexture', window, faces{nb_faces}(nb_img), [], faces_pos{nb_faces}(nb_img,:));
