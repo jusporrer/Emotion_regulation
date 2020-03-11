@@ -128,7 +128,7 @@ try
     %% Set Participant ID
     
     ID = ceil(100000*rand);
-    ID = 2;
+    %ID = 2;
     
     %% Start of the experiment
     
@@ -196,7 +196,7 @@ try
     
     % Check if file was saved -> if problem, save matrices manually
     
-    if  isfile(fileNameRSVP) && isfile(fileNameMemory)
+    if  isfile(fileNameMemory) && isfile(fileNameRSVP) 
         warningMessage = sprintf([' End experiment: all data was saved correctly.                     \n ID : ', ...
             num2str(ID), '\n Date : ',datestr(datetime('now'))]);
         msg = msgbox(warningMessage);

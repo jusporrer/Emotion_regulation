@@ -6,7 +6,7 @@ memory.nTrialsExp           = 15; % expected : 15 -> 5/condi mixed  // min = 3
 
 % Number of blocks
 memory.nBlocksTrain         = 4; % expected : 4*3 -> 2/condi mixed
-memory.nBlocksExp           = 15; % expected : 20/25 // min = 4 (multiple de 4)
+memory.nBlocksExp           = 16; % expected : 20/25 // min = 4 (multiple de 4)
 
 % Number of images around the target
 memory.setSize              = 20;
@@ -22,7 +22,7 @@ memory.fearfulDC            = 0.4;
 memory.neutralDC            = 0.8; 
 
 % How long each image in the memory sequence is on screen (normally 2 s)
-memory.imageDuration        = 5;%1.5;
+memory.imageDuration        = [1.5, 2];
 
 % Length of fixation in seconds
 memory.fixationDuration     = 0.5;

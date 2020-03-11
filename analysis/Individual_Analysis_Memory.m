@@ -5,7 +5,7 @@
 %function []    = Individual_Analysis_Memory(ID, fig)
 clearvars;
 
-ID              = 72605 %11310 %9022 %81731 % 19279; %46700; 5034 ; %10016;
+ID              = 56560 %72605 %11310 %9022 %81731 % 19279; %46700; 5034 ; %10016;
 fig             = 1;
 
 %% =================== Load the data                    ===================
@@ -27,6 +27,7 @@ end
 cfg_training    = data_memory(1).cfg;
 nTrain          = cfg_training.nTrialsTrain * cfg_training.nBlocksTrain;
 cfg_exp         = data_memory(nTrain+1).cfg;
+imageDuration   = [data_memory(nTrain+1:end).imgDur];
 %(0 = training, 1 = Small reward, 2 = Large reward)
 reward          = [data_memory(nTrain+1:end).reward];
 %(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
@@ -201,6 +202,21 @@ perf_BC_smallRwd = ((sum(correct_BC_hom(smallRwd == 1))/sum(BC_hom(smallRwd == 1
 
 perf_BC_largeRwd = ((sum(correct_BC_hom(largeRwd == 1))/sum(BC_hom(largeRwd == 1)))*100 ...
     + (sum(correct_BC_fem(largeRwd == 1))/sum(BC_fem(largeRwd == 1)))*100) / 2;
+
+%% =================== Performance - Lags               ===================
+
+imgShort        = (imageDuration(nTrial) == 1.5);
+nimgShort       = sum(imgShort);
+correct_imgShort= (correct(1:length(nTrial)) == 1 & imgShort(1:length(nTrial)) == 1);
+imgShort_rate   = sum(correct_imgShort)/nimgShort*100;
+
+imgLong         = (imageDuration(nTrial) == 2);
+nimgLong        = sum(imgLong);
+correct_imgLong = (correct(1:length(nTrial)) == 1 & imgLong(1:length(nTrial)) == 1);
+imgLong_rate    = sum(correct_imgLong)/nimgLong*100;
+
+disp(['Performance Lag : ',num2str(ceil(imgShort_rate)), '% were correct after 1.5s & ', ...
+    num2str(ceil(imgLong_rate)), '% were correct after 2s' ]);
 
 %% =================== RTs - Rewards                    ===================
 

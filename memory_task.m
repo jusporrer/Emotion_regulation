@@ -230,21 +230,22 @@ try
             % Screen priority
             Priority(MaxPriority(window));
             Priority(2);
-                        
+                      
             for nb_faces = 1:length(faces)
                 for nb_img = 1: size(faces_pos{nb_faces},1)
                     Screen('DrawTexture', window, faces{nb_faces}(nb_img), [], faces_pos{nb_faces}(nb_img,:));
                 end
             end
             
+            imageDuration = memory.imageDuration(randi(2)); 
             Screen('Flip', window);
             %Screenshot(window,'exp_images/memory_shot.jpg','jpg');
-            Screen('Flip', window, flipTime + memory.imageDuration - ifi,0);
+            Screen('Flip', window, flipTime + imageDuration - ifi,0);
             
             Screen(window, 'FillRect', white);
             Screen('DrawTexture', window, imgRwd, [], stimuli.posRwd);
             Screen('DrawTexture', window, imgInst, [], stimuli.posInst);
-            startTime = Screen('Flip', window, flipTime + memory.imageDuration - ifi,0);
+            startTime = Screen('Flip', window, flipTime + imageDuration - ifi,0);
             
             while GetSecs - startTime < memory.trialTimeout
                 [~,~,keyCode] = KbCheck;
@@ -276,6 +277,7 @@ try
             
             % Save data
             respMatMemory(a).cfg        = memory;
+            respMatMemory(a).imgDur     = imageDuration;  
             respMatMemory(a).ID         = ID;
             respMatMemory(a).training   = training;  %(1 = training, 0 = no training)
             respMatMemory(a).reward     = condiRwd{block}(2); %(0 = training, 1 = Small reward, 2 = Large reward)
