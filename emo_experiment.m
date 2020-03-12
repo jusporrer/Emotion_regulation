@@ -8,7 +8,7 @@ try
     HideCursor;
     
     %Initialise the workspace
-    sca;
+    sca;     
     close all;
     clearvars;
     
