@@ -1,4 +1,4 @@
-% JS initial script analysis for the effect of incentives on emotion regulation 
+% JS initial individual analysis script for the effect of incentives on emotion regulation 
 % in a RSVP Task
 % Creation : February 2020
 
@@ -6,7 +6,7 @@
 clearvars;
 close all; 
 
-ID              =  98197 %12346 %74239 %90255 %81473 %33222 % 53999; %35923; % 5034; % 85841; % % 10016;
+ID              =  90255;
 fig             = 1;
 
 %% =================== Load the data                    ===================
@@ -76,6 +76,7 @@ excl_RtExp      = [find(rt(nTrial) < low_RtExp) find(rt(nTrial) > up_RtExp)];
 
 nTrial          = nTrial(kept_RtExp);
 rt              = rt(nTrial); 
+block           = block(nTrial);
 
 if length(nTrial) < length(trial)
     disp(['RTs warning : ',num2str(length(excl_RtExp)), ...
@@ -191,10 +192,12 @@ disp(['Performance : ',num2str(ceil(perf_incorrect)), ...
 %% =================== Performance - Rewards            ===================
 
 smallRwd        = (reward(nTrial) == 1);
+smallRwdBlock   = unique(block(smallRwd == 1));
 correct_smallRwd= (correct(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1);
 smallRwd_rate   = sum(correct_smallRwd)/sum(smallRwd)*100;
 
 largeRwd        = (reward(nTrial) == 2);
+largeRwdBlock   = unique(block(largeRwd == 1));
 correct_largeRwd= (correct(1:length(nTrial)) == 1 & largeRwd(1:length(nTrial)) == 1);
 largeRwd_rate   = sum(correct_largeRwd)/sum(largeRwd)*100;
 
@@ -385,17 +388,17 @@ rt_BC_largeRwd = (mean(rt(largeRwd == 1 & BC_hom == 1)) + mean(rt(largeRwd == 1 
 
 LC              = zeros(1,cfg_exp.nBlocksExp);
 for i = 1:cfg_exp.nBlocksExp
-    LC(i)       = (sum(correct(block(nTrial) == i)))/(length(nTrial)/cfg_exp.nBlocksExp)*100;
+    LC(i)       = (sum(correct(block == i)))/(length(nTrial)/cfg_exp.nBlocksExp)*100;
 end
 
-LC_smallRwd     = zeros(1,cfg_exp.nBlocksExp);
-for i = 1:2:cfg_exp.nBlocksExp
-    LC_smallRwd(i) = (sum(correct_smallRwd(block(nTrial) == i)))/(length(nTrial)/cfg_exp.nBlocksExp)*100;
+LC_smallRwd     = zeros(1,length(smallRwdBlock));
+for i = 1:length(smallRwdBlock)
+     LC_smallRwd(i) = (sum(correct_smallRwd(block == smallRwdBlock(i))))/(length(nTrial)/cfg_exp.nBlocksExp)*100;
 end
 
-LC_largeRwd     = zeros(1,cfg_exp.nBlocksExp);
-for i = 2:2:cfg_exp.nBlocksExp
-    LC_largeRwd(i) = (sum(correct_largeRwd(block(nTrial) == i)))/(length(nTrial)/cfg_exp.nBlocksExp)*100;
+LC_largeRwd     = zeros(1,length(largeRwdBlock));
+for i = 1:length(largeRwdBlock)
+    LC_largeRwd(i) = (sum(correct_largeRwd(block == largeRwdBlock(i))))/(length(nTrial)/cfg_exp.nBlocksExp)*100;
 end
 
 %% =================== PLOT PART                        ===================
@@ -413,7 +416,7 @@ if fig == 1
     xticklabels({'DC','CC', 'BC'})
     ylabel('Performance','fontsize', 10)
     title('Performance according to conditions','fontsize', 10)
-    axis([0 4 50 100])
+    axis([0 4 50 105])
     grid minor 
     box on 
     hold off
@@ -427,7 +430,7 @@ if fig == 1
     xticklabels({'Small Reward','Large Reward'})
     ylabel('Performance','fontsize', 10)
     title('Performance according to reward','fontsize', 10)
-    axis([0 3 50 100])
+    axis([0 3 50 105])
     grid minor 
     box on 
     hold off
@@ -445,7 +448,7 @@ if fig == 1
     xticklabels({'DC Small Rwd','DC Large Rwd','CC Small Rwd','CC Large Rwd','BC Small Rwd',' BC Large Rwd'})
     ylabel('Performance','fontsize', 10)
     title('Performance according to reward & conditions','fontsize', 10)
-    axis([0 7 50 100])
+    axis([0 7 50 105])
     grid minor 
     box on 
     hold off
@@ -501,22 +504,42 @@ if fig == 1
     box on 
     hold off
     
-    %% Learning Curves Plots 
+    %% Learning Curves Plots
     figure('Name', 'Learning Curve Plots');
-    LC_plots = {LC, LC_smallRwd(1:2:end), LC_largeRwd(2:2:end)};
-    LC_titles = {'Learning Curve Experiment', 'Learning Curve for Small Rewards', 'Learning Curve for Large Rewards'};
+    LC_plots    = {LC, LC_smallRwd, LC_largeRwd};
+    LC_titles   = {'Learning Curve Experiment', 'Learning Curve for Small Rewards', 'Learning Curve for Large Rewards'};
+    LC_xtick    = {unique(block), smallRwdBlock, largeRwdBlock};
+    LC_color    = {[0 0 0], [0.75, 0.85, 0.90], [0.35, 0.50, 0.60]};
     for i = 1:3
         subplot(2,2,i)
-        plot(1:(length(LC_plots{i})), LC_plots{i},'-k','linewidth',1.5)
+        p = plot(1:(length(LC_plots{i})), LC_plots{i},'linew',1.5);
+        p.Color = LC_color{i};
+        line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
         ylabel('Performance','fontsize', 10)
         xlabel('Number of blocks','fontsize', 10)
         xticks(1:(length(LC_plots{i})))
-        xticklabels(1:(length(LC_plots{i})))
+        xticklabels(LC_xtick{i})
         title(LC_titles{i},'fontsize', 10)
-        axis([0 (length(LC_plots{i})+1) 40 100])
+        axis([0 (length(LC_plots{i})+1) 40 105])
         grid minor
         box on
     end
+    
+    subplot(2,2,4)
+    hold on
+    p1 = plot(smallRwdBlock, LC_smallRwd,'linew',1.5);
+    p1.Color = LC_color{2};
+    p2 = plot(largeRwdBlock, LC_largeRwd,'linew',1.5);
+    p2.Color = LC_color{3};
+    line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
+    ylabel('Performance','fontsize', 10)
+    xlabel('Number of blocks','fontsize', 10)
+    xticks(1:12); xticklabels(unique(block))
+    title('Learning Curve for Small and Large Rewards','fontsize', 10)
+    axis([0 (length(unique(block))+1) 40 105])
+    hold off
+    grid minor
+    box on
     
     %% Gender Plots 
     
@@ -527,7 +550,7 @@ if fig == 1
     gender_hom = {perf_hom, rt_hom};
     gender_labels ={'Performance','RTs'};
     gender_titles ={'Performance according to gender', 'RTs according to gender'};
-    gender_axis = {[0 3 50 100], [0 3 0 2]};
+    gender_axis = {[0 3 50 105], [0 3 0 2]};
     
     for i = 1:2
         subplot(2,2,i)
@@ -557,7 +580,7 @@ if fig == 1
     xticklabels({'DC Fem','DC Hom','CC Fem','CC Hom','BC Fem','BC Hom'})
     ylabel('Performance','fontsize', 10)
     title('Performance according to gender & conditions','fontsize', 10)
-    axis([0 7 40 100])
+    axis([0 7 40 105])
     grid minor
     box on
     hold off
