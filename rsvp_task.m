@@ -51,8 +51,8 @@ try
     %% Training or not
     
     if training
-        nBlocks     = rsvp.nBlocksTrain;
-        nTrials     = rsvp.nTrialsTrain;
+        nBlocks     = rsvpCfg.nBlocksTrain;
+        nTrials     = rsvpCfg.nTrialsTrain;
              
         for i = 8:10
             Screen('DrawTexture', window, stimuli.instTexture{i},[],stimuli.instPos,0);
@@ -61,8 +61,8 @@ try
         end
         
     else
-        nBlocks    = rsvp.nBlocksExp;
-        nTrials    = rsvp.nTrialsExp;
+        nBlocks    = rsvpCfg.nBlocksExp;
+        nTrials    = rsvpCfg.nTrialsExp;
         
         for i = 12
             Screen('DrawTexture', window, stimuli.instTexture{i},[],stimuli.instPos,0);
@@ -131,7 +131,7 @@ try
             a               = a + 1;
             rt              = 0;
             response        = 0;
-            imageDisplay    = zeros(1,rsvp.setSize);
+            imageDisplay    = zeros(1,rsvpCfg.setSize);
             
             % Screen priority
             Priority(MaxPriority(window));
@@ -156,10 +156,10 @@ try
                 stimuli.neutralFemRSVP{randi([1 size(stimuli.neutralFemRSVP,2)],1,2)}; ... % 3
                 stimuli.neutralMaleRSVP{randi([1 size(stimuli.neutralMaleRSVP,2)],1,2)}]; % 4
             
-            img_scramble    = [stimuli.fearFemScramble{randi([1 size(stimuli.fearFemScramble,2)],1,rsvp.setSize)};... % 1
-                stimuli.fearMaleScramble{randi([1 size(stimuli.fearMaleScramble,2)],1,rsvp.setSize)}; ... % 2
-                stimuli.neutralFemScramble{randi([1 size(stimuli.neutralFemScramble,2)],1,rsvp.setSize)}; ... %3
-                stimuli.neutralMaleScramble{randi([1 size(stimuli.neutralMaleScramble,2)],1,rsvp.setSize)}]; %4
+            img_scramble    = [stimuli.fearFemScramble{randi([1 size(stimuli.fearFemScramble,2)],1,rsvpCfg.setSize)};... % 1
+                stimuli.fearMaleScramble{randi([1 size(stimuli.fearMaleScramble,2)],1,rsvpCfg.setSize)}; ... % 2
+                stimuli.neutralFemScramble{randi([1 size(stimuli.neutralFemScramble,2)],1,rsvpCfg.setSize)}; ... %3
+                stimuli.neutralMaleScramble{randi([1 size(stimuli.neutralMaleScramble,2)],1,rsvpCfg.setSize)}]; %4
             
             % Indexing of img
             fem = [1,3]; male = [2,4]; fear = [1,2]; neutral = [3,4];
@@ -203,7 +203,7 @@ try
                 target      = fear(randi(2)); % 1 or 2
             end
             
-            for nbImage = 1: rsvp.setSize
+            for nbImage = 1: rsvpCfg.setSize
                 if nbImage == posCritDist
                     imageDisplay(nbImage) = img(distractor,1);
                 elseif nbImage == posTarget
@@ -213,20 +213,20 @@ try
                 end
             end
             
-            for nbImage = 1: rsvp.setSize
+            for nbImage = 1: rsvpCfg.setSize
                 Screen(window, 'FillRect', white);
                 Screen('DrawTexture', window, imageDisplay(nbImage), [],stimuli.posRSVP,0);
                 Screen('DrawTexture', window, imgInst, [], stimuli.posInst);
                 Screen('DrawTexture', window, imgRwd, [], stimuli.posRwd);
-                flipTime = Screen('Flip', window, flipTime + rsvp.imageDuration - ifi,0);
+                flipTime = Screen('Flip', window, flipTime + rsvpCfg.imageDuration - ifi,0);
             end
             
             Screen(window, 'FillRect', white);
             Screen('DrawTexture', window, imgInst, [], stimuli.posInst);
             Screen('DrawTexture', window, imgRwd, [], stimuli.posRwd);
-            startTime = Screen('Flip', window, flipTime + rsvp.imageDuration - ifi,0);
+            startTime = Screen('Flip', window, flipTime + rsvpCfg.imageDuration - ifi,0);
             
-            while GetSecs - startTime < rsvp.trialTimeout
+            while GetSecs - startTime < rsvpCfg.trialTimeout
                 [~,~,keyCode] = KbCheck;
                 respTime = GetSecs;
                 
@@ -265,7 +265,7 @@ try
             end
             
             % Record the trial data into the data matrix
-            respMatRSVP(a).cfg          = rsvp;
+            respMatRSVP(a).cfg          = rsvpCfg;
             respMatRSVP(a).ID           = ID;
             respMatRSVP(a).training     = training; %(1 = training, 0 = no training)
             respMatRSVP(a).reward       = condiRwd{block}(2); %(0 = training, 1 = Small reward, 2 = Large reward)
@@ -286,7 +286,7 @@ try
             Screen('DrawTexture', window, imgInst, [], stimuli.posInst);
             Screen('DrawTexture', window, imgRwd, [], stimuli.posRwd);
             Screen('Flip', window);
-            WaitSecs(rsvp.timeBetweenTrials);
+            WaitSecs(rsvpCfg.timeBetweenTrials);
             
         end
     end

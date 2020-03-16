@@ -74,8 +74,8 @@ try
     %% Training or not
     
     if training
-        nBlocks     = memory.nBlocksTrain;
-        nTrials     = memory.nTrialsTrain;
+        nBlocks     = memCfg.nBlocksTrain;
+        nTrials     = memCfg.nTrialsTrain;
           
         for i = [16, 17, 3]
             Screen('DrawTexture', window, stimuli.instTexture{i},[],stimuli.instPos,0);
@@ -84,8 +84,8 @@ try
         end
         
     else
-        nBlocks     = memory.nBlocksExp;
-        nTrials     = memory.nTrialsExp;
+        nBlocks     = memCfg.nBlocksExp;
+        nTrials     = memCfg.nTrialsExp;
                                 
         for i = 19
             Screen('DrawTexture', window, stimuli.instTexture{i},[],stimuli.instPos,0);
@@ -173,53 +173,53 @@ try
             end
             
             if condition(block,trial)       == 1 % DC_male
-                probaFF = 1 - memory.fearfulDC;
-                probaNF = 1 - memory.neutralDC;
-                probaFM = memory.fearfulDC;
-                probaNM = memory.neutralDC;
+                probaFF = 1 - memCfg.fearfulDC;
+                probaNF = 1 - memCfg.neutralDC;
+                probaFM = memCfg.fearfulDC;
+                probaNM = memCfg.neutralDC;
                 
             elseif condition(block,trial)   == 2 % DC_fem
-                probaFF = memory.fearfulDC;
-                probaNF = memory.neutralDC;
-                probaFM = 1 - memory.fearfulDC;
-                probaNM = 1 - memory.neutralDC;
+                probaFF = memCfg.fearfulDC;
+                probaNF = memCfg.neutralDC;
+                probaFM = 1 - memCfg.fearfulDC;
+                probaNM = 1 - memCfg.neutralDC;
                 
             elseif condition(block,trial)   == 3 % CC_male
-                probaFF = 1 - memory.fearfulCC;
-                probaNF = 1 - memory.neutralCC;
-                probaFM = memory.fearfulCC;
-                probaNM = memory.neutralCC;
+                probaFF = 1 - memCfg.fearfulCC;
+                probaNF = 1 - memCfg.neutralCC;
+                probaFM = memCfg.fearfulCC;
+                probaNM = memCfg.neutralCC;
                 
             elseif condition(block,trial)   == 4 % CC_female
-                probaFF = memory.fearfulCC;
-                probaNF = memory.neutralCC;
-                probaFM = 1 - memory.fearfulCC;
-                probaNM = 1 - memory.neutralCC;
+                probaFF = memCfg.fearfulCC;
+                probaNF = memCfg.neutralCC;
+                probaFM = 1 - memCfg.fearfulCC;
+                probaNM = 1 - memCfg.neutralCC;
                 
             elseif condition(block,trial)   == 5 % BC_male
-                probaFF = 1 - memory.fearfulBC;
-                probaNF = 1 - memory.neutralBC;
-                probaFM = memory.fearfulBC;
-                probaNM = memory.neutralBC;
+                probaFF = 1 - memCfg.fearfulBC;
+                probaNF = 1 - memCfg.neutralBC;
+                probaFM = memCfg.fearfulBC;
+                probaNM = memCfg.neutralBC;
                 
             elseif condition(block,trial)   == 6 % BC_fem
-                probaFF = memory.fearfulBC;
-                probaNF = memory.neutralBC;
-                probaFM = 1 - memory.fearfulBC;
-                probaNM = 1 - memory.neutralBC;
+                probaFF = memCfg.fearfulBC;
+                probaNF = memCfg.neutralBC;
+                probaFM = 1 - memCfg.fearfulBC;
+                probaNM = 1 - memCfg.neutralBC;
             end
             
-            setSizeFF   = ceil(memory.setSize/2 * probaFF);
-            setSizeNF   = ceil(memory.setSize/2 * probaNF);
-            setSizeFM   = ceil(memory.setSize/2 * probaFM);
-            setSizeNM   = ceil(memory.setSize/2 * probaNM);
+            setSizeFF   = ceil(memCfg.setSize/2 * probaFF);
+            setSizeNF   = ceil(memCfg.setSize/2 * probaNF);
+            setSizeFM   = ceil(memCfg.setSize/2 * probaFM);
+            setSizeNM   = ceil(memCfg.setSize/2 * probaNM);
             
             % Select new faces
             faces = createFaceArray(stimuli, setSizeFF, setSizeNF, setSizeFM, setSizeNM);
             
             %Create position and orientation for search display (change every trial)
             faces_pos = createPositionsMemory(positionMatrix, ...
-                memory.setSize,setSizeFF, setSizeNF, setSizeFM, setSizeNM, stimuli.sizeImgMemory);
+                memCfg.setSize,setSizeFF, setSizeNF, setSizeFM, setSizeNM, stimuli.sizeImgMemory);
             
             % Save pos for eye-tracking (is it really useful ?)
             respMatMemory(a).posFF = faces_pos{1};
@@ -237,7 +237,7 @@ try
                 end
             end
             
-            imageDuration = memory.imageDuration(randi(2)); 
+            imageDuration = memCfg.imageDuration(randi(2)); 
             Screen('Flip', window);
             %Screenshot(window,'exp_images/memory_shot.jpg','jpg');
             Screen('Flip', window, flipTime + imageDuration - ifi,0);
@@ -247,7 +247,7 @@ try
             Screen('DrawTexture', window, imgInst, [], stimuli.posInst);
             startTime = Screen('Flip', window, flipTime + imageDuration - ifi,0);
             
-            while GetSecs - startTime < memory.trialTimeout
+            while GetSecs - startTime < memCfg.trialTimeout
                 [~,~,keyCode] = KbCheck;
                 respTime = GetSecs;
                 
@@ -276,7 +276,7 @@ try
             end
             
             % Save data
-            respMatMemory(a).cfg        = memory;
+            respMatMemory(a).cfg        = memCfg;
             respMatMemory(a).imgDur     = imageDuration;  
             respMatMemory(a).ID         = ID;
             respMatMemory(a).training   = training;  %(1 = training, 0 = no training)
@@ -297,7 +297,7 @@ try
             Screen('DrawTexture', window, imgInst, [], stimuli.posInst);
             Screen('DrawTexture', window, imgRwd, [], stimuli.posRwd);
             Screen('Flip', window);
-            WaitSecs(memory.timeBetweenTrials);
+            WaitSecs(memCfg.timeBetweenTrials);
             
         end
     end

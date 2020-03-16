@@ -1,37 +1,37 @@
 %% Settings for the memory Task
 
 % Number of trials per set size
-memory.nTrialsTrain         = 3; % expected : 3*4 -> 2/condi mixed
-memory.nTrialsExp           = 15; % expected : 15 -> 5/condi mixed  // min = 3 
+memCfg.nTrialsTrain         = 3; % expected : 3*4 -> 2/condi mixed
+memCfg.nTrialsExp           = 15; % expected : 15 -> 5/condi mixed  // min = 3 
 
 % Number of blocks
-memory.nBlocksTrain         = 4; % expected : 4*3 -> 2/condi mixed
-memory.nBlocksExp           = 12; % expected : 20/25 // min = 4 (multiple de 4)
+memCfg.nBlocksTrain         = 4; % expected : 4*3 -> 2/condi mixed
+memCfg.nBlocksExp           = 12; % expected : 20/25 // min = 4 (multiple de 4)
 
 % Number of images around the target
-memory.setSize              = 20;
+memCfg.setSize              = 20;
 
 % Probabilities 
-memory.fearfulCC            = 0.6; 
-memory.neutralCC            = 0.6; 
+memCfg.fearfulCC            = 0.6; 
+memCfg.neutralCC            = 0.6; 
 
-memory.fearfulBC            = 0.8; 
-memory.neutralBC            = 0.4; 
+memCfg.fearfulBC            = 0.8; 
+memCfg.neutralBC            = 0.4; 
 
-memory.fearfulDC            = 0.4; 
-memory.neutralDC            = 0.8; 
+memCfg.fearfulDC            = 0.4; 
+memCfg.neutralDC            = 0.8; 
 
 % How long each image in the memory sequence is on screen (normally 2 s)
-memory.imageDuration        = [1.5, 2];
+memCfg.imageDuration        = [1.5, 2];
 
 % Length of fixation in seconds
-memory.fixationDuration     = 0.5;
+memCfg.fixationDuration     = 0.5;
 
 % How long to wait (in seconds) for subject response before the trial times out
-memory.trialTimeout         = 20;
+memCfg.trialTimeout         = 20;
 
 % How long to pause in between trials
-memory.timeBetweenTrials    = 2;
+memCfg.timeBetweenTrials    = 2;
 
 %% Create Response Matrix
 

@@ -107,7 +107,7 @@ incorrect       = (incorrect_Fem) + (incorrect_Hom);
 nIncorrect      = sum(incorrect);
 
 % General performance
-perf_incorrect  = nIncorrect/length(nTrial)*100;
+mem.perf_incorrect  = nIncorrect/length(nTrial)*100;
 
 %% =================== Performance - Rewards            ===================
 
@@ -177,8 +177,8 @@ mem.perf_BC         = (mem.BC_hom_rate + mem.BC_fem_rate) / 2;
 disp(['Performance Emotion : ',num2str(ceil(mem.perf_DC)), '% for detrimental condition, ', ...
     num2str(ceil(mem.perf_CC)), '% for control condition & ',num2str(ceil(mem.perf_BC)), '% for beneficial condition']);
 
-inabi_inhibit   = mem.perf_CC - mem.perf_DC;
-abi_enhance     = mem.perf_BC - mem.perf_CC;
+mem.inabi_inhibit   = mem.perf_CC - mem.perf_DC;
+mem.abi_enhance     = mem.perf_BC - mem.perf_CC;
 
 % Condition Gender
 mem.perf_fem        = (mem.DC_fem_rate + mem.CC_fem_rate + mem.BC_fem_rate) / 3;

@@ -1,27 +1,27 @@
 %% Settings for the Emotional Rapid Serial Visual Presentation Task
 
 % Number of trials per set size
-rsvp.nTrialsTrain           = 3; % expected : 12 -> 2/condi mixed (minimum 6)
-rsvp.nTrialsExp             = 15; % expected : 24 -> 4/condi mixed 
+rsvpCfg.nTrialsTrain           = 3; % expected : 12 -> 2/condi mixed (minimum 6)
+rsvpCfg.nTrialsExp             = 15; % expected : 24 -> 4/condi mixed 
 
 % Number of blocks
-rsvp.nBlocksTrain           = 4; % expected : 1 
-rsvp.nBlocksExp             = 12; % expected : 8 
+rsvpCfg.nBlocksTrain           = 4; % expected : 1 
+rsvpCfg.nBlocksExp             = 12; % expected : 8 
 
 % Number of trialsbefore a break
-rsvp.breakAfterTrials       = 100;
+rsvpCfg.breakAfterTrials       = 100;
 
 % Number of images around the target
-rsvp.setSize                = 15;
+rsvpCfg.setSize                = 15;
 
 % How long each image in the RSVP sequence is on screen(normally 100 ms so 0.1 s)
-rsvp.imageDuration          = 0.1;
+rsvpCfg.imageDuration          = 0.1;
 
 % How long to wait (in seconds) for subject response before the trial times out
-rsvp.trialTimeout           = 20;
+rsvpCfg.trialTimeout           = 20;
 
 % How long to pause in between trials
-rsvp.timeBetweenTrials      = 2;
+rsvpCfg.timeBetweenTrials      = 2;
 
 %% Create Response Matrix
 
