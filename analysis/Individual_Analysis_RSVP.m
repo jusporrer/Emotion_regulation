@@ -2,12 +2,10 @@
 % in a RSVP Task
 % Creation : February 2020
 
-%function []    = Individual_Analysis_RSVP(ID, fig)
-clearvars;
-close all; 
+function [rsvp]    = Individual_Analysis_RSVP(ID, fig)
 
-ID              =  90255;
-fig             = 1;
+%ID              =  90255;
+%fig             = 1;
 
 %% =================== Load the data                    ===================
 resp_folder     = '../results';
@@ -123,11 +121,11 @@ nCorrect        = sum(correct);
 
 % SDT: correct hit
 hit             = (correct_Fem) + (correct_Hom);
-rsvp.hit_rate   = (sum(hit)/nCorrect)*100;
+rsvp.hit_rate   = (sum(hit)/length(nTrial))*100;
 
 % SDT: correct rejection
 reject          = (correct_NotFem) + (correct_NotHom);
-rsvp.reject_rate= (sum(reject)/nCorrect)*100;
+rsvp.reject_rate= (sum(reject)/length(nTrial))*100;
 
 % General performance
 rsvp.performance= nCorrect/length(nTrial)*100;
@@ -176,11 +174,11 @@ nIncorrect      = sum(incorrect);
 
 % SDT: false alarms
 falseAlarm      = (incorrect_Fem) + (incorrect_Hom);
-rsvp.falseAlarm_rate = (sum(falseAlarm)/nIncorrect)*100;
+rsvp.falseAlarm_rate = (sum(falseAlarm)/length(nTrial))*100;
 
 % SDT: misses
 miss            = (incorrect_NotFem) + (incorrect_NotHom);
-rsvp.miss_rate       = (sum(miss)/nIncorrect)*100;
+rsvp.miss_rate       = (sum(miss)/length(nTrial))*100;
 
 % General performance
 rsvp.perf_incorrect  = nIncorrect/length(nTrial)*100;
@@ -403,7 +401,7 @@ for i = 1:length(largeRwdBlock)
 end
 
 %% =================== PLOT PART                        ===================
-if fig == 1
+if fig
     
     %% Performance Plots
     % Performance par conditions 
@@ -586,4 +584,4 @@ if fig == 1
 end
 
 
-%end
+end
