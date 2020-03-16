@@ -59,16 +59,41 @@ try
     % Query the frame duration
     ifi = Screen('GetFlipInterval', window);
     
-    %% Defines the text
-    Screen('TextFont',window, 'Calibri');
-    Screen('TextSize', window, 30);
+    %% Slides with instructions
+    instFolderName = 'instructions/instructionsDiapo/';
+    instFolder = dir(instFolderName);
     
-    text_experiment;
+    inst = cell(1,(length(instFolder)-2));
+    stimuli.instTexture = cell(1,(length(instFolder)-2));
     
-    Screen('Flip', window);
-    KbStrokeWait;
+    for i = 3:length(instFolder)
+        inst{i-2} = imread([instFolderName, 'Diapositive', num2str(i-2), '.JPG']);
+        stimuli.instTexture{i-2} = Screen('MakeTexture', window, inst{i-2});
+    end
+    
+    stimuli.instPos = [(screenXpixels-size(inst{1},2))/2 (screenYpixels-size(inst{1},1))/2 ...
+        (screenXpixels+size(inst{1},2))/2 (screenYpixels+size(inst{1},1))/2];
+    
+    %% Download reward
+    
+    smallRwdImg =imread('instructions\cent.jpg');
+    largeRwdImg = imread('instructions\euro.jpg');
+    stimuli.smallRwd = Screen('MakeTexture', window, smallRwdImg);
+    stimuli.largeRwd = Screen('MakeTexture', window, largeRwdImg);
+    
+    stimuli.posRwd = [(screenXpixels/10*9.5 - size(smallRwdImg,2)/3) (screenYpixels/10 - size(smallRwdImg,1)/3) ...
+        (screenXpixels/10*9.5 + size(smallRwdImg,2)/3) (screenYpixels/10 + size(smallRwdImg,1)/3)];
+    
+    %% Download instruction img 
+    
+    instBCImg =imread('instructions\instBC.jpg');
+    instDCImg = imread('instructions\instDC.jpg');
+    stimuli.instBC = Screen('MakeTexture', window, instBCImg);
+    stimuli.instDC = Screen('MakeTexture', window, instDCImg);
+    
+    stimuli.posInst = [(screenXpixels/10*8.5 - size(instBCImg,2)/3) (screenYpixels/10 - size(instBCImg,1)/3) ...
+        (screenXpixels/10*8.5 + size(instBCImg,2)/3) (screenYpixels/10 + size(instBCImg,1)/3)];
 
-    
     %% Download the images
     
     load('exp_images/WMN_img_vs.mat');

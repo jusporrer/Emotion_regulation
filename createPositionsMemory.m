@@ -1,4 +1,4 @@
-function [posFF, posNF, posFM, posNM] = createPositionsMemory(positionMatrix, setSize,setSizeFF, setSizeNF, setSizeFM, setSizeNM, sizeImg)
+function [faces_pos] = createPositionsMemory(positionMatrix, setSize,setSizeFF, setSizeNF, setSizeFM, setSizeNM, sizeImg)
 
 %% Initialise the matrices 
 positions = zeros(2,setSize);
@@ -36,4 +36,7 @@ posNM = imgPositions((setSizeFF + setSizeNF + setSizeFM + 1):end, :);
 if size(posNM,1) ~= setSizeNM
     disp('Error, problems with set Size'); 
 end 
+
+% Output 
+faces_pos   = {posFF, posNF, posFM, posNM};
 
