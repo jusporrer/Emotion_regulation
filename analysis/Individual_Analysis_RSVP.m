@@ -72,6 +72,8 @@ up_RtExp        = mean_RtExp+std_RtExp ;
 kept_RtExp      = intersect(find(rt(nTrial) > low_RtExp), find(rt(nTrial) < up_RtExp));
 excl_RtExp      = [find(rt(nTrial) < low_RtExp) find(rt(nTrial) > up_RtExp)];
 
+rsvp.nExcTrial  = length(excl_RtExp); 
+
 nTrial          = nTrial(kept_RtExp);
 rt              = rt(nTrial); 
 block           = block(nTrial);
@@ -253,9 +255,6 @@ rsvp.perf_BC         = (rsvp.BC_hom_rate + rsvp.BC_fem_rate) / 2;
 
 disp(['Performance Emotion : ',num2str(ceil(rsvp.perf_DC)), '% for detrimental condition, ', ...
     num2str(ceil(rsvp.perf_CC)), '% for control condition & ',num2str(ceil(rsvp.perf_BC)), '% for beneficial condition']);
-
-inabi_inhibit   = rsvp.perf_CC - rsvp.perf_DC;
-abi_enhance     = rsvp.perf_BC - rsvp.perf_CC;
 
 % Condition Gender
 rsvp.perf_fem        = (rsvp.DC_fem_rate + rsvp.CC_fem_rate + rsvp.BC_fem_rate) / 3;
