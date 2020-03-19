@@ -435,27 +435,27 @@ hold off
 figure('Name', 'Memory Task Learning Curve Plots');
 
 subplot(2,1,1)
-p = plot(1:length(LC), mean(LC),'linew',1.5);
+p = plot(1:length(LC), smooth(mean(LC),'sgolay'),'linew',1.5);
 p.Color = [0 0 0];
-shadedErrorBar(1:length(LC),mean(LC),(std(LC)/sqrt(nS)),'lineprops',{'Color',[0 0 0]},'patchSaturation',.3);
+shadedErrorBar(1:length(LC),smooth(mean(LC),'sgolay'),(std(LC)/sqrt(nS)),'lineprops',{'Color',[0 0 0]},'patchSaturation',.3);
 %line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
 ylabel('Performance','fontsize', 10)
 xlabel('Number of Blocks','fontsize', 10)
 xticks(1:(length(LC)))
 xticklabels(1:12)
-title('Learning Curve Memory Task Experiment','fontsize', 10)
+title('Learning Curve Memory Experiment','fontsize', 10)
 axis([0 (length(LC)+1) 50 100])
 grid minor
 box on
 
 subplot(2,2,3)
 hold on
-p2 = plot(1:6, mean(LC_largeRwd),'-o','linew',1.5);
+p2 = plot(1:6, smooth(mean(LC_largeRwd),'sgolay'),'-o','linew',1.5);
 p2.Color = [.35, .5, .6];
-p1 = plot(1:6, mean(LC_smallRwd),'-x','linew',1.5);
+p1 = plot(1:6, smooth(mean(LC_smallRwd),'sgolay'),'-x','linew',1.5);
 p1.Color = [.75, .85, .9];
-shadedErrorBar(1:6,mean(LC_largeRwd),(std(LC_largeRwd)/sqrt(nS)),'lineprops',{'Color',[.35, .5, .6]},'patchSaturation',.3);
-shadedErrorBar(1:6,mean(LC_smallRwd),(std(LC_smallRwd)/sqrt(nS)),'lineprops',{'Color',[.75, .85, .9]},'patchSaturation',.3);
+shadedErrorBar(1:6,smooth(mean(LC_largeRwd),'sgolay'),(std(LC_largeRwd)/sqrt(nS)),'lineprops',{'Color',[.35, .5, .6]},'patchSaturation',.3);
+shadedErrorBar(1:6,smooth(mean(LC_smallRwd),'sgolay'),(std(LC_smallRwd)/sqrt(nS)),'lineprops',{'Color',[.75, .85, .9]},'patchSaturation',.3);
 %line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
 legend({'Large Rwd','Small Rwd'})
 ylabel('Performance','fontsize', 10)
@@ -469,12 +469,12 @@ box on
 
 subplot(2,2,4)
 hold on
-p1 = plot(1:6, mean(LC_DC),'-x','linew',1.5);
+p1 = plot(1:6, smooth(mean(LC_DC),'sgolay'),'-x','linew',1.5); 
 p1.Color = [0.75 0.45 0.55];
-p2 = plot(1:6, mean(LC_BC),'-o','linew',1.5);
+p2 = plot(1:6, smooth(mean(LC_BC),'sgolay'),'-o','linew',1.5);
 p2.Color = [0.40 0.55 0.40];
-shadedErrorBar(1:6,mean(LC_DC),(std(LC_DC)/sqrt(nS)),'lineprops',{'Color',[.75 .45 .55]},'patchSaturation',.3);
-shadedErrorBar(1:6,mean(LC_BC),(std(LC_BC)/sqrt(nS)),'lineprops',{'Color',[.4 .55 .4]},'patchSaturation',.3);
+shadedErrorBar(1:6,smooth(mean(LC_DC),'sgolay'),(std(LC_DC)/sqrt(nS)),'lineprops',{'Color',[.75 .45 .55]},'patchSaturation',.3);
+shadedErrorBar(1:6,smooth(mean(LC_BC),'sgolay'),(std(LC_BC)/sqrt(nS)),'lineprops',{'Color',[.4 .55 .4]},'patchSaturation',.3);
 %line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
 legend({'DC','BC'})
 ylabel('Performance','fontsize', 10)
