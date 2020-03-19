@@ -61,9 +61,9 @@ end
 
 %% =================== Exclude 3 STD RTs                ===================
 
-rtExp           = rt(nTrial);
-mean_RtExp      = mean(rtExp) ;
-std_RtExp       = std(rtExp)*3 ;
+rt              = (rt(nTrial));
+mean_RtExp      = mean(rt) ;
+std_RtExp       = std(rt)*3 ;
 
 % Recalculate nTrial with only non-outlier RT trials
 low_RtExp       = mean_RtExp-std_RtExp ;
@@ -74,8 +74,13 @@ excl_RtExp      = [find(rt(nTrial) < low_RtExp) find(rt(nTrial) > up_RtExp)];
 
 rsvp.nExcTrial  = length(excl_RtExp); 
 
+if ID == 81477
+    kept_RtExp(31) = [];
+end 
+
 nTrial          = nTrial(kept_RtExp);
-rt              = rt(nTrial); 
+rsvp.rt         = log(rt(nTrial)); 
+rt              = log(rt(nTrial)); 
 block           = block(nTrial);
 
 if length(nTrial) < length(trial)
@@ -365,24 +370,24 @@ rsvp.rt_BC_fem_correct= mean(rt(BC_fem_correct == 1));
 rsvp.rt_BC_fem_incorrect= mean(rt(BC_fem_incorrect == 1));
 
 % Condition Emotions
-rsvp.rt_DC           = (rsvp.rt_DC_hom + rsvp.rt_DC_fem) / 2;
-rsvp.rt_DC_correct   = (rsvp.rt_DC_hom_correct + rsvp.rt_DC_fem_correct) / 2;
-rsvp.rt_DC_incorrect = (rsvp.rt_DC_hom_incorrect + rsvp.rt_DC_fem_incorrect) / 2;
+rsvp.rt_DC           = nanmean([rsvp.rt_DC_hom, rsvp.rt_DC_fem]);
+rsvp.rt_DC_correct   = nanmean([rsvp.rt_DC_hom_correct, rsvp.rt_DC_fem_correct]);
+rsvp.rt_DC_incorrect = nanmean([rsvp.rt_DC_hom_incorrect, rsvp.rt_DC_fem_incorrect]);
 
-rsvp.rt_CC           = (rsvp.rt_CC_hom + rsvp.rt_CC_fem) / 2;
-rsvp.rt_CC_correct   = (rsvp.rt_CC_hom_correct + rsvp.rt_CC_fem_correct) / 2;
-rsvp.rt_CC_incorrect = (rsvp.rt_CC_hom_incorrect + rsvp.rt_CC_fem_incorrect) / 2;
+rsvp.rt_CC           = nanmean([rsvp.rt_CC_hom, rsvp.rt_CC_fem]);
+rsvp.rt_CC_correct   = nanmean([rsvp.rt_CC_hom_correct, rsvp.rt_CC_fem_correct]);
+rsvp.rt_CC_incorrect = nanmean([rsvp.rt_CC_hom_incorrect, rsvp.rt_CC_fem_incorrect]);
 
-rsvp.rt_BC           = (rsvp.rt_BC_hom + rsvp.rt_BC_fem) / 2;
-rsvp.rt_BC_correct   = (rsvp.rt_BC_hom_correct + rsvp.rt_BC_fem_correct) / 2;
-rsvp.rt_BC_incorrect = (rsvp.rt_BC_hom_incorrect + rsvp.rt_BC_fem_incorrect) / 2;
+rsvp.rt_BC           = nanmean([rsvp.rt_BC_hom, rsvp.rt_BC_fem]);
+rsvp.rt_BC_correct   = nanmean([rsvp.rt_BC_hom_correct, rsvp.rt_BC_fem_correct]);
+rsvp.rt_BC_incorrect = nanmean([rsvp.rt_BC_hom_incorrect, rsvp.rt_BC_fem_incorrect]);
 
 disp(['RTs Emotion : ',num2str(rsvp.rt_DC), ' s for detrimental condition, ', ...
     num2str(rsvp.rt_CC), ' s for control condition & ',num2str(rsvp.rt_BC), ' s for beneficial condition']);
 
 % Condition Gender
-rsvp.rt_fem          = (rsvp.rt_DC_fem + rsvp.rt_CC_fem + rsvp.rt_BC_fem) / 3;
-rsvp.rt_hom          = (rsvp.rt_DC_hom + rsvp.rt_CC_hom + rsvp.rt_BC_hom) / 3;
+rsvp.rt_fem          = nanmean([rsvp.rt_DC_fem, rsvp.rt_CC_fem, rsvp.rt_BC_fem]);
+rsvp.rt_hom          = nanmean([rsvp.rt_DC_hom, rsvp.rt_CC_hom, rsvp.rt_BC_hom]);
 
 disp(['RTs Gender: ',num2str(rsvp.rt_fem), ' s for condition femme & ', ...
     num2str(rsvp.rt_hom), ' s for condition homme ']);
@@ -485,9 +490,24 @@ if fig
     hold off
 
     %% RTs Plots 
-    % RTs par conditions 
     figure('Name', 'RTs Plots');
-    subplot(2,2,1)
+    [h_RT, p_RT] = adtest(rt);
+    subplot(2,3,1)
+    histogram(rt,10,'FaceColor',[.5, .5, .5], 'EdgeColor', [.5 .5 .5])
+    xlabel('Reaction Time','fontsize', 10)
+    ylabel('Number of trials','fontsize', 10)
+    title('Distribution of reaction times','fontsize', 12,'fontname', 'Calibri Light')
+    if h_RT == 0
+        text(-1,75,['The distribution is normal at p = ', num2str(round(p_RT,3))],'fontsize', 8,'fontname', 'Calibri')
+    elseif h_RT == 1
+        text(-1,75,['The distribution is not normal at p = ', num2str(round(p_RT,3))],'fontsize', 8,'fontname', 'Calibri')
+    end
+    axis([-1.5 1.5 0 80])
+    grid minor
+    box on
+
+    % RTs par conditions 
+    subplot(2,3,2)
     hold on;
     bar([rsvp.rt_DC 0 0],'FaceColor',[0.75 0.45 0.55]);
     bar([0 rsvp.rt_CC 0],'FaceColor',[0.75 0.75 0.75]);
@@ -496,13 +516,13 @@ if fig
     xticklabels({'DC','CC', 'BC'})
     ylabel('RTs','fontsize', 10)
     title('RTs according to conditions','fontsize', 10)
-    axis([0 4 0 2])
+    axis([0 4 -1 1])
     grid minor 
     box on 
     hold off
     
     % RTs par rewards 
-    subplot(2,2,2)
+    subplot(2,3,3)
     hold on;
     bar([rsvp.rt_smallRwd 0],'FaceColor',[0.75, 0.85, 0.90]);
     bar([0 rsvp.rt_largeRwd],'FaceColor',[0.35, 0.50, 0.60]);
@@ -510,7 +530,7 @@ if fig
     xticklabels({'Small Reward','Large Reward'})
     ylabel('RTs','fontsize', 10)
     title('RTs according to reward','fontsize', 10)
-    axis([0 3 0 2])
+    axis([0 3 -1 1])
     grid minor 
     box on 
     hold off
@@ -528,7 +548,7 @@ if fig
     xticklabels({'DC Small Rwd','DC Large Rwd','CC Small Rwd','CC Large Rwd','CC Small Rwd',' CC Large Rwd'})
     ylabel('RTs','fontsize', 10)
     title('RTs according to reward & conditions','fontsize', 10)
-    axis([0 7 0 2])
+    axis([0 7 -1 1])
     grid minor 
     box on 
     hold off
@@ -590,7 +610,7 @@ if fig
     gender_hom = {rsvp.perf_hom, rsvp.rt_hom};
     gender_labels ={'Performance','RTs'};
     gender_titles ={'Performance according to gender', 'RTs according to gender'};
-    gender_axis = {[0 3 50 105], [0 3 0 2]};
+    gender_axis = {[0 3 50 105], [0 3 -1 1]};
     
     for i = 1:2
         subplot(2,2,i)

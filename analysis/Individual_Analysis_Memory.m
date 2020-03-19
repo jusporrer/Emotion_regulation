@@ -45,7 +45,7 @@ setSizeNM       = [data_memory(nTrain+1:end).setSizeNM];
 
 %% =================== Basic Information                ===================
 
-nTrial          = 1:length(trial); % allows the indexing
+nTrial              = 1:length(trial); % allows the indexing
 
 if length(trial) == cfg_exp.nTrialsExp * cfg_exp.nBlocksExp
     disp(['No data loss : There were ',num2str(length(trial)), ' trials']);
@@ -56,20 +56,23 @@ end
 
 %% =================== Exclude 3 STD RTs                ===================
 
-rtExp           = rt(nTrial);
-mean_RtExp      = mean(rtExp) ;
-std_RtExp       = std(rtExp)*3 ;
+rt                  = (rt(nTrial));
+mean_RtExp          = mean(rt) ;
+std_RtExp           = std(rt)*3 ;
 
 % Recalculate nTrial with only non-outlier RT trials
-low_RtExp       = mean_RtExp-std_RtExp ;
-up_RtExp        = mean_RtExp+std_RtExp ;
+low_RtExp           = mean_RtExp-std_RtExp ;
+up_RtExp            = mean_RtExp+std_RtExp ;
 
-kept_RtExp      = intersect(find(rt(nTrial) > low_RtExp), find(rt(nTrial) < up_RtExp));
-excl_RtExp      = [find(rt(nTrial) < low_RtExp) find(rt(nTrial) > up_RtExp)];
+kept_RtExp          = intersect(find(rt(nTrial) > low_RtExp), find(rt(nTrial) < up_RtExp));
+excl_RtExp          = [find(rt(nTrial) < low_RtExp) find(rt(nTrial) > up_RtExp)];
 
-nTrial          = nTrial(kept_RtExp);
-rt              = rt(nTrial);
-block           = block(nTrial);
+mem.nExcTrial       = length(excl_RtExp); 
+
+nTrial              = nTrial(kept_RtExp);
+mem.rt              = log(rt(nTrial)); 
+rt                  = log(rt(nTrial)); 
+block               = block(nTrial);
 
 if length(nTrial) < length(trial)
     disp(['RTs warning : ',num2str(length(excl_RtExp)), ...
@@ -80,14 +83,14 @@ end
 
 % Correctly detect fem when fem was main
 
-correct_fem     = (response(nTrial) == 1 & ((setSizeFF(nTrial) + setSizeNF(nTrial)) > (setSizeFM(nTrial) + setSizeNM(nTrial))));
+correct_fem         = (response(nTrial) == 1 & ((setSizeFF(nTrial) + setSizeNF(nTrial)) > (setSizeFM(nTrial) + setSizeNM(nTrial))));
 % correct_fem = (response(nTrial) == 1 & (condition(nTrial)==2 | condition(nTrial)==4 | condition(nTrial)==6));
 
-correct_hom     = (response(nTrial) == 2 & ((setSizeFM(nTrial) + setSizeNM(nTrial)) > (setSizeFF(nTrial) + setSizeNF(nTrial))));
+correct_hom         = (response(nTrial) == 2 & ((setSizeFM(nTrial) + setSizeNM(nTrial)) > (setSizeFF(nTrial) + setSizeNF(nTrial))));
 
 % Sum of all the correct trials
-correct         = (correct_fem) + (correct_hom);
-nCorrect        = sum(correct);
+correct             = (correct_fem) + (correct_hom);
+nCorrect            = sum(correct);
 
 % General performance
 mem.performance     = nCorrect/length(nTrial)*100;
@@ -97,27 +100,27 @@ disp(['Performance : ',num2str(ceil(mem.performance)),'%']);
 %% =================== Performance - Incorrect Trials   ===================
 
 % Incorrectly not detect fem when fem was target ( false alarm: says present when not present)
-incorrect_Fem = (response(nTrial) == 2 & ((setSizeFF(nTrial) + setSizeNF(nTrial)) > (setSizeFM(nTrial) + setSizeNM(nTrial))));
+incorrect_Fem       = (response(nTrial) == 2 & ((setSizeFF(nTrial) + setSizeNF(nTrial)) > (setSizeFM(nTrial) + setSizeNM(nTrial))));
 
 % Incorrectly not detect hom when hom was target
-incorrect_Hom = (response(nTrial) == 1 & ((setSizeFM(nTrial) + setSizeNM(nTrial)) > (setSizeFF(nTrial) + setSizeNF(nTrial))));
+incorrect_Hom       = (response(nTrial) == 1 & ((setSizeFM(nTrial) + setSizeNM(nTrial)) > (setSizeFF(nTrial) + setSizeNF(nTrial))));
 
 % Sum of all the incorrect trials
-incorrect       = (incorrect_Fem) + (incorrect_Hom);
-nIncorrect      = sum(incorrect);
+incorrect           = (incorrect_Fem) + (incorrect_Hom);
+nIncorrect          = sum(incorrect);
 
 % General performance
 mem.perf_incorrect  = nIncorrect/length(nTrial)*100;
 
 %% =================== Performance - Rewards            ===================
 
-smallRwd        = (reward(nTrial) == 1);
+smallRwd            = (reward(nTrial) == 1);
 mem.smallRwdBlock   = unique(block(smallRwd == 1));
 mem.correct_smallRwd= (correct(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1);
 mem.incorrect_smallRwd= (incorrect(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1);
 mem.smallRwd_rate   = sum(mem.correct_smallRwd)/sum(smallRwd)*100;
 
-largeRwd        = (reward(nTrial) == 2);
+largeRwd            = (reward(nTrial) == 2);
 mem.largeRwdBlock   = unique(block(largeRwd == 1));
 mem.correct_largeRwd= (correct(1:length(nTrial)) == 1 & largeRwd(1:length(nTrial)) == 1);
 mem.incorrect_largeRwd= (incorrect(1:length(nTrial)) == 1 & largeRwd(1:length(nTrial)) == 1);
@@ -130,36 +133,44 @@ disp(['Reward : ',num2str(ceil(mem.smallRwd_rate)), '% were correct for small rw
 %(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
 
 % Detrimental condition
-DC_hom          = (condition(nTrial) == 1);
-correct_DC_hom  = (correct(1:length(nTrial)) == 1 & DC_hom(1:length(nTrial)) == 1);
-incorrect_DC_hom= (incorrect(1:length(nTrial)) == 1 & DC_hom(1:length(nTrial)) == 1);
-mem.DC_hom_rate = sum(correct_DC_hom)/sum(DC_hom)*100;
+DC_condtion         = (condition(nTrial) == 1 | condition(nTrial) == 2);
+DC_correct          = (correct(1:length(nTrial)) == 1 & DC_condtion(1:length(nTrial)) == 1);
+DC_block            = unique(block(DC_condtion == 1));
 
-DC_fem          = (condition(nTrial) == 2);
-correct_DC_fem  = (correct(1:length(nTrial)) == 1 & DC_fem(1:length(nTrial)) == 1);
-incorrect_DC_fem= (incorrect(1:length(nTrial)) == 1 & DC_fem(1:length(nTrial)) == 1);
-mem.DC_fem_rate = sum(correct_DC_fem)/sum(DC_fem)*100;
+DC_hom              = (condition(nTrial) == 1);
+correct_DC_hom      = (correct(1:length(nTrial)) == 1 & DC_hom(1:length(nTrial)) == 1);
+incorrect_DC_hom    = (incorrect(1:length(nTrial)) == 1 & DC_hom(1:length(nTrial)) == 1);
+mem.DC_hom_rate     = sum(correct_DC_hom)/sum(DC_hom)*100;
+
+DC_fem              = (condition(nTrial) == 2);
+correct_DC_fem      = (correct(1:length(nTrial)) == 1 & DC_fem(1:length(nTrial)) == 1);
+incorrect_DC_fem    = (incorrect(1:length(nTrial)) == 1 & DC_fem(1:length(nTrial)) == 1);
+mem.DC_fem_rate     = sum(correct_DC_fem)/sum(DC_fem)*100;
 
 % Control Conditions
-CC_hom          = (condition(nTrial) == 3);
-correct_CC_hom  = (correct(1:length(nTrial)) == 1 & CC_hom(1:length(nTrial)) == 1);
-incorrect_CC_hom= (incorrect(1:length(nTrial)) == 1 & CC_hom(1:length(nTrial)) == 1);
-mem.CC_hom_rate = sum(correct_CC_hom)/sum(CC_hom)*100;
+CC_hom              = (condition(nTrial) == 3);
+correct_CC_hom      = (correct(1:length(nTrial)) == 1 & CC_hom(1:length(nTrial)) == 1);
+incorrect_CC_hom    = (incorrect(1:length(nTrial)) == 1 & CC_hom(1:length(nTrial)) == 1);
+mem.CC_hom_rate     = sum(correct_CC_hom)/sum(CC_hom)*100;
 
-CC_fem          = (condition(nTrial) == 4);
-correct_CC_fem  = (correct(1:length(nTrial)) == 1 & CC_fem(1:length(nTrial)) == 1);
-incorrect_CC_fem= (incorrect(1:length(nTrial)) == 1 & CC_fem(1:length(nTrial)) == 1);
+CC_fem              = (condition(nTrial) == 4);
+correct_CC_fem      = (correct(1:length(nTrial)) == 1 & CC_fem(1:length(nTrial)) == 1);
+incorrect_CC_fem    = (incorrect(1:length(nTrial)) == 1 & CC_fem(1:length(nTrial)) == 1);
 mem.CC_fem_rate     = sum(correct_CC_fem)/sum(CC_fem)*100;
 
 % Beneficial Conditions
-BC_hom          = (condition(nTrial) == 5);
-correct_BC_hom  = (correct(1:length(nTrial)) == 1 & BC_hom(1:length(nTrial)) == 1);
-incorrect_BC_hom= (incorrect(1:length(nTrial)) == 1 & BC_hom(1:length(nTrial)) == 1);
+BC_condtion         = (condition(nTrial) == 5 | condition(nTrial) == 6);
+BC_correct          = (correct(1:length(nTrial)) == 1 & BC_condtion(1:length(nTrial)) == 1);
+BC_block            = unique(block(BC_condtion == 1));
+
+BC_hom              = (condition(nTrial) == 5);
+correct_BC_hom      = (correct(1:length(nTrial)) == 1 & BC_hom(1:length(nTrial)) == 1);
+incorrect_BC_hom    = (incorrect(1:length(nTrial)) == 1 & BC_hom(1:length(nTrial)) == 1);
 mem.BC_hom_rate     = sum(correct_BC_hom)/sum(BC_hom)*100;
 
-BC_fem          = (condition(nTrial) == 6);
-correct_BC_fem  = (correct(1:length(nTrial)) == 1 & BC_fem(1:length(nTrial)) == 1);
-incorrect_BC_fem= (correct(1:length(nTrial)) == 1 & BC_fem(1:length(nTrial)) == 1);
+BC_fem              = (condition(nTrial) == 6);
+correct_BC_fem      = (correct(1:length(nTrial)) == 1 & BC_fem(1:length(nTrial)) == 1);
+incorrect_BC_fem    = (correct(1:length(nTrial)) == 1 & BC_fem(1:length(nTrial)) == 1);
 mem.BC_fem_rate     = sum(correct_BC_fem)/sum(BC_fem)*100;
 
 % Number of trials in each conditions
@@ -189,38 +200,48 @@ disp(['Performance Gender: ',num2str(ceil(mem.perf_fem)), '% for condition femme
 
 %% =================== Performance - Conditions & Rewards===================
 
-mem.perf_DC_smallRwd = ((sum(correct_DC_hom(smallRwd == 1))/sum(DC_hom(smallRwd == 1)))*100 ...
+mem.perf_DC_smallRwd= ((sum(correct_DC_hom(smallRwd == 1))/sum(DC_hom(smallRwd == 1)))*100 ...
     + (sum(correct_DC_fem(smallRwd == 1))/sum(DC_fem(smallRwd == 1)))*100) / 2;
 
-mem.perf_DC_largeRwd = ((sum(correct_DC_hom(largeRwd ==1))/sum(DC_hom(largeRwd ==1)))*100 ...
+mem.perf_DC_largeRwd= ((sum(correct_DC_hom(largeRwd ==1))/sum(DC_hom(largeRwd ==1)))*100 ...
     + (sum(correct_DC_fem(largeRwd == 1))/sum(DC_fem(largeRwd == 1)))*100) / 2;
 
-mem.perf_CC_smallRwd = ((sum(correct_CC_hom(smallRwd == 1))/sum(CC_hom(smallRwd == 1)))*100 ...
+mem.perf_CC_smallRwd= ((sum(correct_CC_hom(smallRwd == 1))/sum(CC_hom(smallRwd == 1)))*100 ...
     + (sum(correct_CC_fem(smallRwd == 1))/sum(CC_fem(smallRwd == 1)))*100) / 2;
 
-mem.perf_CC_largeRwd = ((sum(correct_CC_hom(largeRwd == 1))/sum(CC_hom(largeRwd == 1)))*100 ...
+mem.perf_CC_largeRwd= ((sum(correct_CC_hom(largeRwd == 1))/sum(CC_hom(largeRwd == 1)))*100 ...
     + (sum(correct_CC_fem(largeRwd == 1))/sum(CC_fem(largeRwd == 1)))*100) / 2;
 
-mem.perf_BC_smallRwd = ((sum(correct_BC_hom(smallRwd == 1))/sum(BC_hom(smallRwd == 1)))*100 ...
+mem.perf_BC_smallRwd= ((sum(correct_BC_hom(smallRwd == 1))/sum(BC_hom(smallRwd == 1)))*100 ...
     + (sum(correct_BC_fem(smallRwd ==1))/sum(BC_fem(smallRwd ==1)))*100) / 2;
 
-mem.perf_BC_largeRwd = ((sum(correct_BC_hom(largeRwd == 1))/sum(BC_hom(largeRwd == 1)))*100 ...
+mem.perf_BC_largeRwd= ((sum(correct_BC_hom(largeRwd == 1))/sum(BC_hom(largeRwd == 1)))*100 ...
     + (sum(correct_BC_fem(largeRwd == 1))/sum(BC_fem(largeRwd == 1)))*100) / 2;
 
 %% =================== Performance - Img Duration        ===================
 
-imgShort        = (imageDuration(nTrial) == 1.5);
+imgShort            = (imageDuration(nTrial) == 1.5);
 mem.nimgShort       = sum(imgShort);
-correct_imgShort= (correct(1:length(nTrial)) == 1 & imgShort(1:length(nTrial)) == 1);
+correct_imgShort    = (correct(1:length(nTrial)) == 1 & imgShort(1:length(nTrial)) == 1);
 mem.imgShort_rate   = sum(correct_imgShort)/mem.nimgShort*100;
 
-imgLong         = (imageDuration(nTrial) == 2);
+imgLong             = (imageDuration(nTrial) == 2);
 mem.nimgLong        = sum(imgLong);
-correct_imgLong = (correct(1:length(nTrial)) == 1 & imgLong(1:length(nTrial)) == 1);
+correct_imgLong     = (correct(1:length(nTrial)) == 1 & imgLong(1:length(nTrial)) == 1);
 mem.imgLong_rate    = sum(correct_imgLong)/mem.nimgLong*100;
 
 disp(['Performance Lag : ',num2str(ceil(mem.imgShort_rate)), '% were correct after 1.5s & ', ...
     num2str(ceil(mem.imgLong_rate)), '% were correct after 2s' ]);
+
+%% =================== RTs - Correct & Incorrect Trials ===================
+
+mem.rt_correct      = mean(rt(correct == 1));
+
+mem.rt_incorrect    = mean(rt(incorrect == 1));
+
+disp(['RTs correct : ',num2str(mem.rt_correct), ' s for correct trials ']);
+
+disp(['RTs incorrect : ',num2str(mem.rt_incorrect), ' s for incorrect trials ']);
 
 %% =================== RTs - Rewards                    ===================
 
@@ -262,10 +283,17 @@ mem.rt_BC_fem_correct= mean(rt(correct_BC_fem == 1));
 mem.rt_BC_fem_incorrect= mean(rt(incorrect_BC_fem == 1));
 
 % Condition Emotions
-mem.rt_DC           = (mem.rt_DC_hom + mem.rt_DC_fem) / 2;
-mem.rt_CC           = (mem.rt_CC_hom + mem.rt_CC_fem) / 2;
-mem.rt_BC           = (mem.rt_BC_hom + mem.rt_BC_fem) / 2;
+mem.rt_DC           = nanmean([mem.rt_DC_hom, mem.rt_DC_fem]);
+mem.rt_DC_correct   = nanmean([mem.rt_DC_hom_correct, mem.rt_DC_fem_correct]);
+mem.rt_DC_incorrect = nanmean([mem.rt_DC_hom_incorrect, mem.rt_DC_fem_incorrect]);
 
+mem.rt_CC           = nanmean([mem.rt_CC_hom, mem.rt_CC_fem]);
+mem.rt_CC_correct   = nanmean([mem.rt_CC_hom_correct, mem.rt_CC_fem_correct]);
+mem.rt_CC_incorrect = nanmean([mem.rt_CC_hom_incorrect, mem.rt_CC_fem_incorrect]);
+
+mem.rt_BC           = nanmean([mem.rt_BC_hom, mem.rt_BC_fem]);
+mem.rt_BC_correct   = nanmean([mem.rt_BC_hom_correct, mem.rt_BC_fem_correct]);
+mem.rt_BC_incorrect = nanmean([mem.rt_BC_hom_incorrect, mem.rt_BC_fem_incorrect]);
 disp(['RTs Emotion : ',num2str(mem.rt_DC), ' s for detrimental condition, ', ...
     num2str(mem.rt_CC), ' s for control condition & ',num2str(mem.rt_BC), ' s for beneficial condition']);
 
@@ -305,6 +333,20 @@ end
 mem.LC_largeRwd     = zeros(1,length(mem.largeRwdBlock));
 for i = 1:length(mem.largeRwdBlock)
     mem.LC_largeRwd(i) = (sum(mem.correct_largeRwd(block == mem.largeRwdBlock(i))))/(length(nTrial)/cfg_exp.nBlocksExp)*100;
+end
+
+mem.LC_DC     = zeros(1,length(DC_block));
+for i = 1:length(DC_block)
+     mem.LC_DC(i) = (sum(DC_correct(block == DC_block(i))))/ ...
+         (sum(condition(nTrial(block == DC_block(i))) == 1 | ...
+         condition(nTrial(block == DC_block(i))) == 2))*100;
+end
+
+mem.LC_BC     = zeros(1,length(BC_block));
+for i = 1:length(BC_block)
+     mem.LC_BC(i) = (sum(BC_correct(block == BC_block(i))))/ ...
+         (sum(condition(nTrial(block == BC_block(i))) == 5 | ...
+         condition(nTrial(block == BC_block(i))) == 6))*100;
 end
 
 %% =================== PLOT PART                        ===================
