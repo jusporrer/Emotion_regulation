@@ -244,10 +244,21 @@ LC_DC                   = zeros(subj_idx,6);
 LC_BC                   = zeros(subj_idx,6);
 LC_CC                   = zeros(subj_idx,6);
 
+RTsC                    = zeros(subj_idx,12);
+RTsC_smallRwd           = zeros(subj_idx,6);
+RTsC_largeRwd           = zeros(subj_idx,6);
+RTsC_DC                 = zeros(subj_idx,6);
+RTsC_BC                 = zeros(subj_idx,6);
+RTsC_CC                 = zeros(subj_idx,6);
+
 for subj_idx = 1:length(subject_ID)
     
     for block = 1:12
         LC(subj_idx,block)                = rsvpGRP(subj_idx).LC(block);
+        LC_CC(subj_idx,block)             = rsvpGRP(subj_idx).LC_CC(block);
+        RTsC(subj_idx,block)              = rsvpGRP(subj_idx).RTsC(block);
+        RTsC_CC(subj_idx,block)           = rsvpGRP(subj_idx).RTsC_CC(block);    
+
     end
     
     for blockCondi = 1:6
@@ -255,6 +266,14 @@ for subj_idx = 1:length(subject_ID)
         LC_largeRwd(subj_idx,blockCondi)  = rsvpGRP(subj_idx).LC_largeRwd(blockCondi);
         LC_DC(subj_idx,blockCondi)        = rsvpGRP(subj_idx).LC_DC(blockCondi);
         LC_BC(subj_idx,blockCondi)        = rsvpGRP(subj_idx).LC_BC(blockCondi);
+        % LC_CC(subj_idx,blockCondi)        = (rsvpGRP(subj_idx).LC_CC(blockCondi) + rsvpGRP(subj_idx).LC_CC(blockCondi + 6))/2;
+        
+        RTsC_smallRwd(subj_idx,blockCondi)= rsvpGRP(subj_idx).RTsC_smallRwd(blockCondi);
+        RTsC_largeRwd(subj_idx,blockCondi)= rsvpGRP(subj_idx).RTsC_largeRwd(blockCondi);
+        RTsC_DC(subj_idx,blockCondi)      = rsvpGRP(subj_idx).RTsC_DC(blockCondi);
+        RTsC_BC(subj_idx,blockCondi)      = rsvpGRP(subj_idx).RTsC_BC(blockCondi);
+        % RTsC_CC(subj_idx,blockCondi)      = (rsvpGRP(subj_idx).RTsC_CC(blockCondi) + rsvpGRP(subj_idx).RTsC_CC(blockCondi + 6))/2;
+
     end
 end
 
@@ -473,7 +492,6 @@ hold off
 %% Learning Curves Plots
 figure('Name', 'RSVP Learning Curve Plots');
 
-
 subplot(2,1,1)
 p = plot(1:length(LC), smooth(mean(LC),'sgolay'),'linew',1.5);
 p.Color = [0 0 0];
@@ -484,7 +502,7 @@ xlabel('Number of Blocks','fontsize', 10)
 xticks(1:(length(LC)))
 xticklabels(1:12)
 title('Learning Curve RSVP Experiment','fontsize', 10)
-axis([0 (length(LC)+1) 50 100])
+axis([0 (length(LC)+1) 70 100])
 grid minor
 box on
 
@@ -502,7 +520,7 @@ ylabel('Performance (mean +/- SEM)','fontsize', 10)
 xlabel('Number of Blocks','fontsize', 10)
 xticks(1:6); xticklabels(1:6)
 title('Learning Curve for Small and Large Rewards','fontsize', 10)
-axis([0 7 50 100])
+axis([0 7 70 100])
 hold off
 grid minor
 box on
@@ -510,18 +528,79 @@ box on
 subplot(2,2,4)
 hold on
 p1 = plot(1:6, mean(LC_DC),'-x','linew',1.5); 
-p1.Color = [0.75 0.45 0.55];
-p2 = plot(1:6, mean(LC_BC),'-o','linew',1.5);
-p2.Color = [0.40 0.55 0.40];
-shadedErrorBar(1:6,smooth(mean(LC_DC),'sgolay'),(std(LC_DC)/sqrt(nS)),'lineprops',{'Color',[.75 .45 .55]},'patchSaturation',.3);
-shadedErrorBar(1:6,smooth(mean(LC_BC),'sgolay'),(std(LC_BC)/sqrt(nS)),'lineprops',{'Color',[.4 .55 .4]},'patchSaturation',.3);
+p1.Color = [.75 .45 .55];
+p2 = plot(1:.5:6.5, mean(LC_CC),'-+','linew',1.5);
+p2.Color = [.50 .50 .50];
+p3 = plot(1:6, mean(LC_BC),'-o','linew',1.5);
+p3.Color = [.40 .55 .40];
+shadedErrorBar(1:6,mean(LC_DC),(std(LC_DC)/sqrt(nS)),'lineprops',{'Color',[.75 .45 .55]},'patchSaturation',.3);
+shadedErrorBar(1:.5:6.5,mean(LC_CC),(std(LC_CC)/sqrt(nS)),'lineprops',{'Color',[.50 .50 .50]},'patchSaturation',.3);
+shadedErrorBar(1:6,mean(LC_BC),(std(LC_BC)/sqrt(nS)),'lineprops',{'Color',[.40 .55 .40]},'patchSaturation',.3);
 %line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
-legend({'DC','BC'})
+legend({'DC','CC','BC'})
 ylabel('Performance (mean +/- SEM)','fontsize', 10)
 xlabel('Number of Blocks','fontsize', 10)
 xticks(1:6); xticklabels(1:6)
-title('Learning Curve for Detrimental and Beneficial Condition','fontsize', 10)
-axis([0 7 50 100])
+title('Learning Curve for Each Conditions','fontsize', 10)
+axis([0 7 70 100])
+hold off
+grid minor
+box on
+
+%% RTs Curves Plots
+figure('Name', 'RSVP RTs Curve Plots');
+
+subplot(2,1,1)
+p = plot(1:length(RTsC), mean(RTsC),'linew',1.5);
+p.Color = [0 0 0];
+shadedErrorBar(1:length(RTsC), mean(RTsC),(std(RTsC)/sqrt(nS)),'lineprops',{'Color',[0 0 0]},'patchSaturation',.3);
+line([-15,15], [0,0],'color','k','LineStyle','--','LineWidth',.7)
+ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
+xlabel('Number of Blocks','fontsize', 10)
+xticks(1:(length(RTsC)))
+xticklabels(1:12)
+title('RTs Curve RSVP Experiment','fontsize', 10)
+axis([0 (length(RTsC)+1) -1 0])
+grid minor
+box on
+
+subplot(2,2,3)
+hold on
+p2 = plot(1:6, mean(RTsC_largeRwd),'-o','linew',1.5);
+p2.Color = [.35, .5, .6];
+p1 = plot(1:6, mean(RTsC_smallRwd),'-x','linew',1.5);
+p1.Color = [.75, .85, .9];
+shadedErrorBar(1:6,mean(RTsC_largeRwd),(std(RTsC_largeRwd)/sqrt(nS)),'lineprops',{'Color',[.35, .5, .6]},'patchSaturation',.3);
+shadedErrorBar(1:6,mean(RTsC_smallRwd),(std(RTsC_smallRwd)/sqrt(nS)),'lineprops',{'Color',[.75, .85, .9]},'patchSaturation',.3);
+line([-15,15], [0,0],'color','k','LineStyle','--','LineWidth',.7)
+legend({'Large Rwd','Small Rwd'})
+ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
+xlabel('Number of Blocks','fontsize', 10)
+xticks(1:6); xticklabels(1:6)
+title('RTs Curve for Small and Large Rewards','fontsize', 10)
+axis([0 7 -1 0])
+hold off
+grid minor
+box on
+
+subplot(2,2,4)
+hold on
+p1 = plot(1:6, mean(RTsC_DC),'-x','linew',1.5); 
+p1.Color = [.75 .45 .55];
+p2 = plot(1:.5:6.5, mean(RTsC_CC),'-+','linew',1.5);
+p2.Color = [.50 .50 .50];
+p3 = plot(1:6, mean(RTsC_BC),'-o','linew',1.5);
+p3.Color = [.40 .55 .40];
+shadedErrorBar(1:6,mean(RTsC_DC),(std(RTsC_DC)/sqrt(nS)),'lineprops',{'Color',[.75 .45 .55]},'patchSaturation',.3);
+shadedErrorBar(1:.5:6.5,mean(RTsC_CC),(std(RTsC_CC)/sqrt(nS)),'lineprops',{'Color',[.50 .50 .50]},'patchSaturation',.3);
+shadedErrorBar(1:6,mean(RTsC_BC),(std(RTsC_BC)/sqrt(nS)),'lineprops',{'Color',[.40 .55 .40]},'patchSaturation',.3);
+line([-15,15], [0,0],'color','k','LineStyle','--','LineWidth',.7)
+legend({'DC','CC','BC'})
+ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
+xlabel('Number of Blocks','fontsize', 10)
+xticks(1:6); xticklabels(1:6)
+title('RTs Curve for Each Conditions','fontsize', 10)
+axis([0 7 -1 0])
 hold off
 grid minor
 box on
