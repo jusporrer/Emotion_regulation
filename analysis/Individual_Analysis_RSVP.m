@@ -213,9 +213,9 @@ disp(['Reward : ',num2str(ceil(rsvp.smallRwd_rate)), '% were correct for small r
 %(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
 
 % Detrimental condition
-DC_condtion         = (condition(nTrial) == 1 | condition(nTrial) == 2);
-DC_correct          = (correct(1:length(nTrial)) == 1 & DC_condtion(1:length(nTrial)) == 1);
-rsvp.DC_block       = unique(block(DC_condtion == 1));
+DC_condition        = (condition(nTrial) == 1 | condition(nTrial) == 2);
+DC_correct          = (correct(1:length(nTrial)) == 1 & DC_condition(1:length(nTrial)) == 1);
+rsvp.DC_block       = unique(block(DC_condition == 1));
 
 DC_hom              = (condition(nTrial) == 1);
 DC_hom_correct      = (correct(1:length(nTrial)) == 1 & DC_hom(1:length(nTrial)) == 1);
@@ -228,6 +228,8 @@ DC_fem_incorrect    = (incorrect(1:length(nTrial)) == 1 & DC_fem(1:length(nTrial
 rsvp.DC_fem_rate    = sum(DC_fem_correct)/sum(DC_fem)*100;
 
 % Control Conditions
+CC_condition         = (condition(nTrial) == 3 | condition(nTrial) == 4);
+CC_correct          = (correct(1:length(nTrial)) == 1 & CC_condition(1:length(nTrial)) == 1);
 
 CC_hom              = (condition(nTrial) == 3);
 CC_hom_correct      = (correct(1:length(nTrial)) == 1 & CC_hom(1:length(nTrial)) == 1);
@@ -240,9 +242,9 @@ CC_fem_incorrect    = (incorrect(1:length(nTrial)) == 1 & CC_fem(1:length(nTrial
 rsvp.CC_fem_rate    = sum(CC_fem_correct)/sum(CC_fem)*100;
 
 % Beneficial Conditions
-BC_condtion         = (condition(nTrial) == 5 | condition(nTrial) == 6);
-BC_correct          = (correct(1:length(nTrial)) == 1 & BC_condtion(1:length(nTrial)) == 1);
-rsvp.BC_block       = unique(block(BC_condtion == 1));
+BC_condition         = (condition(nTrial) == 5 | condition(nTrial) == 6);
+BC_correct          = (correct(1:length(nTrial)) == 1 & BC_condition(1:length(nTrial)) == 1);
+rsvp.BC_block       = unique(block(BC_condition == 1));
 
 BC_hom              = (condition(nTrial) == 5);
 BC_hom_correct      = (correct(1:length(nTrial)) == 1 & BC_hom(1:length(nTrial)) == 1);
@@ -344,7 +346,6 @@ disp(['RTs reward : ',num2str(rsvp.rt_smallRwd), ' s for small rewards & ', ...
     num2str(rsvp.rt_largeRwd), ' s for large rewards ']);
 
 %% =================== RTs - Conditions                 ===================
-
 rsvp.rt_DC_hom       = mean(rt(DC_hom == 1));
 rsvp.rt_DC_hom_correct= mean(rt(DC_hom_correct == 1));
 rsvp.rt_DC_hom_incorrect= mean(rt(DC_hom_incorrect == 1));
@@ -371,6 +372,7 @@ rsvp.rt_BC_fem_incorrect= mean(rt(BC_fem_incorrect == 1));
 
 % Condition Emotions
 rsvp.rt_DC           = nanmean([rsvp.rt_DC_hom, rsvp.rt_DC_fem]);
+rt_DC_correct        = [rt(DC_hom_correct == 1), rt(DC_fem_correct == 1)];
 rsvp.rt_DC_correct   = nanmean([rsvp.rt_DC_hom_correct, rsvp.rt_DC_fem_correct]);
 rsvp.rt_DC_incorrect = nanmean([rsvp.rt_DC_hom_incorrect, rsvp.rt_DC_fem_incorrect]);
 
@@ -379,6 +381,7 @@ rsvp.rt_CC_correct   = nanmean([rsvp.rt_CC_hom_correct, rsvp.rt_CC_fem_correct])
 rsvp.rt_CC_incorrect = nanmean([rsvp.rt_CC_hom_incorrect, rsvp.rt_CC_fem_incorrect]);
 
 rsvp.rt_BC           = nanmean([rsvp.rt_BC_hom, rsvp.rt_BC_fem]);
+rt_DC_correct        = [rt(BC_hom_correct == 1), rt(BC_fem_correct == 1)];
 rsvp.rt_BC_correct   = nanmean([rsvp.rt_BC_hom_correct, rsvp.rt_BC_fem_correct]);
 rsvp.rt_BC_incorrect = nanmean([rsvp.rt_BC_hom_incorrect, rsvp.rt_BC_fem_incorrect]);
 
@@ -394,47 +397,98 @@ disp(['RTs Gender: ',num2str(rsvp.rt_fem), ' s for condition femme & ', ...
 
 %% =================== RTs - Conditions & Rewards       ===================
 
-rsvp.rt_DC_smallRwd = (mean(rt(smallRwd == 1 & DC_hom == 1)) + mean(rt(smallRwd == 1 & DC_fem == 1)))/ 2;
+rsvp.rt_DC_smallRwd     = (mean(rt(smallRwd == 1 & DC_hom == 1)) + mean(rt(smallRwd == 1 & DC_fem == 1)))/ 2;
 
-rsvp.rt_DC_largeRwd = (mean(rt(largeRwd == 1 & DC_hom == 1)) + mean(rt(largeRwd == 1 & DC_fem == 1)))/ 2;
+rsvp.rt_DC_largeRwd     = (mean(rt(largeRwd == 1 & DC_hom == 1)) + mean(rt(largeRwd == 1 & DC_fem == 1)))/ 2;
 
-rsvp.rt_CC_smallRwd = (mean(rt(smallRwd == 1 & CC_hom == 1)) + mean(rt(smallRwd == 1 & CC_fem == 1)))/ 2;
+rsvp.rt_CC_smallRwd     = (mean(rt(smallRwd == 1 & CC_hom == 1)) + mean(rt(smallRwd == 1 & CC_fem == 1)))/ 2;
 
-rsvp.rt_CC_largeRwd = (mean(rt(largeRwd == 1 & CC_hom == 1)) + mean(rt(largeRwd == 1 & CC_fem == 1)))/ 2;
+rsvp.rt_CC_largeRwd     = (mean(rt(largeRwd == 1 & CC_hom == 1)) + mean(rt(largeRwd == 1 & CC_fem == 1)))/ 2;
 
-rsvp.rt_BC_smallRwd = (mean(rt(smallRwd == 1 & BC_hom == 1)) + mean(rt(smallRwd == 1 & BC_fem == 1)))/ 2;
+rsvp.rt_BC_smallRwd     = (mean(rt(smallRwd == 1 & BC_hom == 1)) + mean(rt(smallRwd == 1 & BC_fem == 1)))/ 2;
 
-rsvp.rt_BC_largeRwd = (mean(rt(largeRwd == 1 & BC_hom == 1)) + mean(rt(largeRwd == 1 & BC_fem == 1)))/ 2;
+rsvp.rt_BC_largeRwd     = (mean(rt(largeRwd == 1 & BC_hom == 1)) + mean(rt(largeRwd == 1 & BC_fem == 1)))/ 2;
+
+%% =================== RTs - Link To Performance        ===================
+
+rsvp.rt_median          = median(rt); 
+
+rt_slow                 = find(rt > rsvp.rt_median); 
+rsvp.rt_slow_perf       = sum(correct(rt_slow) == 1)/length(rt_slow)*100;
+rt_fast                 = find(rt < rsvp.rt_median);
+rsvp.rt_fast_perf       = sum(correct(rt_fast) == 1)/length(rt_fast)*100;
+
 
 %% =================== Learning Curves                  ===================
 
 rsvp.LC              = zeros(1,cfg_exp.nBlocksExp);
-for i = 1:cfg_exp.nBlocksExp
+for i = 1:length(rsvp.LC)
     rsvp.LC(i)       = (sum(correct(block == i)))/(length(nTrial(block == i)))*100;
 end
 
 rsvp.LC_smallRwd     = zeros(1,length(rsvp.smallRwdBlock));
 for i = 1:length(rsvp.smallRwdBlock)
-     rsvp.LC_smallRwd(i) = (sum(correct_smallRwd(block == rsvp.smallRwdBlock(i))))/(length(nTrial(block == rsvp.smallRwdBlock(i))))*100;
+     rsvp.LC_smallRwd(i) = (sum(correct(block == rsvp.smallRwdBlock(i))))/...
+         (length(nTrial(block == rsvp.smallRwdBlock(i))))*100;
 end
 
 rsvp.LC_largeRwd     = zeros(1,length(rsvp.largeRwdBlock));
 for i = 1:length(rsvp.largeRwdBlock)
-    rsvp.LC_largeRwd(i) = (sum(correct_largeRwd(block == rsvp.largeRwdBlock(i))))/(length(nTrial(block == rsvp.largeRwdBlock(i))))*100;
+    rsvp.LC_largeRwd(i) = (sum(correct(block == rsvp.largeRwdBlock(i))))/...
+        (length(nTrial(block == rsvp.largeRwdBlock(i))))*100;
 end
 
 rsvp.LC_DC     = zeros(1,length(rsvp.DC_block));
 for i = 1:length(rsvp.DC_block)
      rsvp.LC_DC(i) = (sum(DC_correct(block == rsvp.DC_block(i))))/ ...
-         (sum(condition(nTrial(block == rsvp.DC_block(i))) == 1 | ...
-         condition(nTrial(block == rsvp.DC_block(i))) == 2))*100;
+         sum(DC_condition(block == rsvp.DC_block(i)))*100;
+     % add the conditions as we do not want the CC trials
 end
 
 rsvp.LC_BC     = zeros(1,length(rsvp.BC_block));
 for i = 1:length(rsvp.BC_block)
      rsvp.LC_BC(i) = (sum(BC_correct(block == rsvp.BC_block(i))))/ ...
-         (sum(condition(nTrial(block == rsvp.BC_block(i))) == 5 | ...
-         condition(nTrial(block == rsvp.BC_block(i))) == 6))*100;
+         sum(BC_condition(block == rsvp.BC_block(i)))*100;
+end
+
+rsvp.LC_CC     = zeros(1,cfg_exp.nBlocksExp);
+for i = 1:length(rsvp.LC_CC)
+     rsvp.LC_CC(i) = (sum(CC_correct(block == i)))/ ...
+         sum(CC_condition(block == i))*100;
+end
+
+
+%% =================== RTs Curves                       ===================
+
+rsvp.RTsC              = zeros(1,cfg_exp.nBlocksExp);
+for i = 1:cfg_exp.nBlocksExp
+    rsvp.RTsC(i)       = mean(rt(block == i));
+end
+
+rsvp.RTsC_smallRwd     = zeros(1,length(rsvp.smallRwdBlock));
+for i = 1:length(rsvp.smallRwdBlock)
+     rsvp.RTsC_smallRwd(i) = mean(rt(block == rsvp.smallRwdBlock(i)));
+end
+
+rsvp.RTsC_largeRwd     = zeros(1,length(rsvp.largeRwdBlock));
+for i = 1:length(rsvp.largeRwdBlock)
+    rsvp.RTsC_largeRwd(i) = mean(rt(block == rsvp.largeRwdBlock(i)));
+end
+
+rsvp.RTsC_DC     = zeros(1,length(rsvp.DC_block));
+for i = 1:length(rsvp.DC_block)
+     rsvp.RTsC_DC(i) = mean(rt(block == rsvp.DC_block(i) & DC_condition == 1 ));
+     % add the conditions as we do not want the CC trials 
+end
+
+rsvp.RTsC_BC     = zeros(1,length(rsvp.BC_block));
+for i = 1:length(rsvp.BC_block)
+     rsvp.RTsC_BC(i) = mean(rt(block == rsvp.BC_block(i) & BC_condition == 1 ));
+end
+
+rsvp.RTsC_CC     = zeros(1,cfg_exp.nBlocksExp);
+for i = 1:length(rsvp.RTsC_CC)
+     rsvp.RTsC_CC(i) = mean(rt(block == i & CC_condition == 1 ));
 end
 
 %% =================== PLOT PART                        ===================
@@ -560,7 +614,7 @@ if fig
     p = plot(1:(length(rsvp.LC)), rsvp.LC,'linew',1.5);
     p.Color = [0 0 0];
     line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
-    ylabel('Performance','fontsize', 10)
+    ylabel('Performance (Mean)','fontsize', 10)
     xlabel('Number of blocks','fontsize', 10)
     xticks(1:(length(rsvp.LC)))
     xticklabels(unique(block))
@@ -576,7 +630,7 @@ if fig
     p2 = plot(rsvp.largeRwdBlock, rsvp.LC_largeRwd,'-o','linew',1.5);
     p2.Color = [0.35, 0.50, 0.60];
     line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
-    ylabel('Performance','fontsize', 10)
+    ylabel('Performance (Mean)','fontsize', 10)
     xlabel('Number of blocks','fontsize', 10)
     xticks(1:12); xticklabels(unique(block))
     title('Learning Curve for Small and Large Rewards','fontsize', 10)
@@ -588,15 +642,67 @@ if fig
     subplot(2,2,4)
     hold on
     p1 = plot(rsvp.DC_block, rsvp.LC_DC,'-x','linew',1.5);
-    p1.Color = [0.75 0.45 0.55];
-    p2 = plot(rsvp.BC_block, rsvp.LC_BC,'-o','linew',1.5);
-    p2.Color = [0.40 0.55 0.40];
+    p1.Color = [.75 .45 .55];
+    p2 = plot(unique(block), rsvp.LC_CC,'-+','linew',1.5);
+    p2.Color = [.5 .5 .5];
+    p3 = plot(rsvp.BC_block, rsvp.LC_BC,'-o','linew',1.5);
+    p3.Color = [.40 .55 .40];
     line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
-    ylabel('Performance','fontsize', 10)
+    ylabel('Performance (Mean)','fontsize', 10)
     xlabel('Number of blocks','fontsize', 10)
     xticks(1:12); xticklabels(unique(block))
     title('Learning Curve for DC and BC','fontsize', 10)
     axis([0 (length(unique(block))+1) 40 110])
+    hold off
+    grid minor
+    box on
+    
+    %% RTs Curves Plots
+    figure('Name', ' RSVP RTs Curve Plots');
+
+    subplot(2,1,1)
+    p = plot(1:(length(rsvp.RTsC)), rsvp.RTsC,'linew',1.5);
+    p.Color = [0 0 0];
+    line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
+    ylabel('Mean(log(RTS))','fontsize', 10)
+    xlabel('Number of blocks','fontsize', 10)
+    xticks(1:(length(rsvp.RTsC)))
+    xticklabels(unique(block))
+    title('RTs Curve RSVP Experiment','fontsize', 10)
+    axis([0 (length(rsvp.RTsC)+1) -1 1])
+    grid minor
+    box on
+    
+    subplot(2,2,3)
+    hold on
+    p1 = plot(rsvp.smallRwdBlock, rsvp.RTsC_smallRwd,'-x','linew',1.5);
+    p1.Color = [0.75, 0.85, 0.90];
+    p2 = plot(rsvp.largeRwdBlock, rsvp.RTsC_largeRwd,'-o','linew',1.5);
+    p2.Color = [0.35, 0.50, 0.60];
+    line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
+    ylabel('Mean(log(RTS))','fontsize', 10)
+    xlabel('Number of blocks','fontsize', 10)
+    xticks(1:12); xticklabels(unique(block))
+    title('RTs Curve for Small and Large Rewards','fontsize', 10)
+    axis([0 (length(unique(block))+1) -1 1])
+    hold off
+    grid minor
+    box on
+    
+    subplot(2,2,4)
+    hold on
+    p1 = plot(rsvp.DC_block, rsvp.RTsC_DC,'-x','linew',1.5);
+    p1.Color = [.75 .45 .55];
+    p2 = plot(unique(block), rsvp.RTsC_CC,'-o','linew',1.5);
+    p2.Color = [.50 .50 .50];
+    p3 = plot(rsvp.BC_block, rsvp.RTsC_BC,'-+','linew',1.5);
+    p3.Color = [.40 .55 .40];
+    line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
+    ylabel('Mean(log(RTS))','fontsize', 10)
+    xlabel('Number of blocks','fontsize', 10)
+    xticks(1:12); xticklabels(unique(block))
+    title('RTs Curve for DC and BC','fontsize', 10)
+    axis([0 (length(unique(block))+1) -1 1])
     hold off
     grid minor
     box on
