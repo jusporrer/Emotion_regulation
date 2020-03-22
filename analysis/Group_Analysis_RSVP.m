@@ -98,8 +98,14 @@ disp(['Gender: ',num2str(round(perf_fem)), '% for condition femme & ', ...
 perf_DC         = mean([rsvpGRP.perf_DC]);
 perf_DC_sem     = std([rsvpGRP.perf_DC])/sqrt(nS);
 
+perf_CC_DC         = mean([rsvpGRP.perf_CC_DC]);
+perf_CC_DC_sem     = std([rsvpGRP.perf_CC_DC])/sqrt(nS);
+
 perf_CC         = mean([rsvpGRP.perf_CC]);
 perf_CC_sem     = std([rsvpGRP.perf_CC])/sqrt(nS);
+
+perf_CC_BC         = mean([rsvpGRP.perf_CC_BC]);
+perf_CC_BC_sem     = std([rsvpGRP.perf_CC_BC])/sqrt(nS);
 
 perf_BC         = mean([rsvpGRP.perf_BC]);
 perf_BC_sem     = std([rsvpGRP.perf_BC])/sqrt(nS);
@@ -284,17 +290,21 @@ end
 figure('Name', 'RSVP Performance Plots');
 subplot(2,3,1)
 hold on;
-bar([perf_DC 0 0],'FaceColor',[0.55 0.25 0.35]);
-bar([0 perf_CC 0],'FaceColor',[0.75 0.75 0.75]);
-bar([0 0 perf_BC],'FaceColor',[0.40 0.55 0.40]);
+bar(1, perf_DC,'FaceColor',[.55 .25 .35])
+bar(2, perf_CC_DC,'FaceColor',[.85 .75 .75], 'BarWidth',.4);
+bar(2.5, perf_CC,'FaceColor',[.75 .75 .75], 'BarWidth',.4);
+bar(3, perf_CC_BC,'FaceColor',[.75 .85 .75], 'BarWidth',.4);
+bar(4, perf_BC,'FaceColor',[.40 .55 .40])
 errorbar(1, perf_DC, perf_DC_sem, 'k.','LineWidth',1);
-errorbar(2, perf_CC, perf_CC_sem, 'k.','LineWidth',1);
-errorbar(3, perf_BC, perf_BC_sem, 'k.','LineWidth',1);
-xticks([1 2 3 4])
-xticklabels({'DC','CC', 'BC'})
+errorbar(2, perf_CC_DC, perf_CC_DC_sem, 'k.','LineWidth',1);
+errorbar(2.5, perf_CC_BC, perf_CC_BC_sem, 'k.','LineWidth',1);
+errorbar(3, perf_CC, perf_CC_sem, 'k.','LineWidth',1);
+errorbar(4, perf_BC, perf_BC_sem, 'k.','LineWidth',1);
+xticks([1 2.5 4])
+xticklabels({'DC','CC/DC CC CC/BC','BC'})
 ylabel('Performance','fontsize', 10)
 title('Performance According to Conditions','fontsize', 10)
-axis([0 4 50 100])
+axis([0 5 50 100])
 grid minor
 box on
 hold off
@@ -302,8 +312,8 @@ hold off
 % Performance par rewards
 subplot(2,3,2)
 hold on;
-bar([smallRwd_rate 0],'FaceColor',[0.75, 0.85, 0.90]);
-bar([0 largeRwd_rate],'FaceColor',[0.35, 0.50, 0.60]);
+bar([smallRwd_rate 0],'FaceColor',[.45, .75, .80]);
+bar([0 largeRwd_rate],'FaceColor',[.00, .45, .55]);
 errorbar(1, smallRwd_rate, smallRwd_rate_sem, 'k.','LineWidth',1)
 errorbar(2, largeRwd_rate, largeRwd_rate_sem, 'k.','LineWidth',1);
 xticks([1 2])
@@ -358,19 +368,19 @@ hold off
 subplot(2,2,4)
 hold on;
 p2 = plot(1:3,[perf_DC_largeRwd, perf_CC_largeRwd,perf_BC_largeRwd], 'linewidth',2.3);
-p2.Color = [.35, .5, .6];
+p2.Color = [.00, .45, .55];
 p1 = plot(1:3,[perf_DC_smallRwd, perf_CC_smallRwd,perf_BC_smallRwd], 'linewidth',2.3);
-p1.Color = [.75, .85, .9];
+p1.Color = [.45, .75, .80];
 shadedErrorBar(1:3, [perf_DC_largeRwd, perf_CC_largeRwd,perf_BC_largeRwd], ...
-    [perf_DC_largeRwd_sem, perf_CC_largeRwd_sem, perf_BC_largeRwd_sem],'lineprops',{'Color',[.35, .5, .6]},'patchSaturation',.2);
+    [perf_DC_largeRwd_sem, perf_CC_largeRwd_sem, perf_BC_largeRwd_sem],'lineprops',{'Color',[.00, .45, .55]},'patchSaturation',.2);
 e2 = errorbar(1:3,[perf_DC_largeRwd, perf_CC_largeRwd,perf_BC_largeRwd], ...
     [perf_DC_largeRwd_sem, perf_CC_largeRwd_sem, perf_BC_largeRwd_sem], 'k.','LineWidth',.9);
-e2.Color = [.35, .5, .6];
+e2.Color = [.00, .45, .55];
 shadedErrorBar(1:3,[perf_DC_smallRwd, perf_CC_smallRwd,perf_BC_smallRwd], ...
-    [perf_DC_smallRwd_sem, perf_CC_smallRwd_sem,perf_BC_smallRwd_sem],'lineprops',{'Color',[.75, .85, .9]},'patchSaturation',.2);
+    [perf_DC_smallRwd_sem, perf_CC_smallRwd_sem,perf_BC_smallRwd_sem],'lineprops',{'Color',[.45, .75, .80]},'patchSaturation',.2);
 e1 = errorbar(1:3,[perf_DC_smallRwd, perf_CC_smallRwd,perf_BC_smallRwd], ...
     [perf_DC_smallRwd_sem, perf_CC_smallRwd_sem,perf_BC_smallRwd_sem], 'k.','LineWidth',.9);
-e1.Color = [.75, .85, .9];
+e1.Color = [.45, .75, .80];
 line([0,5], [0,0], 'color','k','LineStyle',':','LineWidth',.5)
 xticks([1 2 3])
 legend({'Large Rwd','Small Rwd'})
@@ -419,8 +429,8 @@ hold off
 % RTs par rewards
 subplot(2,3,3)
 hold on;
-bar([nanmean(rt_smallRwd) 0],'FaceColor',[0.75, 0.85, 0.90]);
-bar([0 nanmean(rt_largeRwd)],'FaceColor',[0.35, 0.50, 0.60]);
+bar([nanmean(rt_smallRwd) 0],'FaceColor',[.45, .75, .80]);
+bar([0 nanmean(rt_largeRwd)],'FaceColor',[.00, .45, .55]);
 errorbar(1, nanmean(rt_smallRwd), nanstd(rt_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
 errorbar(2, nanmean(rt_largeRwd), nanstd(rt_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
 xticks([1 2])
@@ -435,19 +445,19 @@ hold off
 subplot(2,2,3)
 hold on;
 p2 = plot(1:3,[nanmean(rt_DC_largeRwd), nanmean(rt_CC_largeRwd), nanmean(rt_BC_largeRwd)], 'linewidth',2.3);
-p2.Color = [.35, .5, .6];
+p2.Color = [.00, .45, .55];
 p1 = plot(1:3,[nanmean(rt_DC_smallRwd), nanmean(rt_CC_smallRwd), nanmean(rt_BC_smallRwd)], 'linewidth',2.3);
-p1.Color = [.75, .85, .9];
+p1.Color = [.45, .75, .80];
 shadedErrorBar(1:3, [nanmean(rt_DC_largeRwd), nanmean(rt_CC_largeRwd),nanmean(rt_BC_largeRwd)], ...
-    [nanstd(rt_DC_largeRwd), nanstd(rt_CC_largeRwd), nanstd(rt_BC_largeRwd)],'lineprops',{'Color',[.35, .5, .6]},'patchSaturation',.2);
+    [nanstd(rt_DC_largeRwd), nanstd(rt_CC_largeRwd), nanstd(rt_BC_largeRwd)],'lineprops',{'Color',[.00, .45, .55]},'patchSaturation',.2);
 e2 = errorbar(1:3,[nanmean(rt_DC_largeRwd), nanmean(rt_CC_largeRwd),nanmean(rt_BC_largeRwd)], ...
     [nanstd(rt_DC_largeRwd), nanstd(rt_CC_largeRwd), nanstd(rt_BC_largeRwd)], 'k.','LineWidth',.9);
-e2.Color = [.35, .5, .6];
+e2.Color = [.00, .45, .55];
 shadedErrorBar(1:3,[nanmean(rt_DC_smallRwd), nanmean(rt_CC_smallRwd),nanmean(rt_BC_smallRwd)], ...
-    [nanstd(rt_DC_smallRwd)/sqrt(nS), nanstd(rt_CC_smallRwd)/sqrt(nS),nanstd(rt_BC_smallRwd)/sqrt(nS)],'lineprops',{'Color',[.75, .85, .9]},'patchSaturation',.2);
+    [nanstd(rt_DC_smallRwd)/sqrt(nS), nanstd(rt_CC_smallRwd)/sqrt(nS),nanstd(rt_BC_smallRwd)/sqrt(nS)],'lineprops',{'Color',[.45, .75, .80]},'patchSaturation',.2);
 e1 = errorbar(1:3,[nanmean(rt_DC_smallRwd), nanmean(rt_CC_smallRwd),nanmean(rt_BC_smallRwd)], ...
     [nanstd(rt_DC_smallRwd)/sqrt(nS), nanstd(rt_CC_smallRwd)/sqrt(nS),nanstd(rt_BC_smallRwd)/sqrt(nS)], 'k.','LineWidth',.9);
-e1.Color = [.75, .85, .9];
+e1.Color = [.45, .75, .80];
 line([0,5], [0,0], 'color','k','LineStyle',':','LineWidth',.5)
 xticks([1 2 3])
 legend({'Large Rwd','Small Rwd'})
@@ -509,11 +519,11 @@ box on
 subplot(2,2,3)
 hold on
 p2 = plot(1:6, mean(LC_largeRwd),'-o','linew',1.5);
-p2.Color = [.35, .5, .6];
+p2.Color = [.00, .45, .55];
 p1 = plot(1:6, mean(LC_smallRwd),'-x','linew',1.5);
-p1.Color = [.75, .85, .9];
-shadedErrorBar(1:6,smooth(mean(LC_largeRwd),'sgolay'),(std(LC_largeRwd)/sqrt(nS)),'lineprops',{'Color',[.35, .5, .6]},'patchSaturation',.3);
-shadedErrorBar(1:6,smooth(mean(LC_smallRwd),'sgolay'),(std(LC_smallRwd)/sqrt(nS)),'lineprops',{'Color',[.75, .85, .9]},'patchSaturation',.3);
+p1.Color = [.45, .75, .80];
+shadedErrorBar(1:6,smooth(mean(LC_largeRwd),'sgolay'),(std(LC_largeRwd)/sqrt(nS)),'lineprops',{'Color',[.00, .45, .55]},'patchSaturation',.3);
+shadedErrorBar(1:6,smooth(mean(LC_smallRwd),'sgolay'),(std(LC_smallRwd)/sqrt(nS)),'lineprops',{'Color',[.45, .75, .80]},'patchSaturation',.3);
 %line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
 legend({'Large Rwd','Small Rwd'})
 ylabel('Performance (mean +/- SEM)','fontsize', 10)
@@ -567,11 +577,11 @@ box on
 subplot(2,2,3)
 hold on
 p2 = plot(1:6, mean(RTsC_largeRwd),'-o','linew',1.5);
-p2.Color = [.35, .5, .6];
+p2.Color = [.00, .45, .55];
 p1 = plot(1:6, mean(RTsC_smallRwd),'-x','linew',1.5);
-p1.Color = [.75, .85, .9];
-shadedErrorBar(1:6,mean(RTsC_largeRwd),(std(RTsC_largeRwd)/sqrt(nS)),'lineprops',{'Color',[.35, .5, .6]},'patchSaturation',.3);
-shadedErrorBar(1:6,mean(RTsC_smallRwd),(std(RTsC_smallRwd)/sqrt(nS)),'lineprops',{'Color',[.75, .85, .9]},'patchSaturation',.3);
+p1.Color = [.45, .75, .80];
+shadedErrorBar(1:6,mean(RTsC_largeRwd),(std(RTsC_largeRwd)/sqrt(nS)),'lineprops',{'Color',[.00, .45, .55]},'patchSaturation',.3);
+shadedErrorBar(1:6,mean(RTsC_smallRwd),(std(RTsC_smallRwd)/sqrt(nS)),'lineprops',{'Color',[.45, .75, .80]},'patchSaturation',.3);
 line([-15,15], [0,0],'color','k','LineStyle','--','LineWidth',.7)
 legend({'Large Rwd','Small Rwd'})
 ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
