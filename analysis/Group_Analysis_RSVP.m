@@ -17,35 +17,35 @@ end
 %% =================== General Information              ===================
 disp('=================== General Group Information ===================');
 
-rt              = [rsvpGRP.rt];
-[h_RT, p_RT]    = adtest(rt); % Normality Anderson-Darling test
+rt                      = [rsvpGRP.rt];
+[h_RT, p_RT]            = adtest(rt); % Normality Anderson-Darling test
 
-nS              = length(subject_ID);
+nS                      = length(subject_ID);
 disp(['Number of subjects: ',num2str(nS)]);
 
-nExcTrial       = [rsvpGRP.nExcTrial];
+nExcTrial               = mean([rsvpGRP.nExcTrial]);
+nExcTrial_sem           = std([rsvpGRP.nExcTrial])/sqrt(nS);
 
-disp(['Number of excluded trials : ',num2str(mean(nExcTrial))]);
+disp(['Number of excluded trials : ',num2str(nExcTrial)]);
 
 %% =================== Performance - General            ===================
 disp('=================== Performance Information ===================');
 
-perf            = [rsvpGRP.performance];
-[h_perf, p_perf]= adtest(perf); % Normality Anderson-Darling test
-perf_min        = min([rsvpGRP.performance]);
-perf_max        = max([rsvpGRP.performance]);
-perf_sem        = std([rsvpGRP.performance])/sqrt(nS);
+perf                    = [rsvpGRP.performance];
+[h_perf, p_perf]        = adtest(perf); % Normality Anderson-Darling test
+perf_min                = min([rsvpGRP.performance]);
+perf_max                = max([rsvpGRP.performance]);
+perf_sem                = std([rsvpGRP.performance])/sqrt(nS);
 
 disp(['Mean : ', ...
     num2str(round(mean(perf))), '% correct (min perf : ', ...
     num2str(round(perf_min)), '% & max perf : ', ...
     num2str(round(perf_max)), '%) ']) ;
 
-hit_rate        = mean([rsvpGRP.hit_rate]);
-reject_rate     = mean([rsvpGRP.reject_rate]);
-
-miss_rate       = mean([rsvpGRP.miss_rate]);
-falseAlarm_rate = mean([rsvpGRP.falseAlarm_rate]);
+hit_rate                = mean([rsvpGRP.hit_rate]);
+reject_rate             = mean([rsvpGRP.reject_rate]);
+miss_rate               = mean([rsvpGRP.miss_rate]);
+falseAlarm_rate         = mean([rsvpGRP.falseAlarm_rate]);
 
 disp(['Sdt : ', ...
     num2str(round(hit_rate)), '% hit rate, ', ...
@@ -53,13 +53,13 @@ disp(['Sdt : ', ...
     num2str(round(miss_rate)), '% miss rate & ', ...
     num2str(round(falseAlarm_rate)), '% false alarm ']) ;
 
-perf_lag2       = [rsvpGRP.lag2_rate];
-perf_lag2_sem   = std([rsvpGRP.lag2_rate])/sqrt(nS);
+perf_lag2               = [rsvpGRP.lag2_rate];
+perf_lag2_sem           = std([rsvpGRP.lag2_rate])/sqrt(nS);
 
-perf_lag4       = [rsvpGRP.lag4_rate];
-perf_lag4_sem   = std([rsvpGRP.lag4_rate])/sqrt(nS);
+perf_lag4               = [rsvpGRP.lag4_rate];
+perf_lag4_sem           = std([rsvpGRP.lag4_rate])/sqrt(nS);
 
-[h_lag,p_lag, ci_lag] = ttest2(perf_lag2, perf_lag4); 
+[h_lag,p_lag, ci_lag]   = ttest2(perf_lag2, perf_lag4); 
 if h_lag == 1 
     disp(['The ttest rejects the null hypothesis that the performance between lag 2 and lag 4 has a mean equal to zero at ', ...
         num2str(p_lag), ' of p-value with a CI [', num2str(ci_lag(1)),'-', num2str(ci_lag(2)),']']); 
@@ -73,46 +73,61 @@ disp(['Lag : ', ...
     num2str(round(mean(perf_lag4))), '% for lag 4 ']) ;
 
 %% =================== Performance - Rewards            ===================
-smallRwd_rate       = mean([rsvpGRP.smallRwd_rate]);
-smallRwd_rate_sem   = std([rsvpGRP.smallRwd_rate])/sqrt(nS);
+smallRwd_rate           = [rsvpGRP.smallRwd_rate];
+smallRwd_rate_sem       = std([rsvpGRP.smallRwd_rate])/sqrt(nS);
 
-largeRwd_rate       = mean([rsvpGRP.largeRwd_rate]);
-largeRwd_rate_sem   = std([rsvpGRP.largeRwd_rate])/sqrt(nS);
+largeRwd_rate           = [rsvpGRP.largeRwd_rate];
+largeRwd_rate_sem       = std([rsvpGRP.largeRwd_rate])/sqrt(nS);
 
-disp(['Reward : ',num2str(round(smallRwd_rate)), '% for small rwd & ', ...
-    num2str(round(largeRwd_rate)), '% for large rwd' ]);
+disp(['Reward : ',num2str(round(mean(smallRwd_rate))), '% for small rwd & ', ...
+    num2str(round(mean(largeRwd_rate))), '% for large rwd' ]);
 
 %% =================== Performance - Genders            ===================
 
-perf_fem            = mean([rsvpGRP.perf_fem]);
-perf_fem_sem        = std([rsvpGRP.perf_fem]);
+perf_fem                = mean([rsvpGRP.perf_fem]);
+perf_fem_sem            = std([rsvpGRP.perf_fem]);
 
-perf_hom            = mean([rsvpGRP.perf_hom]);
-perf_hom_sem        = std([rsvpGRP.perf_hom]);
+perf_hom                = mean([rsvpGRP.perf_hom]);
+perf_hom_sem            = std([rsvpGRP.perf_hom]);
 
 disp(['Gender: ',num2str(round(perf_fem)), '% for condition femme & ', ...
     num2str(round(perf_hom)), '% for condition homme ']);
 
-%% =================== Performance - Condition          ===================
+%% =================== Performance - Conditions         ===================
 
-perf_DC         = mean([rsvpGRP.perf_DC]);
-perf_DC_sem     = std([rsvpGRP.perf_DC])/sqrt(nS);
+perf_DC                 = [rsvpGRP.perf_DC];
+perf_DC_sem             = std([rsvpGRP.perf_DC])/sqrt(nS);
 
-perf_CC_DC         = mean([rsvpGRP.perf_CC_DC]);
-perf_CC_DC_sem     = std([rsvpGRP.perf_CC_DC])/sqrt(nS);
+hit_rate_DC             = mean([rsvpGRP.hit_rate_DC ]);
+reject_rate_DC          = mean([rsvpGRP.reject_rate_DC ]);
+miss_rate_DC            = mean([rsvpGRP.miss_rate_DC ]);
+falseAlarm_rate_DC      = mean([rsvpGRP.falseAlarm_rate_DC ]);
 
-perf_CC         = mean([rsvpGRP.perf_CC]);
-perf_CC_sem     = std([rsvpGRP.perf_CC])/sqrt(nS);
+perf_CC_DC              = [rsvpGRP.perf_CC_DC];
+perf_CC_DC_sem          = std([rsvpGRP.perf_CC_DC])/sqrt(nS);
 
-perf_CC_BC         = mean([rsvpGRP.perf_CC_BC]);
-perf_CC_BC_sem     = std([rsvpGRP.perf_CC_BC])/sqrt(nS);
+perf_CC                 = ([rsvpGRP.perf_CC]);
+perf_CC_sem             = std([rsvpGRP.perf_CC])/sqrt(nS);
 
-perf_BC         = mean([rsvpGRP.perf_BC]);
-perf_BC_sem     = std([rsvpGRP.perf_BC])/sqrt(nS);
+hit_rate_CC             = mean([rsvpGRP.hit_rate_CC ]);
+reject_rate_CC          = mean([rsvpGRP.reject_rate_CC ]);
+miss_rate_CC            = mean([rsvpGRP.miss_rate_CC ]);
+falseAlarm_rate_CC      = mean([rsvpGRP.falseAlarm_rate_CC ]);
 
-disp(['Emotion : ',num2str(round(perf_DC)), '% for DC, ', ...
-    num2str(round(perf_CC)), '% for CC & ',...
-    num2str(ceil(perf_BC)), '% for BC']);
+perf_CC_BC              = ([rsvpGRP.perf_CC_BC]);
+perf_CC_BC_sem          = std([rsvpGRP.perf_CC_BC])/sqrt(nS);
+
+perf_BC                 = ([rsvpGRP.perf_BC]);
+perf_BC_sem             = std([rsvpGRP.perf_BC])/sqrt(nS);
+
+hit_rate_BC             = mean([rsvpGRP.hit_rate_BC ]);
+reject_rate_BC          = mean([rsvpGRP.reject_rate_BC ]);
+miss_rate_BC            = mean([rsvpGRP.miss_rate_BC ]);
+falseAlarm_rate_BC      = mean([rsvpGRP.falseAlarm_rate_BC ]);
+
+disp(['Emotion : ',num2str(round(mean(perf_DC))), '% for DC, ', ...
+    num2str(round(mean(perf_CC))), '% for CC & ',...
+    num2str(round(mean(perf_BC))), '% for BC']);
 
 perf_DC_smallRwd        = mean([rsvpGRP.perf_DC_smallRwd]);
 perf_DC_smallRwd_sem    = std([rsvpGRP.perf_DC_smallRwd])/sqrt(nS);
@@ -261,9 +276,9 @@ for subj_idx = 1:length(subject_ID)
     
     for block = 1:12
         LC(subj_idx,block)                = rsvpGRP(subj_idx).LC(block);
-        LC_CC(subj_idx,block)             = rsvpGRP(subj_idx).LC_CC(block);
+        %LC_CC(subj_idx,block)             = rsvpGRP(subj_idx).LC_CC(block);
         RTsC(subj_idx,block)              = rsvpGRP(subj_idx).RTsC(block);
-        RTsC_CC(subj_idx,block)           = rsvpGRP(subj_idx).RTsC_CC(block);    
+        %RTsC_CC(subj_idx,block)           = rsvpGRP(subj_idx).RTsC_CC(block);    
 
     end
     
@@ -272,13 +287,13 @@ for subj_idx = 1:length(subject_ID)
         LC_largeRwd(subj_idx,blockCondi)  = rsvpGRP(subj_idx).LC_largeRwd(blockCondi);
         LC_DC(subj_idx,blockCondi)        = rsvpGRP(subj_idx).LC_DC(blockCondi);
         LC_BC(subj_idx,blockCondi)        = rsvpGRP(subj_idx).LC_BC(blockCondi);
-        % LC_CC(subj_idx,blockCondi)        = (rsvpGRP(subj_idx).LC_CC(blockCondi) + rsvpGRP(subj_idx).LC_CC(blockCondi + 6))/2;
+        LC_CC(subj_idx,blockCondi)        = (rsvpGRP(subj_idx).LC_CC(blockCondi) + rsvpGRP(subj_idx).LC_CC(blockCondi + 6))/2;
         
         RTsC_smallRwd(subj_idx,blockCondi)= rsvpGRP(subj_idx).RTsC_smallRwd(blockCondi);
         RTsC_largeRwd(subj_idx,blockCondi)= rsvpGRP(subj_idx).RTsC_largeRwd(blockCondi);
         RTsC_DC(subj_idx,blockCondi)      = rsvpGRP(subj_idx).RTsC_DC(blockCondi);
         RTsC_BC(subj_idx,blockCondi)      = rsvpGRP(subj_idx).RTsC_BC(blockCondi);
-        % RTsC_CC(subj_idx,blockCondi)      = (rsvpGRP(subj_idx).RTsC_CC(blockCondi) + rsvpGRP(subj_idx).RTsC_CC(blockCondi + 6))/2;
+        RTsC_CC(subj_idx,blockCondi)      = (rsvpGRP(subj_idx).RTsC_CC(blockCondi) + rsvpGRP(subj_idx).RTsC_CC(blockCondi + 6))/2;
 
     end
 end
@@ -290,52 +305,66 @@ end
 figure('Name', 'RSVP Performance Plots');
 subplot(2,3,1)
 hold on;
-bar(1, perf_DC,'FaceColor',[.55 .25 .35])
-bar(2, perf_CC_DC,'FaceColor',[.85 .75 .75], 'BarWidth',.4);
-bar(2.5, perf_CC,'FaceColor',[.75 .75 .75], 'BarWidth',.4);
-bar(3, perf_CC_BC,'FaceColor',[.75 .85 .75], 'BarWidth',.4);
-bar(4, perf_BC,'FaceColor',[.40 .55 .40])
-errorbar(1, perf_DC, perf_DC_sem, 'k.','LineWidth',1);
-errorbar(2, perf_CC_DC, perf_CC_DC_sem, 'k.','LineWidth',1);
-errorbar(2.5, perf_CC_BC, perf_CC_BC_sem, 'k.','LineWidth',1);
-errorbar(3, perf_CC, perf_CC_sem, 'k.','LineWidth',1);
-errorbar(4, perf_BC, perf_BC_sem, 'k.','LineWidth',1);
+bar(1, mean(perf_DC),'FaceColor',[.55 .25 .35])
+bar(2, mean(perf_CC_DC),'FaceColor',[.85 .75 .75], 'BarWidth',.5);
+bar(2.5, mean(perf_CC),'FaceColor',[.75 .75 .75], 'BarWidth',.5);
+bar(3, mean(perf_CC_BC),'FaceColor',[.75 .85 .75], 'BarWidth',.5);
+bar(4, mean(perf_BC),'FaceColor',[.40 .55 .40])
+errorbar(1, mean(perf_DC), perf_DC_sem, 'k.','LineWidth',1);
+errorbar(2, mean(perf_CC_DC), perf_CC_DC_sem, 'k.','LineWidth',1);
+errorbar(2.5, mean(perf_CC_BC), perf_CC_BC_sem, 'k.','LineWidth',1);
+errorbar(3, mean(perf_CC), perf_CC_sem, 'k.','LineWidth',1);
+errorbar(4, mean(perf_BC), perf_BC_sem, 'k.','LineWidth',1);
 xticks([1 2.5 4])
 xticklabels({'DC','CC/DC CC CC/BC','BC'})
 ylabel('Performance','fontsize', 10)
 title('Performance According to Conditions','fontsize', 10)
-axis([0 5 50 100])
+axis([0 5 50 105])
 grid minor
 box on
 hold off
 
-% Performance par rewards
+% STD Performance per conditions 
+
 subplot(2,3,2)
 hold on;
-bar([smallRwd_rate 0],'FaceColor',[.45, .75, .80]);
-bar([0 largeRwd_rate],'FaceColor',[.00, .45, .55]);
-errorbar(1, smallRwd_rate, smallRwd_rate_sem, 'k.','LineWidth',1)
-errorbar(2, largeRwd_rate, largeRwd_rate_sem, 'k.','LineWidth',1);
+b1 = bar([2, 3], [hit_rate_DC, reject_rate_DC, falseAlarm_rate_DC, miss_rate_DC ; 0 0 0 0], 'stacked', 'FaceColor','flat');
+b1(1).CData = [.7 .9 .5]; b1(2).CData = [.3 .7 .0]; b1(3).CData = [.9 .5 .7]; b1(4).CData = [.7 .0 .3];
+b2 = bar([3, 4], [hit_rate_CC, reject_rate_CC, falseAlarm_rate_CC, miss_rate_CC ; 0 0 0 0], 'stacked', 'FaceColor','flat');
+b2(1).CData = [.7 .9 .5]; b2(2).CData = [.3 .7 .0]; b2(3).CData = [.9 .5 .7]; b2(4).CData = [.7 .0 .3];
+b3 = bar([4, 5], [hit_rate_BC, reject_rate_BC, falseAlarm_rate_BC, miss_rate_BC ; 0 0 0 0], 'stacked', 'FaceColor','flat');
+b3(1).CData = [.7 .9 .5]; b3(2).CData = [.3 .7 .0]; b3(3).CData = [.9 .5 .7]; b3(4).CData = [.7 .0 .3];
+xticks([2 3 4])
+xticklabels({'DC','CC','BC'})
+ylabel('Performance','fontsize', 10)
+legend({'Hit', 'Reject', 'FA', 'Miss'})
+title('STD Performance According to Conditions','fontsize', 10)
+axis([1 5 0 105])
+grid minor
+box on
+hold off
+
+
+% Performance par rewards
+subplot(2,3,3)
+hold on;
+rwd_plotY = [smallRwd_rate.', largeRwd_rate.'];
+rwd_plotX = [1, 2];
+rwd_plot_color = {[.00, .45, .55], [.45, .75, .80]};
+B = boxplot(rwd_plotY, rwd_plotX,'Widths',.7);
+get (B, 'tag'); 
+set(B(1,:), 'color', 'k'); set(B(2,:), 'color', 'k');
+set(B(6,:), 'color', 'k', 'linewidth', 2);
+scatter(rwd_plotX,mean(rwd_plotY),'k','filled','d')
+h = findobj(gca,'Tag','Box');
+ for j=1:length(h)
+    patch(get(h(j),'XData'),get(h(j),'YData'),rwd_plot_color{j},'FaceAlpha',.7);
+ end
 xticks([1 2])
+legend({'Mean'})
 xticklabels({'Small Rwd','Large Rwd'})
 ylabel('Performance','fontsize', 10)
 title('Performance According to Reward Size','fontsize', 10)
-axis([0 3 50 100])
-grid minor
-box on
-hold off
-
-% Performance par lag
-subplot(2,3,3)
-hold on;
-bar([mean(perf_lag2) 0],'FaceColor',[.9, .8, .9]);
-bar([0 mean(perf_lag4)],'FaceColor',[.9, .7, .7]);
-errorbar(1, mean(perf_lag2), perf_lag2_sem, 'k.','LineWidth',1)
-errorbar(2, mean(perf_lag4), perf_lag4_sem, 'k.','LineWidth',1);
-xticks([1 2])
-xticklabels({'Lag 2','Lag 4'})
-ylabel('Performance','fontsize', 10)
-title('Performance According to Lag Size','fontsize', 10)
 axis([0 3 50 100])
 grid minor
 box on
@@ -539,12 +568,12 @@ subplot(2,2,4)
 hold on
 p1 = plot(1:6, mean(LC_DC),'-x','linew',1.5); 
 p1.Color = [.75 .45 .55];
-p2 = plot(1:.5:6.5, mean(LC_CC),'-+','linew',1.5);
+p2 = plot(1:6, mean(LC_CC),'-+','linew',1.5); %1:.5:6.5
 p2.Color = [.50 .50 .50];
 p3 = plot(1:6, mean(LC_BC),'-o','linew',1.5);
 p3.Color = [.40 .55 .40];
 shadedErrorBar(1:6,mean(LC_DC),(std(LC_DC)/sqrt(nS)),'lineprops',{'Color',[.75 .45 .55]},'patchSaturation',.3);
-shadedErrorBar(1:.5:6.5,mean(LC_CC),(std(LC_CC)/sqrt(nS)),'lineprops',{'Color',[.50 .50 .50]},'patchSaturation',.3);
+shadedErrorBar(1:6,mean(LC_CC),(std(LC_CC)/sqrt(nS)),'lineprops',{'Color',[.50 .50 .50]},'patchSaturation',.3);
 shadedErrorBar(1:6,mean(LC_BC),(std(LC_BC)/sqrt(nS)),'lineprops',{'Color',[.40 .55 .40]},'patchSaturation',.3);
 %line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
 legend({'DC','CC','BC'})
@@ -597,12 +626,12 @@ subplot(2,2,4)
 hold on
 p1 = plot(1:6, mean(RTsC_DC),'-x','linew',1.5); 
 p1.Color = [.75 .45 .55];
-p2 = plot(1:.5:6.5, mean(RTsC_CC),'-+','linew',1.5);
+p2 = plot(1:6, mean(RTsC_CC),'-+','linew',1.5); %1:.5:6.5 if 12 blocks 
 p2.Color = [.50 .50 .50];
 p3 = plot(1:6, mean(RTsC_BC),'-o','linew',1.5);
 p3.Color = [.40 .55 .40];
 shadedErrorBar(1:6,mean(RTsC_DC),(std(RTsC_DC)/sqrt(nS)),'lineprops',{'Color',[.75 .45 .55]},'patchSaturation',.3);
-shadedErrorBar(1:.5:6.5,mean(RTsC_CC),(std(RTsC_CC)/sqrt(nS)),'lineprops',{'Color',[.50 .50 .50]},'patchSaturation',.3);
+shadedErrorBar(1:6,mean(RTsC_CC),(std(RTsC_CC)/sqrt(nS)),'lineprops',{'Color',[.50 .50 .50]},'patchSaturation',.3);
 shadedErrorBar(1:6,mean(RTsC_BC),(std(RTsC_BC)/sqrt(nS)),'lineprops',{'Color',[.40 .55 .40]},'patchSaturation',.3);
 line([-15,15], [0,0],'color','k','LineStyle','--','LineWidth',.7)
 legend({'DC','CC','BC'})

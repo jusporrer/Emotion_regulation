@@ -61,27 +61,27 @@ end
 
 %% =================== Exclude 3 STD RTs                ===================
 
-rt              = (rt(nTrial));
-mean_RtExp      = mean(rt) ;
-std_RtExp       = std(rt)*3 ;
+rt                      = (rt(nTrial));
+mean_RtExp              = mean(rt) ;
+std_RtExp               = std(rt)*3 ;
 
 % Recalculate nTrial with only non-outlier RT trials
-low_RtExp       = mean_RtExp-std_RtExp ;
-up_RtExp        = mean_RtExp+std_RtExp ;
+low_RtExp               = mean_RtExp-std_RtExp ;
+up_RtExp                = mean_RtExp+std_RtExp ;
 
-kept_RtExp      = intersect(find(rt(nTrial) > low_RtExp), find(rt(nTrial) < up_RtExp));
-excl_RtExp      = [find(rt(nTrial) < low_RtExp) find(rt(nTrial) > up_RtExp)];
+kept_RtExp              = intersect(find(rt(nTrial) > low_RtExp), find(rt(nTrial) < up_RtExp));
+excl_RtExp              = [find(rt(nTrial) < low_RtExp) find(rt(nTrial) > up_RtExp)];
 
-rsvp.nExcTrial  = length(excl_RtExp); 
+rsvp.nExcTrial          = length(excl_RtExp); 
 
 if ID == 81477
     kept_RtExp(31) = [];
 end 
 
-nTrial          = nTrial(kept_RtExp);
-rsvp.rt         = log(rt(nTrial)); 
-rt              = log(rt(nTrial)); 
-block           = block(nTrial);
+nTrial                  = nTrial(kept_RtExp);
+rsvp.rt                 = log(rt(nTrial)); 
+rt                      = log(rt(nTrial)); 
+block                   = block(nTrial);
 
 if length(nTrial) < length(trial)
     disp(['RTs warning : ',num2str(length(excl_RtExp)), ...
@@ -123,20 +123,20 @@ correct_NotHom_NeutralFem = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...
     & target(nTrial) == 3);
 
 % Sum of all the correct trials
-correct         = (correct_Fem) + (correct_Hom) + (correct_NotFem) + (correct_NotHom);
+correct                 = (correct_Fem) + (correct_Hom) + (correct_NotFem) + (correct_NotHom);
 % correct_test    = (response(nTrial) == 1 & instQuest(nTrial) == 1 & (target(nTrial) == 1 | target(nTrial) == 3)) | ...
 %     (response(nTrial) == 1 & instQuest(nTrial) == 2 & (target(nTrial) == 2 | target(nTrial) == 4)) | ...
 %     (response(nTrial) == 2 & instQuest(nTrial) == 1 & (target(nTrial) == 2 | target(nTrial) == 4)) | ...
 %     (response(nTrial) == 2 & instQuest(nTrial) == 2 & (target(nTrial) == 1 | target(nTrial) == 3));
-nCorrect        = sum(correct);
+nCorrect                = sum(correct);
 
 % SDT: correct hit
-hit             = (correct_Fem) + (correct_Hom);
-rsvp.hit_rate   = (sum(hit)/length(nTrial))*100;
+hit                     = (correct_Fem) + (correct_Hom);
+rsvp.hit_rate           = (sum(hit)/length(nTrial))*100;
 
 % SDT: correct rejection
-reject          = (correct_NotFem) + (correct_NotHom);
-rsvp.reject_rate= (sum(reject)/length(nTrial))*100;
+reject                  = (correct_NotFem) + (correct_NotHom);
+rsvp.reject_rate        = (sum(reject)/length(nTrial))*100;
 
 % General performance
 rsvp.performance= nCorrect/length(nTrial)*100;
@@ -180,19 +180,19 @@ incorrect_NotHom_NeutralFem = (response(nTrial) == 1 & instQuest(nTrial) == 2 ..
     & target(nTrial) == 3);
 
 % Sum of all the incorrect trials
-incorrect       = (incorrect_Fem) + (incorrect_Hom) + (incorrect_NotFem) + (incorrect_NotHom);
-nIncorrect      = sum(incorrect);
+incorrect               = (incorrect_Fem) + (incorrect_Hom) + (incorrect_NotFem) + (incorrect_NotHom);
+nIncorrect              = sum(incorrect);
 
 % SDT: false alarms
-falseAlarm      = (incorrect_Fem) + (incorrect_Hom);
-rsvp.falseAlarm_rate = (sum(falseAlarm)/length(nTrial))*100;
+falseAlarm              = (incorrect_Fem) + (incorrect_Hom);
+rsvp.falseAlarm_rate    = (sum(falseAlarm)/length(nTrial))*100;
 
 % SDT: misses
-miss                = (incorrect_NotFem) + (incorrect_NotHom);
-rsvp.miss_rate       = (sum(miss)/length(nTrial))*100;
+miss                    = (incorrect_NotFem) + (incorrect_NotHom);
+rsvp.miss_rate          = (sum(miss)/length(nTrial))*100;
 
 % General performance
-rsvp.perf_incorrect  = nIncorrect/length(nTrial)*100;
+rsvp.perf_incorrect     = nIncorrect/length(nTrial)*100;
 
 disp(['Performance : ',num2str(ceil(rsvp.perf_incorrect)), ...
     '% incorrect trials with ',num2str(ceil(rsvp.falseAlarm_rate)), '% false alarms & ', ...
@@ -200,17 +200,17 @@ disp(['Performance : ',num2str(ceil(rsvp.perf_incorrect)), ...
 
 %% =================== Performance - Rewards            ===================
 
-smallRwd            = (reward(nTrial) == 1);
-rsvp.smallRwdBlock  = unique(block(smallRwd == 1));
-smallRwd_correct    = correct(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1;
-smallRwd_incorrect  = incorrect(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1;
-rsvp.smallRwd_rate  = sum(smallRwd_correct)/sum(smallRwd)*100;
+smallRwd                = (reward(nTrial) == 1);
+rsvp.smallRwdBlock      = unique(block(smallRwd == 1));
+smallRwd_correct        = correct(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1;
+smallRwd_incorrect      = incorrect(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1;
+rsvp.smallRwd_rate      = sum(smallRwd_correct)/sum(smallRwd)*100;
 
-largeRwd            = (reward(nTrial) == 2);
-rsvp.largeRwdBlock  = unique(block(largeRwd == 1));
-largeRwd_correct    = correct(1:length(nTrial)) == 1 & largeRwd(1:length(nTrial)) == 1;
-largeRwd_incorrect  = incorrect(1:length(nTrial)) == 1 & largeRwd(1:length(nTrial)) == 1;
-rsvp.largeRwd_rate  = sum(largeRwd_correct)/sum(largeRwd)*100;
+largeRwd                = (reward(nTrial) == 2);
+rsvp.largeRwdBlock      = unique(block(largeRwd == 1));
+largeRwd_correct        = correct(1:length(nTrial)) == 1 & largeRwd(1:length(nTrial)) == 1;
+largeRwd_incorrect      = incorrect(1:length(nTrial)) == 1 & largeRwd(1:length(nTrial)) == 1;
+rsvp.largeRwd_rate      = sum(largeRwd_correct)/sum(largeRwd)*100;
 
 disp(['Reward : ',num2str(ceil(rsvp.smallRwd_rate)), '% were correct for small rwd & ', ...
     num2str(ceil(rsvp.largeRwd_rate)), '% were correct for large rwd' ]);
@@ -219,67 +219,122 @@ disp(['Reward : ',num2str(ceil(rsvp.smallRwd_rate)), '% were correct for small r
 %(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
 
 % Detrimental condition
-DC_condition        = condition(nTrial) == 1 | condition(nTrial) == 2;
-DC_correct          = correct(1:length(nTrial)) == 1 & DC_condition(1:length(nTrial)) == 1;
-DC_incorrect        = incorrect(1:length(nTrial)) == 1 & DC_condition(1:length(nTrial)) == 1;
-rsvp.DC_block       = unique(block(DC_condition));
-DC_trials           = zeros(1,length(nTrial));
+DC_condition            = condition(nTrial) == 1 | condition(nTrial) == 2;
+DC_correct              = correct(1:length(nTrial)) == 1 & DC_condition(1:length(nTrial)) == 1;
+DC_incorrect            = incorrect(1:length(nTrial)) == 1 & DC_condition(1:length(nTrial)) == 1;
+rsvp.DC_block           = unique(block(DC_condition));
+DC_trials               = zeros(1,length(nTrial));
 for i = 1:length(rsvp.DC_block)
-    DC_trials       = DC_trials + (block == rsvp.DC_block(i));
+    DC_trials           = DC_trials + (block == rsvp.DC_block(i));
 end 
 
-DC_hom              = condition(nTrial) == 1;
-DC_hom_correct      = correct(1:length(nTrial)) == 1 & DC_hom(1:length(nTrial)) == 1;
-DC_hom_incorrect    = incorrect(1:length(nTrial)) == 1 & DC_hom(1:length(nTrial)) == 1;
-rsvp.DC_hom_rate    = sum(DC_hom_correct)/sum(DC_hom)*100;
+DC_hom                  = condition(nTrial) == 1;
+DC_hom_correct          = correct(1:length(nTrial)) == 1 & DC_hom(1:length(nTrial)) == 1;
+DC_hom_incorrect        = incorrect(1:length(nTrial)) == 1 & DC_hom(1:length(nTrial)) == 1;
+rsvp.DC_hom_rate        = sum(DC_hom_correct)/sum(DC_hom)*100;
 
-DC_fem              = condition(nTrial) == 2;
-DC_fem_correct      = correct(1:length(nTrial)) == 1 & DC_fem(1:length(nTrial)) == 1;
-DC_fem_incorrect    = incorrect(1:length(nTrial)) == 1 & DC_fem(1:length(nTrial)) == 1;
-rsvp.DC_fem_rate    = sum(DC_fem_correct)/sum(DC_fem)*100;
+DC_fem                  = condition(nTrial) == 2;
+DC_fem_correct          = correct(1:length(nTrial)) == 1 & DC_fem(1:length(nTrial)) == 1;
+DC_fem_incorrect        = incorrect(1:length(nTrial)) == 1 & DC_fem(1:length(nTrial)) == 1;
+rsvp.DC_fem_rate        = sum(DC_fem_correct)/sum(DC_fem)*100;
+
+% SDT: DC
+hit_DC                  =  sum((correct_Fem(1:length(nTrial)) == 1 & DC_condition(1:length(nTrial)) == 1) | ...
+    correct_Hom(1:length(nTrial)) == 1 & DC_condition(1:length(nTrial)) == 1);
+rsvp.hit_rate_DC        = (hit_DC / sum(DC_condition))*100;
+
+reject_DC               = sum((correct_NotFem(1:length(nTrial)) == 1 & DC_condition(1:length(nTrial)) == 1) | ...
+    correct_NotHom(1:length(nTrial)) == 1 & DC_condition(1:length(nTrial)) == 1);
+rsvp.reject_rate_DC     = (reject_DC / sum(DC_condition))*100;
+
+
+falseAlarm_DC           = sum((incorrect_Fem(1:length(nTrial)) == 1 & DC_condition(1:length(nTrial)) == 1) | ...
+    incorrect_Hom(1:length(nTrial)) == 1 & DC_condition(1:length(nTrial)) == 1);
+rsvp.falseAlarm_rate_DC = (falseAlarm_DC / sum(DC_condition))*100;
+
+miss_DC                 = sum((incorrect_NotFem(1:length(nTrial)) == 1 & DC_condition(1:length(nTrial)) == 1) | ...
+    incorrect_NotHom(1:length(nTrial)) == 1 & DC_condition(1:length(nTrial)) == 1);
+rsvp.miss_rate_DC       = (miss_DC/ sum(DC_condition))*100;
 
 % Beneficial Conditions
-BC_condition        = (condition(nTrial) == 5 | condition(nTrial) == 6);
-BC_correct          = (correct(1:length(nTrial)) == 1 & BC_condition(1:length(nTrial)) == 1);
-BC_incorrect        = (incorrect(1:length(nTrial)) == 1 & BC_condition(1:length(nTrial)) == 1);
-rsvp.BC_block       = unique(block(BC_condition));
-BC_trials           = zeros(1,length(nTrial));
+BC_condition            = (condition(nTrial) == 5 | condition(nTrial) == 6);
+BC_correct              = (correct(1:length(nTrial)) == 1 & BC_condition(1:length(nTrial)) == 1);
+BC_incorrect            = (incorrect(1:length(nTrial)) == 1 & BC_condition(1:length(nTrial)) == 1);
+rsvp.BC_block           = unique(block(BC_condition));
+BC_trials               = zeros(1,length(nTrial));
 for i = 1:length(rsvp.BC_block)
-    BC_trials       = BC_trials + (block == rsvp.BC_block(i));
+    BC_trials           = BC_trials + (block == rsvp.BC_block(i));
 end 
 
-BC_hom              = (condition(nTrial) == 5);
-BC_hom_correct      = (correct(1:length(nTrial)) == 1 & BC_hom(1:length(nTrial)) == 1);
-BC_hom_incorrect    = (incorrect(1:length(nTrial)) == 1 & BC_hom(1:length(nTrial)) == 1);
-rsvp.BC_hom_rate    = sum(BC_hom_correct)/sum(BC_hom)*100;
+BC_hom                  = (condition(nTrial) == 5);
+BC_hom_correct          = (correct(1:length(nTrial)) == 1 & BC_hom(1:length(nTrial)) == 1);
+BC_hom_incorrect        = (incorrect(1:length(nTrial)) == 1 & BC_hom(1:length(nTrial)) == 1);
+rsvp.BC_hom_rate        = sum(BC_hom_correct)/sum(BC_hom)*100;
 
-BC_fem              = (condition(nTrial) == 6);
-BC_fem_correct      = (correct(1:length(nTrial)) == 1 & BC_fem(1:length(nTrial)) == 1);
-BC_fem_incorrect    = (correct(1:length(nTrial)) == 1 & BC_fem(1:length(nTrial)) == 1);
-rsvp.BC_fem_rate    = sum(BC_fem_correct)/sum(BC_fem)*100;
+BC_fem                  = (condition(nTrial) == 6);
+BC_fem_correct          = (correct(1:length(nTrial)) == 1 & BC_fem(1:length(nTrial)) == 1);
+BC_fem_incorrect        = (correct(1:length(nTrial)) == 1 & BC_fem(1:length(nTrial)) == 1);
+rsvp.BC_fem_rate        = sum(BC_fem_correct)/sum(BC_fem)*100;
+
+% SDT: BC
+hit_BC                  =  sum((correct_Fem(1:length(nTrial)) == 1 & BC_condition(1:length(nTrial)) == 1) | ...
+    correct_Hom(1:length(nTrial)) == 1 & BC_condition(1:length(nTrial)) == 1);
+rsvp.hit_rate_BC        = (hit_BC / sum(BC_condition))*100;
+
+reject_BC               = sum((correct_NotFem(1:length(nTrial)) == 1 & BC_condition(1:length(nTrial)) == 1) | ...
+    correct_NotHom(1:length(nTrial)) == 1 & BC_condition(1:length(nTrial)) == 1);
+rsvp.reject_rate_BC     = (reject_BC / sum(BC_condition))*100;
+
+
+falseAlarm_BC           = sum((incorrect_Fem(1:length(nTrial)) == 1 & BC_condition(1:length(nTrial)) == 1) | ...
+    incorrect_Hom(1:length(nTrial)) == 1 & BC_condition(1:length(nTrial)) == 1);
+rsvp.falseAlarm_rate_BC = (falseAlarm_BC / sum(BC_condition))*100;
+
+miss_BC                 = sum((incorrect_NotFem(1:length(nTrial)) == 1 & BC_condition(1:length(nTrial)) == 1) | ...
+    incorrect_NotHom(1:length(nTrial)) == 1 & BC_condition(1:length(nTrial)) == 1);
+rsvp.miss_rate_BC       = (miss_BC/ sum(BC_condition))*100;
 
 % Control Conditions
-CC_DC_condition     = DC_trials & (condition(nTrial) == 3 | condition(nTrial) == 4);
-CC_DC_correct       = correct(1:length(nTrial)) == 1 & CC_DC_condition(1:length(nTrial)) == 1;
-CC_DC_incorrect     = incorrect(1:length(nTrial)) == 1 & CC_DC_condition(1:length(nTrial)) == 1;
+CC_DC_condition         = DC_trials & (condition(nTrial) == 3 | condition(nTrial) == 4);
+CC_DC_correct           = correct(1:length(nTrial)) == 1 & CC_DC_condition(1:length(nTrial)) == 1;
+CC_DC_incorrect         = incorrect(1:length(nTrial)) == 1 & CC_DC_condition(1:length(nTrial)) == 1;
 
-CC_BC_condition     = BC_trials & (condition(nTrial) == 3 | condition(nTrial) == 4);
-CC_BC_correct       = correct(1:length(nTrial)) == 1 & CC_BC_condition(1:length(nTrial)) == 1;
-CC_BC_incorrect     = incorrect(1:length(nTrial)) == 1 & CC_BC_condition(1:length(nTrial)) == 1;
+CC_BC_condition         = BC_trials & (condition(nTrial) == 3 | condition(nTrial) == 4);
+CC_BC_correct           = correct(1:length(nTrial)) == 1 & CC_BC_condition(1:length(nTrial)) == 1;
+CC_BC_incorrect         = incorrect(1:length(nTrial)) == 1 & CC_BC_condition(1:length(nTrial)) == 1;
 
-CC_condition        = condition(nTrial) == 3 | condition(nTrial) == 4;
-CC_correct          = correct(1:length(nTrial)) == 1 & CC_condition(1:length(nTrial)) == 1;
-CC_incorrect        = incorrect(1:length(nTrial)) == 1 & CC_condition(1:length(nTrial)) == 1;
+CC_condition            = condition(nTrial) == 3 | condition(nTrial) == 4;
+CC_correct              = correct(1:length(nTrial)) == 1 & CC_condition(1:length(nTrial)) == 1;
+CC_incorrect            = incorrect(1:length(nTrial)) == 1 & CC_condition(1:length(nTrial)) == 1;
 
-CC_hom              = condition(nTrial) == 3;
-CC_hom_correct      = correct(1:length(nTrial)) == 1 & CC_hom(1:length(nTrial)) == 1;
-CC_hom_incorrect    = incorrect(1:length(nTrial)) == 1 & CC_hom(1:length(nTrial)) == 1;
-rsvp.CC_hom_rate    = sum(CC_hom_correct)/sum(CC_hom)*100;
+CC_hom                  = condition(nTrial) == 3;
+CC_hom_correct          = correct(1:length(nTrial)) == 1 & CC_hom(1:length(nTrial)) == 1;
+CC_hom_incorrect        = incorrect(1:length(nTrial)) == 1 & CC_hom(1:length(nTrial)) == 1;
+rsvp.CC_hom_rate        = sum(CC_hom_correct)/sum(CC_hom)*100;
 
-CC_fem              = (condition(nTrial) == 4);
-CC_fem_correct      = (correct(1:length(nTrial)) == 1 & CC_fem(1:length(nTrial)) == 1);
-CC_fem_incorrect    = (incorrect(1:length(nTrial)) == 1 & CC_fem(1:length(nTrial)) == 1);
-rsvp.CC_fem_rate    = sum(CC_fem_correct)/sum(CC_fem)*100;
+CC_fem                  = (condition(nTrial) == 4);
+CC_fem_correct          = (correct(1:length(nTrial)) == 1 & CC_fem(1:length(nTrial)) == 1);
+CC_fem_incorrect        = (incorrect(1:length(nTrial)) == 1 & CC_fem(1:length(nTrial)) == 1);
+rsvp.CC_fem_rate        = sum(CC_fem_correct)/sum(CC_fem)*100;
+
+% SDT: CC
+hit_CC                  =  sum((correct_Fem(1:length(nTrial)) == 1 & CC_condition(1:length(nTrial)) == 1) | ...
+    correct_Hom(1:length(nTrial)) == 1 & CC_condition(1:length(nTrial)) == 1);
+rsvp.hit_rate_CC        = (hit_CC / sum(CC_condition))*100;
+
+reject_CC               = sum((correct_NotFem(1:length(nTrial)) == 1 & CC_condition(1:length(nTrial)) == 1) | ...
+    correct_NotHom(1:length(nTrial)) == 1 & CC_condition(1:length(nTrial)) == 1);
+rsvp.reject_rate_CC     = (reject_CC / sum(CC_condition))*100;
+
+
+falseAlarm_CC           = sum((incorrect_Fem(1:length(nTrial)) == 1 & CC_condition(1:length(nTrial)) == 1) | ...
+    incorrect_Hom(1:length(nTrial)) == 1 & CC_condition(1:length(nTrial)) == 1);
+rsvp.falseAlarm_rate_CC = (falseAlarm_CC / sum(CC_condition))*100;
+
+miss_CC                 = sum((incorrect_NotFem(1:length(nTrial)) == 1 & CC_condition(1:length(nTrial)) == 1) | ...
+    incorrect_NotHom(1:length(nTrial)) == 1 & CC_condition(1:length(nTrial)) == 1);
+rsvp.miss_rate_CC       = (miss_CC/ sum(CC_condition))*100;
+
 
 % Number of trials in each conditions
 if sum(DC_hom) == sum(DC_fem) == sum(CC_hom) == ...
@@ -290,11 +345,11 @@ else
 end
 
 % Condition Emotions
-rsvp.perf_DC             = (sum(DC_correct))/sum(DC_condition)*100;  
-rsvp.perf_BC             = (sum(BC_correct))/sum(BC_condition)*100; 
-rsvp.perf_CC_DC          = (sum(CC_DC_correct))/sum(CC_DC_condition)*100; 
-rsvp.perf_CC_BC          = (sum(CC_BC_correct))/sum(CC_BC_condition)*100; 
-rsvp.perf_CC             = (sum(CC_correct))/sum(CC_condition)*100;
+rsvp.perf_DC            = (sum(DC_correct))/sum(DC_condition)*100;  
+rsvp.perf_BC            = (sum(BC_correct))/sum(BC_condition)*100; 
+rsvp.perf_CC_DC         = (sum(CC_DC_correct))/sum(CC_DC_condition)*100; 
+rsvp.perf_CC_BC         = (sum(CC_BC_correct))/sum(CC_BC_condition)*100; 
+rsvp.perf_CC            = (sum(CC_correct))/sum(CC_condition)*100;
 
 disp(['Performance Emotion : ',num2str(ceil(rsvp.perf_DC)), '% for detrimental condition, ', ...
     num2str(ceil(rsvp.perf_CC)), '% for control condition & ',num2str(ceil(rsvp.perf_BC)), '% for beneficial condition']);
