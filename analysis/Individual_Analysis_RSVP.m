@@ -525,7 +525,6 @@ rsvp.rt_slow_perf       = sum(correct(rt_slow) == 1)/length(rt_slow)*100;
 rt_fast                 = find(rt < rsvp.rt_median);
 rsvp.rt_fast_perf       = sum(correct(rt_fast) == 1)/length(rt_fast)*100;
 
-
 %% =================== Learning Curves                  ===================
 
 rsvp.LC              = zeros(1,cfg_exp.nBlocksExp);
@@ -563,7 +562,6 @@ for i = 1:length(rsvp.LC_CC)
      rsvp.LC_CC(i) = (sum(CC_correct(block == i)))/ ...
          sum(CC_condition(block == i))*100;
 end
-
 
 %% =================== RTs Curves                       ===================
 
