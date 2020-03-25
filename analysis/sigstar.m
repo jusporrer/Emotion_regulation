@@ -1,4 +1,4 @@
-function varargout=sigstar(groups,stats,nosort)
+function varargout=sigstar(groups,stats,nosort,range_input)
     % sigstar - Add significance stars to bar charts, boxplots, line charts, etc,
     %
     % H = sigstar(groups,stats,nsort)
@@ -89,8 +89,6 @@ function varargout=sigstar(groups,stats,nosort)
     end
 
 
-
-
     %Check the inputs are of the right sort
     if ~iscell(groups)
         error('groups must be a cell array')
@@ -103,10 +101,6 @@ function varargout=sigstar(groups,stats,nosort)
     if length(stats)~=length(groups)
         error('groups and stats must be the same length')
     end
-
-
-
-
 
 
     %Each member of the cell array groups may be one of three things:
@@ -155,8 +149,6 @@ function varargout=sigstar(groups,stats,nosort)
 
 
 
-
-
     %Optionally sort sig bars from shortest to longest so we plot the shorter ones first
     %in the loop below. Usually this will result in the neatest plot. If we waned to 
     %optimise the order the sig bars are plotted to produce the neatest plot, then this 
@@ -178,11 +170,17 @@ function varargout=sigstar(groups,stats,nosort)
     H=ones(length(groups),2); %The handles will be stored here
 
     y=ylim;
-    yd=myRange(y)*0.1; %separate sig bars vertically by 5% 
+    if range_input == 100
+        yd=myRange(y)*0.02;
+    elseif range_input == 1
+        yd=myRange(y)*0.2; %separate sig bars vertically by 5%
+    else 
+        yd=myRange(y)*0.5;
+    end
 
     for ii=1:length(groups)
         thisY=findMinY(xlocs(ii,:))+yd;
-        H(ii,:)=makeSignificanceBar(xlocs(ii,:),thisY,stats(ii));
+        H(ii,:)=makeSignificanceBar(xlocs(ii,:),thisY,stats(ii),range_input);
     end
     %-----------------------------------------------------
 
@@ -227,7 +225,7 @@ end %close sigstar
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Internal functions
 
-function H=makeSignificanceBar(x,y,p)
+function H=makeSignificanceBar(x,y,p,range_input)
     %makeSignificanceBar produces the bar and defines how many asterisks we get for a 
     %given p-value
 
@@ -251,17 +249,33 @@ function H=makeSignificanceBar(x,y,p)
 
     %Increase offset between line and text if we will print "n.s."
     %instead of a star. 
-    if ~isnan(p)
-        offset=0.005;
+    
+    if p<=1E-3 || p<=1E-2 || p<=0.05
+        if range_input == 100
+            offset=0.0009;
+        elseif range_input == 1
+            offset=0.009;
+        else
+            offset=0.009;
+        end
+        fontsize = 12;
     else
-        offset=0.02;
+        if range_input == 100
+            offset=0.008;
+        elseif range_input == 1
+            offset=0.08;
+        else
+            offset=0.08;
+        end
+        
+        fontsize = 8;
     end
 
     starY=mean(y)+myRange(ylim)*offset;
     H(2)=text(mean(x(:)),starY,stars,...
         'HorizontalAlignment','Center',...
         'BackGroundColor','none',...
-        'Tag','sigstar_stars');
+        'Tag','sigstar_stars', 'fontsize', fontsize);
 
     Y=ylim;
     if Y(2)<starY

@@ -2,7 +2,7 @@
 % in a RSVP Task
 % Creation : February 2020
 
-function [rsvp]    = Individual_Analysis_RSVP(ID, fig)
+function [rsvp]    = Individual_Analysis_RSVP_short(ID, fig)
 
 %ID              =  90255;
 %fig             = 1;
@@ -59,34 +59,42 @@ else
         num2str(cfg_exp.nTrialsExp * cfg_exp.nBlocksExp), 'trial expected']);
 end
 
-%% =================== Exclude 3 STD RTs                ===================
 
-rt                      = (rt(nTrial));
-mean_RtExp              = mean(rt) ;
-std_RtExp               = std(rt)*3 ;
+block_DC_smallRwd = unique(block(reward(nTrial) == 1 & (condition(nTrial) == 1 | condition(nTrial) == 2)));
+block_DC_largeRwd = unique(block(reward(nTrial) == 2 & (condition(nTrial) == 1 | condition(nTrial) == 2)));
+block_BC_smallRwd = unique(block(reward(nTrial) == 1 & (condition(nTrial) == 5 | condition(nTrial) == 6)));
+block_BC_largeRwd = unique(block(reward(nTrial) == 2 & (condition(nTrial) == 5 | condition(nTrial) == 6)));
+nTrialBlock = [nTrial(block == block_DC_smallRwd(1)), nTrial(block == block_DC_largeRwd(1)), ...
+    nTrial(block == block_BC_smallRwd(1)), nTrial(block == block_BC_largeRwd(1))];
 
-% Recalculate nTrial with only non-outlier RT trials
-low_RtExp               = mean_RtExp-std_RtExp ;
-up_RtExp                = mean_RtExp+std_RtExp ;
-
-kept_RtExp              = intersect(find(rt(nTrial) > low_RtExp), find(rt(nTrial) < up_RtExp));
-excl_RtExp              = [find(rt(nTrial) < low_RtExp) find(rt(nTrial) > up_RtExp)];
-
-rsvp.nExcTrial          = length(excl_RtExp); 
-
-if ID == 81477
-    kept_RtExp(31) = [];
-end 
-
-nTrial                  = nTrial(kept_RtExp);
+nTrial                  = sort(nTrialBlock);
 rsvp.rt                 = log(rt(nTrial)); 
 rt                      = log(rt(nTrial)); 
 block                   = block(nTrial);
 
-if length(nTrial) < length(trial)
-    disp(['RTs warning : ',num2str(length(excl_RtExp)), ...
-        ' trial(s) had to be excluded because the RTs were over or under 3 STD']);
-end
+%% =================== Exclude 3 STD RTs                ===================
+
+mean_RtExp              = mean(rt) ;
+std_RtExp               = std(rt)*3 ;
+
+% % Recalculate nTrial with only non-outlier RT trials
+% low_RtExp               = mean_RtExp-std_RtExp ;
+% up_RtExp                = mean_RtExp+std_RtExp ;
+% 
+% kept_RtExp              = intersect(find(rt(nTrial) > low_RtExp), find(rt(nTrial) < up_RtExp));
+% excl_RtExp              = [find(rt(nTrial) < low_RtExp) find(rt(nTrial) > up_RtExp)];
+% 
+% rsvp.nExcTrial          = length(excl_RtExp); 
+% 
+% if ID == 81477
+%     kept_RtExp(31) = [];
+% end 
+% 
+% if length(nTrial) < length(trial)
+%     disp(['RTs warning : ',num2str(length(excl_RtExp)), ...
+%         ' trial(s) had to be excluded because the RTs were over or under 3 STD']);
+% end
+
 
 %% =================== Performance - Correct Trials     ===================
 
@@ -750,7 +758,7 @@ if fig
     hold on
     p1 = plot(rsvp.DC_block, rsvp.LC_DC,'-x','linew',1.5);
     p1.Color = [.75 .45 .55];
-    p2 = plot(unique(block), rsvp.LC_CC,'-+','linew',1.5);
+    p2 = plot(1:length(rsvp.LC_CC), rsvp.LC_CC,'-+','linew',1.5);
     p2.Color = [.5 .5 .5];
     p3 = plot(rsvp.BC_block, rsvp.LC_BC,'-o','linew',1.5);
     p3.Color = [.40 .55 .40];
@@ -800,7 +808,7 @@ if fig
     hold on
     p1 = plot(rsvp.DC_block, rsvp.RTsC_DC,'-x','linew',1.5);
     p1.Color = [.75 .45 .55];
-    p2 = plot(unique(block), rsvp.RTsC_CC,'-o','linew',1.5);
+    p2 = plot(1:length(rsvp.RTsC_CC), rsvp.RTsC_CC,'-o','linew',1.5);
     p2.Color = [.50 .50 .50];
     p3 = plot(rsvp.BC_block, rsvp.RTsC_BC,'-+','linew',1.5);
     p3.Color = [.40 .55 .40];

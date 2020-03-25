@@ -11,7 +11,7 @@ subject_ID = [81473, 74239, 98197, 12346, 81477, 90255, 33222, 90255, 48680];
 for subj_idx = 1:length(subject_ID)
     disp(['=================== Subject ', ...
         num2str(subject_ID(subj_idx)), ' ===================' ]);
-    rsvpGRP(subj_idx) = Individual_Analysis_RSVP(subject_ID(subj_idx), false);
+    rsvpGRP(subj_idx) = Individual_Analysis_RSVP_short(subject_ID(subj_idx), false);
 end
 
 %% =================== General Information              ===================
@@ -23,10 +23,6 @@ rt                      = [rsvpGRP.rt];
 nS                      = length(subject_ID);
 disp(['Number of subjects: ',num2str(nS)]);
 
-nExcTrial               = mean([rsvpGRP.nExcTrial]);
-nExcTrial_sem           = std([rsvpGRP.nExcTrial])/sqrt(nS);
-
-disp(['Number of excluded trials : ',num2str(nExcTrial)]);
 
 %% =================== Performance - General            ===================
 disp('=================== Performance Information ===================');
@@ -53,11 +49,6 @@ disp(['Sdt : ', ...
     num2str(round(miss_rate)), '% miss rate & ', ...
     num2str(round(falseAlarm_rate)), '% false alarm ']) ;
 
-[h_correct_std, p_correct_std, ci_correct_std, stats_correct_std]           = ttest2([rsvpGRP.hit_rate], [rsvpGRP.reject_rate]);
-[h_incorrect_std, p_incorrect_std, ci_incorrect_std, stats_incorrect_std]   = ttest2([rsvpGRP.miss_rate], [rsvpGRP.falseAlarm_rate]);
-
-% Lag 
-
 perf_lag2               = [rsvpGRP.lag2_rate];
 perf_lag2_sem           = std([rsvpGRP.lag2_rate])/sqrt(nS);
 
@@ -65,35 +56,38 @@ perf_lag4               = [rsvpGRP.lag4_rate];
 perf_lag4_sem           = std([rsvpGRP.lag4_rate])/sqrt(nS);
 
 [h_lag,p_lag, ci_lag]   = ttest2(perf_lag2, perf_lag4); 
+if h_lag == 1 
+    disp(['The ttest rejects the null hypothesis that the performance between lag 2 and lag 4 has a mean equal to zero at ', ...
+        num2str(p_lag), ' of p-value with a CI [', num2str(ci_lag(1)),'-', num2str(ci_lag(2)),']']); 
+elseif  h_lag == 0 
+    disp(['The ttest does not reject the null hypothesis that the performance between lag 2 and lag 4 has a mean equal to zero at ', ...
+        num2str(p_lag), ' of p-value with a CI [', num2str(ci_lag(1)),'-', num2str(ci_lag(2)),']']); 
+end 
 
 disp(['Lag : ', ...
     num2str(round(mean(perf_lag2))), '% for lag 2 & ', ...
     num2str(round(mean(perf_lag4))), '% for lag 4 ']) ;
 
 %% =================== Performance - Rewards            ===================
-perf_smallRwd           = [rsvpGRP.smallRwd_rate];
-perf_smallRwd_sem       = std([rsvpGRP.smallRwd_rate])/sqrt(nS);
+smallRwd_rate           = [rsvpGRP.smallRwd_rate];
+smallRwd_rate_sem       = std([rsvpGRP.smallRwd_rate])/sqrt(nS);
 
-perf_largeRwd           = [rsvpGRP.largeRwd_rate];
-perf_largeRwd_sem       = std([rsvpGRP.largeRwd_rate])/sqrt(nS);
+largeRwd_rate           = [rsvpGRP.largeRwd_rate];
+largeRwd_rate_sem       = std([rsvpGRP.largeRwd_rate])/sqrt(nS);
 
-disp(['Reward : ',num2str(round(mean(perf_smallRwd))), '% for small rwd & ', ...
-    num2str(round(mean(perf_largeRwd))), '% for large rwd' ]);
-
-[h_perf_rwd, p_perf_rwd, ci_perf_rwd, stats_perf_rwd] = ttest2(perf_smallRwd, perf_largeRwd);
+disp(['Reward : ',num2str(round(mean(smallRwd_rate))), '% for small rwd & ', ...
+    num2str(round(mean(largeRwd_rate))), '% for large rwd' ]);
 
 %% =================== Performance - Genders            ===================
 
-perf_fem                =[rsvpGRP.perf_fem];
+perf_fem                = mean([rsvpGRP.perf_fem]);
 perf_fem_sem            = std([rsvpGRP.perf_fem]);
 
-perf_hom                = [rsvpGRP.perf_hom];
+perf_hom                = mean([rsvpGRP.perf_hom]);
 perf_hom_sem            = std([rsvpGRP.perf_hom]);
 
 disp(['Gender: ',num2str(round(perf_fem)), '% for condition femme & ', ...
     num2str(round(perf_hom)), '% for condition homme ']);
-
-[h_perf_gender, p_perf_gender, ci_perf_gender, stats_perf_gender] = ttest2(perf_fem, perf_hom);
 
 %% =================== Performance - Conditions         ===================
 
@@ -131,59 +125,35 @@ disp(['Emotion : ',num2str(round(mean(perf_DC))), '% for DC, ', ...
     num2str(round(mean(perf_CC))), '% for CC & ',...
     num2str(round(mean(perf_BC))), '% for BC']);
 
-perf_DC_smallRwd        = ([rsvpGRP.perf_DC_smallRwd]);
+perf_DC_smallRwd        = mean([rsvpGRP.perf_DC_smallRwd]);
 perf_DC_smallRwd_sem    = std([rsvpGRP.perf_DC_smallRwd])/sqrt(nS);
 
-perf_DC_largeRwd        = ([rsvpGRP.perf_DC_largeRwd]);
+perf_DC_largeRwd        = mean([rsvpGRP.perf_DC_largeRwd]);
 perf_DC_largeRwd_sem    = std([rsvpGRP.perf_DC_largeRwd])/sqrt(nS);
 
-[h_perf_DC_rwd, p_perf_DC_rwd, ci_perf_DC_rwd, stats_perf_DC_rwd] = ttest2(perf_DC_smallRwd, perf_DC_largeRwd);
-
-perf_CC_smallRwd        = ([rsvpGRP.perf_CC_smallRwd]);
+perf_CC_smallRwd        = mean([rsvpGRP.perf_CC_smallRwd]);
 perf_CC_smallRwd_sem    = std([rsvpGRP.perf_CC_smallRwd])/sqrt(nS);
 
-perf_CC_largeRwd        = ([rsvpGRP.perf_CC_largeRwd]);
+perf_CC_largeRwd        = mean([rsvpGRP.perf_CC_largeRwd]);
 perf_CC_largeRwd_sem    = std([rsvpGRP.perf_CC_largeRwd])/sqrt(nS);
 
-[h_perf_CC_rwd, p_perf_CC_rwd, ci_perf_CC_rwd, stats_perf_CC_rwd] = ttest2(perf_CC_smallRwd, perf_CC_largeRwd);
-
-perf_CC_DC_smallRwd     = ([rsvpGRP.perf_CC_DC_smallRwd]);
+perf_CC_DC_smallRwd     = mean([rsvpGRP.perf_CC_DC_smallRwd]);
 perf_CC_DC_smallRwd_sem = std([rsvpGRP.perf_CC_DC_smallRwd])/sqrt(nS);
 
-perf_CC_DC_largeRwd     = ([rsvpGRP.perf_CC_DC_largeRwd]);
+perf_CC_DC_largeRwd     = mean([rsvpGRP.perf_CC_DC_largeRwd]);
 perf_CC_DC_largeRwd_sem = std([rsvpGRP.perf_CC_DC_largeRwd])/sqrt(nS);
 
-[h_perf_CC_DC_rwd, p_perf_CC_DC_rwd, ci_perf_CC_DC_rwd, stats_perf_CC_DC_rwd] = ttest2(perf_CC_DC_smallRwd, perf_CC_DC_largeRwd);
-
-perf_CC_BC_smallRwd     = ([rsvpGRP.perf_CC_BC_smallRwd]);
+perf_CC_BC_smallRwd     = mean([rsvpGRP.perf_CC_BC_smallRwd]);
 perf_CC_BC_smallRwd_sem = std([rsvpGRP.perf_CC_BC_smallRwd])/sqrt(nS);
 
-perf_CC_BC_largeRwd     = ([rsvpGRP.perf_CC_BC_largeRwd]);
+perf_CC_BC_largeRwd     = mean([rsvpGRP.perf_CC_BC_largeRwd]);
 perf_CC_BC_largeRwd_sem = std([rsvpGRP.perf_CC_BC_largeRwd])/sqrt(nS);
 
-[h_perf_CC_BC_rwd, p_perf_CC_BC_rwd, ci_perf_CC_BC_rwd, stats_perf_CC_BC_rwd] = ttest2(perf_CC_BC_smallRwd, perf_CC_BC_largeRwd);
-
-perf_BC_smallRwd        = ([rsvpGRP.perf_BC_smallRwd]);
+perf_BC_smallRwd        = mean([rsvpGRP.perf_BC_smallRwd]);
 perf_BC_smallRwd_sem    = std([rsvpGRP.perf_BC_smallRwd])/sqrt(nS);
 
-perf_BC_largeRwd        = ([rsvpGRP.perf_BC_largeRwd]);
+perf_BC_largeRwd        = mean([rsvpGRP.perf_BC_largeRwd]);
 perf_BC_largeRwd_sem    = std([rsvpGRP.perf_BC_largeRwd])/sqrt(nS);
-
-[h_perf_BC_rwd, p_perf_BC_rwd, ci_perf_BC_rwd, stats_perf_BC_rwd] = ttest2(perf_BC_smallRwd, perf_BC_largeRwd);
-        
-% T-test 
-[h_perf_DC_CC, p_perf_DC_CC, ci_perf_DC_CC, stats_perf_DC_CC] = ttest2(perf_DC, perf_CC);
-[h_perf_DC_BC, p_perf_DC_BC, ci_perf_DC_BC, stats_perf_DC_BC] = ttest2(perf_DC, perf_BC);
-[h_perf_CC_BC, p_perf_CC_BC, ci_perf_CC_BC, stats_perf_CC_BC] = ttest2(perf_CC, perf_BC);
-
-[h_perf_DC_CC_smallRwd, p_perf_DC_CC_smallRwd, ci_perf_DC_CC_smallRwd, stats_perf_DC_CC_smallRwd] = ttest2(perf_DC_smallRwd, perf_CC_smallRwd);
-[h_perf_DC_BC_smallRwd, p_perf_DC_BC_smallRwd, ci_perf_DC_BC_smallRwd, stats_perf_DC_BC_smallRwd] = ttest2(perf_DC_smallRwd, perf_BC_smallRwd);
-[h_perf_CC_BC_smallRwd, p_perf_CC_BC_smallRwd, ci_perf_CC_BC_smallRwd, stats_perf_CC_BC_smallRwd] = ttest2(perf_CC, perf_BC);
-
-[h_perf_DC_CC_largeRwd, p_perf_DC_CC_largeRwd, ci_perf_DC_CC_largeRwd, stats_perf_DC_CC_largeRwd] = ttest2(perf_DC_largeRwd, perf_CC_largeRwd);
-[h_perf_DC_BC_largeRwd, p_perf_DC_BC_largeRwd, ci_perf_DC_BC_largeRwd, stats_perf_DC_BC_largeRwd] = ttest2(perf_DC_largeRwd, perf_BC_largeRwd);
-[h_perf_CC_BC_largeRwd, p_perf_CC_BC_largeRwd, ci_perf_CC_BC_largeRwd, stats_perf_CC_BC_largeRwd] = ttest2(perf_CC_largeRwd, perf_BC_largeRwd);
-
 
 %% =================== RTs - General                    ===================
 
@@ -226,10 +196,6 @@ disp(['Large reward : ', ...
     num2str(mean(rt_largeRwd)), ' s (', ...
     num2str(mean(rt_largeRwd_correct)), ' s for correct & ', ...
     num2str(mean(rt_largeRwd_incorrect)), ' s for incorrect)']);
-
-% T-test 
-
-[h_rt_rwd, p_rt_rwd, ci_rt_rwd, stats_rwd] = ttest2(rt_smallRwd, rt_largeRwd);
 
 %% =================== RTs - Genders                    ===================
 
@@ -274,35 +240,19 @@ disp(['BC : ', ...
     num2str(nanmean(rt_BC_correct)), ' s for correct & ', ...
     num2str(nanmean(rt_BC_incorrect)), ' s for incorrect)']);
 
-% T-test 
-[h_rt_DC_CC, p_rt_DC_CC, ci_rt_DC_CC, stats_rt_DC_CC] = ttest2(rt_DC, rt_CC);
-[h_rt_DC_BC, p_rt_DC_BC, ci_rt_DC_BC, stats_rt_DC_BC] = ttest2(rt_DC, rt_BC);
-[h_rt_CC_BC, p_rt_CC_BC, ci_rt_CC_BC, stats_rt_CC_BC] = ttest2(rt_CC, rt_BC);
-
-[h_rt_DC_correct, p_rt_DC_correct, ci_rt_DC_correct, stats_DC_correct] = ttest2(rt_DC_correct, rt_DC_incorrect);
-[h_rt_CC_correct, p_rt_CC_correct, ci_rt_CC_correct, stats_CC_correct] = ttest2(rt_CC_correct, rt_CC_incorrect);
-[h_rt_BC_correct, p_rt_BC_correct, ci_rt_BC_correct, stats_BC_correct] = ttest2(rt_BC_correct, rt_BC_incorrect);
-
-[h_rt_DC_CC_diff, p_rt_DC_CC_diff, ci_rt_DC_CC_diff, stats_rt_DC_CC_diff] = ttest2(rt_DC_diff, rt_CC_diff);
-[h_rt_DC_BC_diff, p_rt_DC_BC_diff, ci_rt_DC_BC_diff, stats_rt_DC_BC_diff] = ttest2(rt_DC_diff, rt_BC_diff);
-[h_rt_CC_BC_diff, p_rt_CC_BC_diff, ci_rt_CC_BC_diff, stats_rt_CC_BC_diff] = ttest2(rt_CC_diff, rt_BC_diff);
-
 %% =================== RTs - Conditions & Reward        ===================
 
 rt_DC_smallRwd          = [rsvpGRP.rt_DC_smallRwd];
+
 rt_DC_largeRwd          = [rsvpGRP.rt_DC_largeRwd];
 
-[h_rt_DC_rwd, p_rt_DC_rwd, ci_rt_DC_rwd, stats_rt_DC_rwd] = ttest2(rt_DC_smallRwd, rt_DC_largeRwd);
-
 rt_CC_smallRwd          = [rsvpGRP.rt_CC_smallRwd];
+
 rt_CC_largeRwd          = [rsvpGRP.rt_CC_largeRwd];
 
-[h_rt_CC_rwd, p_rt_CC_rwd, ci_rt_CC_rwd, stats_rt_CC_rwd] = ttest2(rt_CC_smallRwd, rt_CC_largeRwd);
-
 rt_BC_smallRwd          = [rsvpGRP.rt_BC_smallRwd];
-rt_BC_largeRwd          = [rsvpGRP.rt_BC_largeRwd];
 
-[h_rt_BC_rwd, p_rt_BC_rwd, ci_rt_BC_rwd, stats_rt_BC_rwd] = ttest2(rt_BC_smallRwd, rt_BC_largeRwd);
+rt_BC_largeRwd          = [rsvpGRP.rt_BC_largeRwd];
 
 disp(['Small Reward : ',...
     num2str(nanmean(rt_DC_smallRwd)), ' s for DC, ', ...
@@ -314,7 +264,7 @@ disp(['Large Reward : ',...
     num2str(nanmean(rt_CC_largeRwd)), ' s for CC & ', ...
     num2str(nanmean(rt_BC_largeRwd)), ' s for BC ']);
 
-%% =================== Learning & RTs Curves            ===================
+%% =================== Learning Curves                  ===================
 
 LC                      = zeros(subj_idx,12);
 LC_smallRwd             = zeros(subj_idx,6);
@@ -330,11 +280,6 @@ RTsC_DC                 = zeros(subj_idx,6);
 RTsC_BC                 = zeros(subj_idx,6);
 RTsC_CC                 = zeros(subj_idx,6);
 
-rt_slow_perf            = [rsvpGRP.rt_slow_perf];
-rt_fast_perf            = [rsvpGRP.rt_fast_perf];
-
-[h_rt_perf, p_rt_perf, ci_rt_perf, stats_rt_perf] = ttest2(rt_slow_perf, rt_fast_perf);
-
 for subj_idx = 1:length(subject_ID)
     
     for block = 1:12
@@ -345,7 +290,7 @@ for subj_idx = 1:length(subject_ID)
 
     end
     
-    for blockCondi = 1:6
+    for blockCondi = 1:2
         LC_smallRwd(subj_idx,blockCondi)  = rsvpGRP(subj_idx).LC_smallRwd(blockCondi);
         LC_largeRwd(subj_idx,blockCondi)  = rsvpGRP(subj_idx).LC_largeRwd(blockCondi);
         LC_DC(subj_idx,blockCondi)        = rsvpGRP(subj_idx).LC_DC(blockCondi);
@@ -378,13 +323,12 @@ errorbar((2-.8/3), mean(perf_CC_DC), perf_CC_DC_sem, 'k.','LineWidth',.8);
 errorbar((2), mean(perf_CC), perf_CC_sem, 'k.','LineWidth',.8);
 errorbar((2+.8/3), mean(perf_CC_BC), perf_CC_BC_sem, 'k.','LineWidth',.8);
 errorbar(3, mean(perf_BC), perf_BC_sem, 'k.','LineWidth',1);
-sigstar({[1,2],[1,3],[2,3]},[p_perf_DC_CC, p_perf_DC_BC, p_perf_CC_BC], 0, 100);
 xticks([1 2 3])
 xticklabels({'DC','CC','BC'})
 legend([b1 b2 b3],{'CC (DC)','CC', 'CC (BC)'},'fontsize', 6, 'location','northeast')
 ylabel('Performance','fontsize', 10)
 title('Performance According to Conditions','fontsize', 10)
-axis([0 4 70 110])
+axis([0 4 70 100])
 grid minor
 box on
 hold off
@@ -404,7 +348,7 @@ xticklabels({'DC','CC','BC'})
 ylabel('Performance','fontsize', 10)
 legend({'Hit', 'Reject', 'FA', 'Miss'},'fontsize', 6 , 'Location', 'southeast')
 title('STD Performance According to Conditions','fontsize', 10)
-axis([1 5 0 110])
+axis([1 5 0 105])
 grid minor
 box on
 hold off
@@ -413,7 +357,7 @@ hold off
 % Performance par rewards
 subplot(2,3,3)
 hold on;
-rwd_plotY = [perf_smallRwd.', perf_largeRwd.'];
+rwd_plotY = [smallRwd_rate.', largeRwd_rate.'];
 rwd_plotX = [1, 2];
 rwd_plot_color = {[.00, .45, .55], [.45, .75, .80]};
 B = boxplot(rwd_plotY, rwd_plotX,'Widths',.7);
@@ -425,13 +369,12 @@ h = findobj(gca,'Tag','Box');
  for j=1:length(h)
     patch(get(h(j),'XData'),get(h(j),'YData'),rwd_plot_color{j},'FaceAlpha',.7);
  end
-sigstar({[1,2]},p_perf_rwd, 0, 1);
 xticks([1 2])
 legend({'Mean'}, 'Location', 'southeast')
 xticklabels({'Small Rwd','Large Rwd'})
 ylabel('Performance','fontsize', 10)
 title('Performance According to Reward Size','fontsize', 10)
-axis([0 3 70 110])
+axis([0 3 70 100])
 grid minor
 box on
 hold off
@@ -439,67 +382,63 @@ hold off
 % Performance par conditions & rewards
 subplot(2,2,3)
 hold on;
-bar(1, mean(perf_DC_smallRwd),'FaceColor',[0.65 0.35 0.45], 'BarWidth',.5)
-bar(1.5-.5/3, mean(perf_CC_DC_smallRwd),'FaceColor',[0.95 0.85 0.85], 'BarWidth',.5/3)
-bar(1.5, mean(perf_CC_smallRwd),'FaceColor',[0.85 0.85 0.85], 'BarWidth',.5/3)
-bar(1.5+.5/3, mean(perf_CC_BC_smallRwd),'FaceColor',[0.85 0.95 0.85], 'BarWidth',.5/3)
-bar(2, mean(perf_BC_smallRwd),'FaceColor',[0.50 0.65 0.50], 'BarWidth',.5)
+bar(1, perf_DC_smallRwd,'FaceColor',[0.65 0.35 0.45], 'BarWidth',.5)
+bar(1.5-.5/3, perf_CC_DC_smallRwd,'FaceColor',[0.95 0.85 0.85], 'BarWidth',.5/3)
+bar(1.5, perf_CC_smallRwd,'FaceColor',[0.85 0.85 0.85], 'BarWidth',.5/3)
+bar(1.5+.5/3, perf_CC_BC_smallRwd,'FaceColor',[0.85 0.95 0.85], 'BarWidth',.5/3)
+bar(2, perf_BC_smallRwd,'FaceColor',[0.50 0.65 0.50], 'BarWidth',.5)
 
-bar(3, mean(perf_DC_largeRwd),'FaceColor',[0.45 0.15 0.25], 'BarWidth',.5)
-bar(3.5-.5/3, mean(perf_CC_DC_largeRwd),'FaceColor',[0.75 0.65 0.65], 'BarWidth',.5/3)
-bar(3.5, mean(perf_CC_largeRwd),'FaceColor',[0.65 0.65 0.65], 'BarWidth',.5/3)
-bar(3.5+.5/3, mean(perf_CC_BC_largeRwd),'FaceColor',[0.65 0.75 0.65], 'BarWidth',.5/3)
-bar(4, mean(perf_BC_largeRwd),'FaceColor',[0.30 0.45 0.30], 'BarWidth',.5)
+bar(3, perf_DC_largeRwd,'FaceColor',[0.45 0.15 0.25], 'BarWidth',.5)
+bar(3.5-.5/3, perf_CC_DC_largeRwd,'FaceColor',[0.75 0.65 0.65], 'BarWidth',.5/3)
+bar(3.5, perf_CC_largeRwd,'FaceColor',[0.65 0.65 0.65], 'BarWidth',.5/3)
+bar(3.5+.5/3, perf_CC_BC_largeRwd,'FaceColor',[0.65 0.75 0.65], 'BarWidth',.5/3)
+bar(4, perf_BC_largeRwd,'FaceColor',[0.30 0.45 0.30], 'BarWidth',.5)
 
-errorbar(1, mean(perf_DC_smallRwd), perf_DC_smallRwd_sem, 'k.','LineWidth',1)
-errorbar(1.5-.5/3, mean(perf_CC_DC_smallRwd), perf_CC_DC_smallRwd_sem, 'k.','LineWidth',.8)
-errorbar(1.5, mean(perf_CC_smallRwd), perf_CC_smallRwd_sem, 'k.','LineWidth',.8)
-errorbar(1.5+.5/3, mean(perf_CC_BC_smallRwd), perf_CC_BC_smallRwd_sem, 'k.','LineWidth',.8)
-errorbar(2, mean(perf_BC_smallRwd), perf_BC_smallRwd_sem, 'k.','LineWidth',1)
+errorbar(1, perf_DC_smallRwd, perf_DC_smallRwd_sem, 'k.','LineWidth',1)
+errorbar(1.5-.5/3, perf_CC_DC_smallRwd, perf_CC_DC_smallRwd_sem, 'k.','LineWidth',.8)
+errorbar(1.5, perf_CC_smallRwd, perf_CC_smallRwd_sem, 'k.','LineWidth',.8)
+errorbar(1.5+.5/3, perf_CC_BC_smallRwd, perf_CC_BC_smallRwd_sem, 'k.','LineWidth',.8)
+errorbar(2, perf_BC_smallRwd, perf_BC_smallRwd_sem, 'k.','LineWidth',1)
 
-errorbar(3, mean(perf_DC_largeRwd), perf_DC_largeRwd_sem, 'k.','LineWidth',1)
-errorbar(3.5-.5/3, mean(perf_CC_DC_largeRwd), perf_CC_DC_largeRwd_sem, 'k.','LineWidth',.8)
-errorbar(3.5, mean(perf_CC_largeRwd), perf_CC_largeRwd_sem, 'k.','LineWidth',.8)
-errorbar(3.5+.5/3, mean(perf_CC_BC_largeRwd), perf_CC_BC_largeRwd_sem, 'k.','LineWidth',.8)
-errorbar(4, mean(perf_BC_largeRwd), perf_BC_largeRwd_sem, 'k.','LineWidth',1)
-
-sigstar({[1,1.5],[1,2],[1.5,2]},[p_perf_DC_CC_smallRwd, p_perf_DC_BC_smallRwd, p_perf_CC_BC_smallRwd], 0, 100);
-sigstar({[3,3.5],[3,4],[3.5,4]},[p_perf_DC_CC_largeRwd, p_perf_DC_BC_largeRwd, p_perf_CC_BC_largeRwd], 0, 100);
+errorbar(3, perf_DC_largeRwd, perf_DC_largeRwd_sem, 'k.','LineWidth',1)
+errorbar(3.5-.5/3, perf_CC_DC_largeRwd, perf_CC_DC_largeRwd_sem, 'k.','LineWidth',.8)
+errorbar(3.5, perf_CC_largeRwd, perf_CC_largeRwd_sem, 'k.','LineWidth',.8)
+errorbar(3.5+.5/3, perf_CC_BC_largeRwd, perf_CC_BC_largeRwd_sem, 'k.','LineWidth',.8)
+errorbar(4, perf_BC_largeRwd, perf_BC_largeRwd_sem, 'k.','LineWidth',1)
 
 xticks([1.5 3.5])
 xticklabels({'Small Rwd', 'Large Rwd'})
 legend({'DC','CC (DC)','CC', 'CC (BC)', 'BC'}, 'fontsize', 6 , 'Location', 'northeast')
 ylabel('Performance','fontsize', 10)
 title('Performance According to Rewards and Conditions','fontsize', 10)
-axis([0 5 70 110])
+axis([0 5 70 100])
 grid minor
 box on
 hold off
 
 subplot(2,2,4)
 hold on;
-p2 = plot(1:3,[mean(perf_DC_largeRwd), mean(perf_CC_largeRwd), mean(perf_BC_largeRwd)], 'linewidth',2.3);
+p2 = plot(1:3,[perf_DC_largeRwd, perf_CC_largeRwd,perf_BC_largeRwd], 'linewidth',2.3);
 p2.Color = [.00, .45, .55];
-p1 = plot(1:3,[mean(perf_DC_smallRwd), mean(perf_CC_smallRwd), mean(perf_BC_smallRwd)], 'linewidth',2.3);
+p1 = plot(1:3,[perf_DC_smallRwd, perf_CC_smallRwd,perf_BC_smallRwd], 'linewidth',2.3);
 p1.Color = [.45, .75, .80];
-shadedErrorBar(1:3, [mean(perf_DC_largeRwd), mean(perf_CC_largeRwd), mean(perf_BC_largeRwd)], ...
+shadedErrorBar(1:3, [perf_DC_largeRwd, perf_CC_largeRwd,perf_BC_largeRwd], ...
     [perf_DC_largeRwd_sem, perf_CC_largeRwd_sem, perf_BC_largeRwd_sem],'lineprops',{'Color',[.00, .45, .55]},'patchSaturation',.2);
-e2 = errorbar(1:3,[mean(perf_DC_largeRwd), mean(perf_CC_largeRwd), mean(perf_BC_largeRwd)], ...
+e2 = errorbar(1:3,[perf_DC_largeRwd, perf_CC_largeRwd,perf_BC_largeRwd], ...
     [perf_DC_largeRwd_sem, perf_CC_largeRwd_sem, perf_BC_largeRwd_sem], 'k.','LineWidth',.9);
 e2.Color = [.00, .45, .55];
-shadedErrorBar(1:3,[mean(perf_DC_smallRwd), mean(perf_CC_smallRwd), mean(perf_BC_smallRwd)], ...
+shadedErrorBar(1:3,[perf_DC_smallRwd, perf_CC_smallRwd,perf_BC_smallRwd], ...
     [perf_DC_smallRwd_sem, perf_CC_smallRwd_sem,perf_BC_smallRwd_sem],'lineprops',{'Color',[.45, .75, .80]},'patchSaturation',.2);
-e1 = errorbar(1:3,[mean(perf_DC_smallRwd), mean(perf_CC_smallRwd), mean(perf_BC_smallRwd)], ...
+e1 = errorbar(1:3,[perf_DC_smallRwd, perf_CC_smallRwd,perf_BC_smallRwd], ...
     [perf_DC_smallRwd_sem, perf_CC_smallRwd_sem,perf_BC_smallRwd_sem], 'k.','LineWidth',.9);
 e1.Color = [.45, .75, .80];
 line([0,5], [0,0], 'color','k','LineStyle',':','LineWidth',.8)
-sigstar({[.8,1.2],[1.8,2.2],[2.8,3.2]},[p_perf_DC_rwd, p_perf_CC_rwd, p_perf_BC_rwd], 0, 100);
 xticks([1 2 3])
 legend({'Large Rwd','Small Rwd'}, 'Location', 'southeast')
 xticklabels({'DC','CC','BC '})
 ylabel('Performance (mean +/- SEM)','fontsize', 10)
 title('Performance According to Reward and Conditions','fontsize', 10)
-axis([0 4 70 110])
+axis([0 4 70 100])
 grid minor
 box on
 hold off
@@ -507,10 +446,10 @@ hold off
 %% RTs Plots
 figure('Name', 'RSVP RTs Plots');
 subplot(2,3,1)
-histogram(rt,'FaceColor',[.44, .24, .38], 'EdgeColor', [.5 .5 .5])
+histogram(rt,'FaceColor',[.5, .5, .5], 'EdgeColor', [.5 .5 .5])
 xlabel('log(RTs) (mean +/- SEM)','fontsize', 10)
 ylabel('Number of Trials','fontsize', 10)
-title('Fig1. Distribution of RSVP Reaction Times','fontsize', 10)
+title('Distribution of RSVP Reaction Times','fontsize', 10)
 if h_RT == 0
     text(-3,75,['The distribution is normal at p = ', num2str(round(p_RT,3))],'fontsize', 8)
 elseif h_RT == 1
@@ -529,11 +468,10 @@ bar([0 0 nanmean(rt_BC)],'FaceColor',[0.40 0.55 0.40]);
 errorbar(1, nanmean(rt_DC), nanstd(rt_DC)/sqrt(nS), 'k.','LineWidth',1)
 errorbar(2, nanmean(rt_CC), nanstd(rt_CC)/sqrt(nS), 'k.','LineWidth',1)
 errorbar(3, nanmean(rt_BC), nanstd(rt_BC)/sqrt(nS), 'k.','LineWidth',1)
-sigstar({[1,2],[1,3],[2,3]},[p_rt_DC_CC, p_rt_DC_BC, p_rt_CC_BC], 0, 1);
 xticks([1 2 3 4])
 xticklabels({'DC','CC', 'BC'})
 ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
-title('Fig2. RTs According to Conditions','fontsize', 10)
+title('RTs According to Conditions','fontsize', 10)
 axis([0 4 -.8 .8])
 grid minor
 box on
@@ -546,11 +484,10 @@ bar([nanmean(rt_smallRwd) 0],'FaceColor',[.45, .75, .80]);
 bar([0 nanmean(rt_largeRwd)],'FaceColor',[.00, .45, .55]);
 errorbar(1, nanmean(rt_smallRwd), nanstd(rt_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
 errorbar(2, nanmean(rt_largeRwd), nanstd(rt_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
-sigstar({[1,2]},p_rt_rwd, 0, 1);
 xticks([1 2])
 xticklabels({'Small Rwd','Large Rwd'})
 ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
-title( 'Fig3. RTs According to Reward Size','fontsize', 10)
+title('RTs According to Reward Size','fontsize', 10)
 axis([0 3 -.8 .8])
 grid minor
 box on
@@ -572,190 +509,160 @@ shadedErrorBar(1:3,[nanmean(rt_DC_smallRwd), nanmean(rt_CC_smallRwd),nanmean(rt_
 e1 = errorbar(1:3,[nanmean(rt_DC_smallRwd), nanmean(rt_CC_smallRwd),nanmean(rt_BC_smallRwd)], ...
     [nanstd(rt_DC_smallRwd)/sqrt(nS), nanstd(rt_CC_smallRwd)/sqrt(nS),nanstd(rt_BC_smallRwd)/sqrt(nS)], 'k.','LineWidth',.9);
 e1.Color = [.45, .75, .80];
-sigstar({[.8,1.2],[1.8,2.2],[2.8,3.2]},[p_rt_DC_rwd, p_rt_CC_rwd, p_rt_BC_rwd], 0, 1);
 line([0,5], [0,0], 'color','k','LineStyle',':','LineWidth',.8)
 xticks([1 2 3])
-legend({'Large Rwd','Small Rwd'}, 'Location', 'northeast')
+legend({'Large Rwd','Small Rwd'}, 'Location', 'southeast')
 xticklabels({'DC','CC','BC '})
 ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
-title('Fig4. RTs According to Reward and Conditions','fontsize', 10)
+title('RTs According to Reward and Conditions','fontsize', 10)
 axis([0 4 -1 1])
 grid minor
 box on
 hold off
 
-% RTs par conditions & correct 
+% RTs par conditions & rewards
 subplot(2,2,4)
 hold on;
 
-p1 = plot(1:3,[mean(rt_DC_correct), mean(rt_CC_correct), mean(rt_BC_correct)], 'linewidth',2.3);
+p1 = plot(1:3,[nanmean(rt_DC_correct), nanmean(rt_CC_correct), nanmean(rt_BC_correct)], 'linewidth',2.3);
 p1.Color = [.2 .5 .2];
-p2 = plot(1:3,[mean(rt_DC_incorrect), mean(rt_CC_incorrect), mean(rt_BC_incorrect)], 'linewidth',2.3);
+p2 = plot(1:3,[nanmean(rt_DC_incorrect), nanmean(rt_CC_incorrect), nanmean(rt_BC_incorrect)], 'linewidth',2.3);
 p2.Color = [.8 .3 .3];
 line([0,5], [0,0], 'color','k','LineStyle',':','LineWidth',.8)
-shadedErrorBar(1:3,[mean(rt_DC_correct), mean(rt_CC_correct), mean(rt_BC_correct)], ...
-    [(std(rt_DC_correct)/sqrt(nS)), (nanstd(rt_CC_correct)/sqrt(nS)), (std(rt_BC_correct)/sqrt(nS))],'lineprops',{'Color',[.2 .5 .2]},'patchSaturation',.2);
-e1 = errorbar(1:3,[mean(rt_DC_correct), mean(rt_CC_correct), mean(rt_BC_correct)], ...
-    [(std(rt_DC_correct)/sqrt(nS)), (std(rt_CC_correct)/sqrt(nS)), (std(rt_BC_correct)/sqrt(nS))], 'k.','LineWidth',.9);
+shadedErrorBar(1:3,[nanmean(rt_DC_correct), nanmean(rt_CC_correct), nanmean(rt_BC_correct)], ...
+    [(nanstd(rt_DC_correct)/sqrt(nS)), (nanstd(rt_CC_correct)/sqrt(nS)), (nanstd(rt_BC_correct)/sqrt(nS))],'lineprops',{'Color',[.2 .5 .2]},'patchSaturation',.2);
+e1 = errorbar(1:3,[nanmean(rt_DC_correct), nanmean(rt_CC_correct), nanmean(rt_BC_correct)], ...
+    [(nanstd(rt_DC_correct)/sqrt(nS)), (nanstd(rt_CC_correct)/sqrt(nS)), (nanstd(rt_BC_correct)/sqrt(nS))], 'k.','LineWidth',.9);
 e1.Color = [.2 .5 .2];
 shadedErrorBar(1:3, [nanmean(rt_DC_incorrect), nanmean(rt_CC_incorrect), nanmean(rt_BC_incorrect)], ...
     [(nanstd(rt_DC_incorrect)/sqrt(nS)), (nanstd(rt_CC_incorrect)/sqrt(nS)), (nanstd(rt_BC_incorrect)/sqrt(nS))],'lineprops',{'Color',[.8 .3 .3]},'patchSaturation',.2);
 e2 = errorbar(1:3,[nanmean(rt_DC_incorrect), nanmean(rt_CC_incorrect), nanmean(rt_BC_incorrect)], ...
     [(nanstd(rt_DC_incorrect)/sqrt(nS)), (nanstd(rt_CC_incorrect)/sqrt(nS)), (nanstd(rt_BC_incorrect)/sqrt(nS))], 'k.','LineWidth',.9);
 e2.Color = [.8 .3 .3];
-sigstar({[.8,1.2],[1.8,2.2],[2.8,3.2]},[p_rt_DC_correct, p_rt_CC_correct, p_rt_BC_correct], 0, 1);
 xticks([1 2 3])
 xticklabels({'DC','CC',' BC'})
 ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
-title('Fig5. RTs for Correct and Incorrect Trials in fct of Conditions','fontsize', 10)
-legend({'Correct','Incorrect'}, 'Location', 'northeast')
+title('RTs for Correct and Incorrect Trials in Function of Conditions','fontsize', 10)
+legend({'Correct','Incorrect'}, 'Location', 'southeast')
 axis([0 4 -.8 .8])
 grid minor
 box on
 hold off
 
-fig = false; 
-if fig
-    
-    %% Learning Curves Plots
-    figure('Name', 'RSVP Learning Curve Plots');
-    
-    subplot(2,1,1)
-    p = plot(1:length(LC), mean(LC),'linew',1.5);
-    p.Color = [.0, .0, .0];
-    shadedErrorBar(1:length(LC),mean(LC),(std(LC)/sqrt(nS)),'lineprops',{'Color',[.0, .0, .0]},'patchSaturation',.4);
-    %line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
-    ylabel('Performance (mean +/- SEM)','fontsize', 10)
-    xlabel('Number of Blocks','fontsize', 10)
-    xticks(1:(length(LC)))
-    xticklabels(1:12)
-    title('Learning Curve RSVP Experiment','fontsize', 10)
-    axis([0 (length(LC)+1) 70 100])
-    grid minor
-    box on
-    
-    subplot(2,2,3)
-    hold on
-    p2 = plot(1:6, mean(LC_largeRwd),'-o','linew',1.5);
-    p2.Color = [.00, .45, .55];
-    p1 = plot(1:6, mean(LC_smallRwd),'-x','linew',1.5);
-    p1.Color = [.45, .75, .80];
-    shadedErrorBar(1:6,mean(LC_largeRwd),(std(LC_largeRwd)/sqrt(nS)),'lineprops',{'Color',[.00, .45, .55]},'patchSaturation',.3);
-    shadedErrorBar(1:6,mean(LC_smallRwd),(std(LC_smallRwd)/sqrt(nS)),'lineprops',{'Color',[.45, .75, .80]},'patchSaturation',.4);
-    %line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
-    legend({'Large Rwd','Small Rwd'}, 'Location', 'southeast')
-    ylabel('Performance (mean +/- SEM)','fontsize', 10)
-    xlabel('Number of Blocks','fontsize', 10)
-    xticks(1:6); xticklabels(1:6)
-    title('Learning Curve for Small and Large Rewards','fontsize', 10)
-    axis([0 7 70 100])
-    hold off
-    grid minor
-    box on
-    
-    subplot(2,2,4)
-    hold on
-    p1 = plot(1:6, mean(LC_DC),'-x','linew',1.5);
-    p1.Color = [.75 .45 .55];
-    p2 = plot(1:6, mean(LC_CC),'-+','linew',1.5); %1:.5:6.5
-    p2.Color = [.50 .50 .50];
-    p3 = plot(1:6, mean(LC_BC),'-o','linew',1.5);
-    p3.Color = [.40 .55 .40];
-    shadedErrorBar(1:6,mean(LC_DC),(std(LC_DC)/sqrt(nS)),'lineprops',{'Color',[.75 .45 .55]},'patchSaturation',.4);
-    shadedErrorBar(1:6,mean(LC_CC),(std(LC_CC)/sqrt(nS)),'lineprops',{'Color',[.50 .50 .50]},'patchSaturation',.4);
-    shadedErrorBar(1:6,mean(LC_BC),(std(LC_BC)/sqrt(nS)),'lineprops',{'Color',[.40 .55 .40]},'patchSaturation',.4);
-    %line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
-    legend({'DC','CC','BC'}, 'Location', 'southeast')
-    ylabel('Performance (mean +/- SEM)','fontsize', 10)
-    xlabel('Number of Blocks','fontsize', 10)
-    xticks(1:6); xticklabels(1:6)
-    title('Learning Curve for Each Conditions','fontsize', 10)
-    axis([0 7 70 100])
-    hold off
-    grid minor
-    box on
-    
-    %% RTs Curves Plots
-    figure('Name', 'RSVP RTs Curve Plots');
-    subplot(2,3,1)
-    hold on;
-    rt_plotY = [rt_slow_perf.', rt_fast_perf.'];
-    rt_plotX = [1, 2];
-    rt_plot_color = {[.44, .24, .38], [.69, .56, .65]};
-    B = boxplot(rt_plotY, rt_plotX,'Widths',.7);
-    get (B, 'tag');
-    set(B(1,:), 'color', 'k'); set(B(2,:), 'color', 'k');
-    set(B(6,:), 'color', 'k', 'linewidth', 2);
-    scatter(rt_plotX,mean(rt_plotY),'k','filled','d')
-    h = findobj(gca,'Tag','Box');
-    for j=1:length(h)
-        patch(get(h(j),'XData'),get(h(j),'YData'),rt_plot_color{j},'FaceAlpha',.7);
-    end
-    sigstar({[1,2]},p_rt_perf, 0, 1);
-    xticks([1 2])
-    legend({'Mean'}, 'Location', 'southeast')
-    xticklabels({'Slow RTs','Fast RTs'}) %(> or < median(log(rt))
-    ylabel('Performance','fontsize', 10)
-    title('Performance According to Slow and Fast Response','fontsize', 10)
-    axis([0 3 60 110])
-    grid minor
-    box on
-    hold off
-    
-    
-    subplot(2,3,2:3)
-    p = plot(1:length(RTsC), smooth(mean(RTsC)),'linew',1.5);
-    p.Color = [.44, .24, .38];
-    shadedErrorBar(1:length(RTsC), smooth(mean(RTsC)),(std(RTsC)/sqrt(nS)),'lineprops',{'Color',[.44, .24, .38]},'patchSaturation',.4);
-    line([-15,15], [0,0],'color','k','LineStyle','--','LineWidth',.7)
-    ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
-    xlabel('Number of Blocks','fontsize', 10)
-    xticks(1:(length(RTsC)))
-    xticklabels(1:12)
-    title('RTs Curve RSVP Experiment','fontsize', 10)
-    axis([0 (length(RTsC)+1) -1 0])
-    grid minor
-    box on
-    
-    subplot(2,2,3)
-    hold on
-    p2 = plot(1:6, mean(RTsC_largeRwd),'-o','linew',1.5);
-    p2.Color = [.00, .45, .55];
-    p1 = plot(1:6, mean(RTsC_smallRwd),'-x','linew',1.5);
-    p1.Color = [.45, .75, .80];
-    shadedErrorBar(1:6,mean(RTsC_largeRwd),(std(RTsC_largeRwd)/sqrt(nS)),'lineprops',{'Color',[.00, .45, .55]},'patchSaturation',.3);
-    shadedErrorBar(1:6,mean(RTsC_smallRwd),(std(RTsC_smallRwd)/sqrt(nS)),'lineprops',{'Color',[.45, .75, .80]},'patchSaturation',.4);
-    line([-15,15], [0,0],'color','k','LineStyle','--','LineWidth',.7)
-    legend({'Large Rwd','Small Rwd'}, 'Location', 'southeast')
-    ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
-    xlabel('Number of Blocks','fontsize', 10)
-    xticks(1:6); xticklabels(1:6)
-    title('RTs Curve for Small and Large Rewards','fontsize', 10)
-    axis([0 7 -1 0])
-    hold off
-    grid minor
-    box on
-    
-    subplot(2,2,4)
-    hold on
-    p1 = plot(1:6, mean(RTsC_DC),'-x','linew',1.5);
-    p1.Color = [.75 .45 .55];
-    p2 = plot(1:6, mean(RTsC_CC),'-+','linew',1.5); %1:.5:6.5 if 12 blocks
-    p2.Color = [.50 .50 .50];
-    p3 = plot(1:6, mean(RTsC_BC),'-o','linew',1.5);
-    p3.Color = [.40 .55 .40];
-    shadedErrorBar(1:6,mean(RTsC_DC),(std(RTsC_DC)/sqrt(nS)),'lineprops',{'Color',[.75 .45 .55]},'patchSaturation',.4);
-    shadedErrorBar(1:6,mean(RTsC_CC),(std(RTsC_CC)/sqrt(nS)),'lineprops',{'Color',[.50 .50 .50]},'patchSaturation',.4);
-    shadedErrorBar(1:6,mean(RTsC_BC),(std(RTsC_BC)/sqrt(nS)),'lineprops',{'Color',[.40 .55 .40]},'patchSaturation',.4);
-    line([-15,15], [0,0],'color','k','LineStyle','--','LineWidth',.7)
-    legend({'DC','CC','BC'}, 'Location', 'southeast')
-    ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
-    xlabel('Number of Blocks','fontsize', 10)
-    xticks(1:6); xticklabels(1:6)
-    title('RTs Curve for Each Conditions','fontsize', 10)
-    axis([0 7 -1 0])
-    hold off
-    grid minor
-    box on
-    
-end
+
+%% Learning Curves Plots
+figure('Name', 'RSVP Learning Curve Plots');
+
+subplot(2,1,1)
+p = plot(1:length(LC), mean(LC),'linew',1.5);
+p.Color = [0 0 0];
+shadedErrorBar(1:length(LC),mean(LC),(std(LC)/sqrt(nS)),'lineprops',{'Color',[0 0 0]},'patchSaturation',.3);
+%line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
+ylabel('Performance (mean +/- SEM)','fontsize', 10)
+xlabel('Number of Blocks','fontsize', 10)
+xticks(1:(length(LC)))
+xticklabels(1:12)
+title('Learning Curve RSVP Experiment','fontsize', 10)
+axis([0 (length(LC)+1) 70 100])
+grid minor
+box on
+
+subplot(2,2,3)
+hold on
+p2 = plot(1:6, mean(LC_largeRwd),'-o','linew',1.5);
+p2.Color = [.00, .45, .55];
+p1 = plot(1:6, mean(LC_smallRwd),'-x','linew',1.5);
+p1.Color = [.45, .75, .80];
+shadedErrorBar(1:6,mean(LC_largeRwd),(std(LC_largeRwd)/sqrt(nS)),'lineprops',{'Color',[.00, .45, .55]},'patchSaturation',.3);
+shadedErrorBar(1:6,mean(LC_smallRwd),(std(LC_smallRwd)/sqrt(nS)),'lineprops',{'Color',[.45, .75, .80]},'patchSaturation',.3);
+%line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
+legend({'Large Rwd','Small Rwd'}, 'Location', 'southeast')
+ylabel('Performance (mean +/- SEM)','fontsize', 10)
+xlabel('Number of Blocks','fontsize', 10)
+xticks(1:6); xticklabels(1:6)
+title('Learning Curve for Small and Large Rewards','fontsize', 10)
+axis([0 7 70 100])
+hold off
+grid minor
+box on
+
+subplot(2,2,4)
+hold on
+p1 = plot(1:6, mean(LC_DC),'-x','linew',1.5); 
+p1.Color = [.75 .45 .55];
+p2 = plot(1:6, mean(LC_CC),'-+','linew',1.5); %1:.5:6.5
+p2.Color = [.50 .50 .50];
+p3 = plot(1:6, mean(LC_BC),'-o','linew',1.5);
+p3.Color = [.40 .55 .40];
+shadedErrorBar(1:6,mean(LC_DC),(std(LC_DC)/sqrt(nS)),'lineprops',{'Color',[.75 .45 .55]},'patchSaturation',.3);
+shadedErrorBar(1:6,mean(LC_CC),(std(LC_CC)/sqrt(nS)),'lineprops',{'Color',[.50 .50 .50]},'patchSaturation',.3);
+shadedErrorBar(1:6,mean(LC_BC),(std(LC_BC)/sqrt(nS)),'lineprops',{'Color',[.40 .55 .40]},'patchSaturation',.3);
+%line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
+legend({'DC','CC','BC'}, 'Location', 'southeast')
+ylabel('Performance (mean +/- SEM)','fontsize', 10)
+xlabel('Number of Blocks','fontsize', 10)
+xticks(1:6); xticklabels(1:6)
+title('Learning Curve for Each Conditions','fontsize', 10)
+axis([0 7 70 100])
+hold off
+grid minor
+box on
+
+%% RTs Curves Plots
+figure('Name', 'RSVP RTs Curve Plots');
+
+subplot(2,1,1)
+p = plot(1:length(RTsC), mean(RTsC),'linew',1.5);
+p.Color = [0 0 0];
+shadedErrorBar(1:length(RTsC), mean(RTsC),(std(RTsC)/sqrt(nS)),'lineprops',{'Color',[0 0 0]},'patchSaturation',.3);
+line([-15,15], [0,0],'color','k','LineStyle','--','LineWidth',.7)
+ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
+xlabel('Number of Blocks','fontsize', 10)
+xticks(1:(length(RTsC)))
+xticklabels(1:12)
+title('RTs Curve RSVP Experiment','fontsize', 10)
+axis([0 (length(RTsC)+1) -1 0])
+grid minor
+box on
+
+subplot(2,2,3)
+hold on
+p2 = plot(1:6, mean(RTsC_largeRwd),'-o','linew',1.5);
+p2.Color = [.00, .45, .55];
+p1 = plot(1:6, mean(RTsC_smallRwd),'-x','linew',1.5);
+p1.Color = [.45, .75, .80];
+shadedErrorBar(1:6,mean(RTsC_largeRwd),(std(RTsC_largeRwd)/sqrt(nS)),'lineprops',{'Color',[.00, .45, .55]},'patchSaturation',.3);
+shadedErrorBar(1:6,mean(RTsC_smallRwd),(std(RTsC_smallRwd)/sqrt(nS)),'lineprops',{'Color',[.45, .75, .80]},'patchSaturation',.3);
+line([-15,15], [0,0],'color','k','LineStyle','--','LineWidth',.7)
+legend({'Large Rwd','Small Rwd'}, 'Location', 'southeast')
+ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
+xlabel('Number of Blocks','fontsize', 10)
+xticks(1:6); xticklabels(1:6)
+title('RTs Curve for Small and Large Rewards','fontsize', 10)
+axis([0 7 -1 0])
+hold off
+grid minor
+box on
+
+subplot(2,2,4)
+hold on
+p1 = plot(1:6, mean(RTsC_DC),'-x','linew',1.5); 
+p1.Color = [.75 .45 .55];
+p2 = plot(1:6, mean(RTsC_CC),'-+','linew',1.5); %1:.5:6.5 if 12 blocks 
+p2.Color = [.50 .50 .50];
+p3 = plot(1:6, mean(RTsC_BC),'-o','linew',1.5);
+p3.Color = [.40 .55 .40];
+shadedErrorBar(1:6,mean(RTsC_DC),(std(RTsC_DC)/sqrt(nS)),'lineprops',{'Color',[.75 .45 .55]},'patchSaturation',.3);
+shadedErrorBar(1:6,mean(RTsC_CC),(std(RTsC_CC)/sqrt(nS)),'lineprops',{'Color',[.50 .50 .50]},'patchSaturation',.3);
+shadedErrorBar(1:6,mean(RTsC_BC),(std(RTsC_BC)/sqrt(nS)),'lineprops',{'Color',[.40 .55 .40]},'patchSaturation',.3);
+line([-15,15], [0,0],'color','k','LineStyle','--','LineWidth',.7)
+legend({'DC','CC','BC'}, 'Location', 'southeast')
+ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
+xlabel('Number of Blocks','fontsize', 10)
+xticks(1:6); xticklabels(1:6)
+title('RTs Curve for Each Conditions','fontsize', 10)
+axis([0 7 -1 0])
+hold off
+grid minor
+box on
+
