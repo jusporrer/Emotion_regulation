@@ -184,6 +184,39 @@ perf_BC_largeRwd_sem    = std([rsvpGRP.perf_BC_largeRwd])/sqrt(nS);
 [h_perf_DC_BC_largeRwd, p_perf_DC_BC_largeRwd, ci_perf_DC_BC_largeRwd, stats_perf_DC_BC_largeRwd] = ttest2(perf_DC_largeRwd, perf_BC_largeRwd);
 [h_perf_CC_BC_largeRwd, p_perf_CC_BC_largeRwd, ci_perf_CC_BC_largeRwd, stats_perf_CC_BC_largeRwd] = ttest2(perf_CC_largeRwd, perf_BC_largeRwd);
 
+%% =================== Performance - Gender & Rewards   ===================
+
+perf_fem_smallRwd         = [rsvpGRP.perf_fem_smallRwd]; 
+perf_fem_largeRwd         = [rsvpGRP.perf_fem_largeRwd]; 
+
+[h_perf_fem_rwd, p_perf_fem_rwd, ci_perf_fem_rwd, stats_perf_fem_rwd] = ttest2(perf_fem_smallRwd, perf_fem_largeRwd);
+
+perf_hom_smallRwd         = [rsvpGRP.perf_hom_smallRwd]; 
+perf_hom_largeRwd         = [rsvpGRP.perf_hom_largeRwd]; 
+
+[h_perf_hom_rwd, p_perf_hom_rwd, ci_perf_hom_rwd, stats_perf_hom_rwd] = ttest2(perf_hom_smallRwd, perf_hom_largeRwd);
+
+[h_perf_fem_hom_smallRwd, p_perf_fem_hom_smallRwd, ci_perf_fem_hom_smallRwd, stats_perf_fem_hom_smallRwd] = ttest2(rt_fem_smallRwd, rt_hom_smallRwd);
+[h_perf_fem_hom_largeRwd, p_perf_fem_hom_largeRwd, ci_perf_fem_hom_largeRwd, stats_perf_fem_hom_largeRwd] = ttest2(rt_fem_largeRwd, rt_hom_largeRwd);
+
+DC_fem_rate                 = [rsvpGRP.DC_fem_rate]; 
+CC_fem_rate                 = [rsvpGRP.CC_fem_rate];
+BC_fem_rate                 = [rsvpGRP.BC_fem_rate]; 
+[h_perf_DC_BC_fem, p_perf_DC_BC_fem, ci_perf_DC_BC_fem, stats_perf_DC_BC_fem] = ttest2(DC_fem_rate, BC_fem_rate);
+[h_perf_DC_CC_fem, p_perf_DC_CC_fem, ci_perf_DC_CC_fem, stats_perf_DC_CC_fem] = ttest2(DC_fem_rate, CC_fem_rate);
+[h_perf_CC_BC_fem, p_perf_CC_BC_fem, ci_perf_CC_BC_fem, stats_perf_CC_BC_fem] = ttest2(CC_fem_rate, BC_fem_rate);
+
+DC_hom_rate                 = [rsvpGRP.DC_hom_rate]; 
+BC_hom_rate                 = [rsvpGRP.BC_hom_rate]; 
+CC_hom_rate                 = [rsvpGRP.CC_hom_rate];
+[h_perf_DC_BC_hom, p_perf_DC_BC_hom, ci_perf_DC_BC_hom, stats_perf_DC_BC_hom] = ttest2(DC_hom_rate, BC_hom_rate);
+[h_perf_DC_CC_hom, p_perf_DC_CC_hom, ci_perf_DC_CC_hom, stats_perf_DC_CC_hom] = ttest2(DC_hom_rate, CC_hom_rate);
+[h_perf_CC_BC_hom, p_perf_CC_BC_hom, ci_perf_CC_BC_hom, stats_perf_CC_BC_hom] = ttest2(CC_hom_rate, BC_hom_rate);
+
+[h_perf_DC_gender, p_perf_DC_gender, ci_perf_DC_gender, stats_perf_DC_gender] = ttest2(DC_hom_rate, DC_fem_rate);
+[h_perf_CC_gender, p_perf_CC_gender, ci_perf_CC_gender, stats_perf_CC_gender] = ttest2(CC_hom_rate, CC_fem_rate);
+[h_perf_BC_gender, p_perf_BC_gender, ci_perf_BC_gender, stats_perf_BC_gender] = ttest2(BC_hom_rate, BC_fem_rate);
+
 %% =================== RTs - General                    ===================
 
 disp('=================== RTs information ===================');
@@ -329,6 +362,29 @@ disp(['Large Reward : ',...
 [h_rt_DC_CC_largeRwd, p_rt_DC_CC_largeRwd, ci_rt_DC_CC_largeRwd, stats_rt_DC_CC_largeRwd] = ttest2(rt_DC_largeRwd, rt_CC_largeRwd);
 [h_rt_DC_BC_largeRwd, p_rt_DC_BC_largeRwd, ci_rt_DC_BC_largeRwd, stats_rt_DC_BC_largeRwd] = ttest2(rt_DC_largeRwd, rt_BC_largeRwd);
 [h_rt_CC_BC_largeRwd, p_rt_CC_BC_largeRwd, ci_rt_CC_BC_largeRwd, stats_rt_CC_BC_largeRwd] = ttest2(rt_CC_largeRwd, rt_BC_largeRwd);
+
+%% =================== RTs - Gender & Rewards           ===================
+
+rt_fem_smallRwd         = [rsvpGRP.rt_fem_smallRwd]; 
+rt_fem_largeRwd         = [rsvpGRP.rt_fem_largeRwd]; 
+
+[h_rt_fem_rwd, p_rt_fem_rwd, ci_rt_fem_rwd, stats_rt_fem_rwd] = ttest2(rt_fem_smallRwd, rt_fem_largeRwd);
+
+rt_hom_smallRwd         = [rsvpGRP.rt_hom_smallRwd]; 
+rt_hom_largeRwd         = [rsvpGRP.rt_hom_largeRwd]; 
+
+[h_rt_hom_rwd, p_rt_hom_rwd, ci_rt_hom_rwd, stats_rt_hom_rwd] = ttest2(rt_hom_smallRwd, rt_hom_largeRwd);
+
+[h_rt_fem_hom_smallRwd, p_rt_fem_hom_smallRwd, ci_rt_fem_hom_smallRwd, stats_rt_fem_hom_smallRwd] = ttest2(rt_fem_smallRwd, rt_hom_smallRwd);
+[h_rt_fem_hom_largeRwd, p_rt_fem_hom_largeRwd, ci_rt_fem_hom_largeRwd, stats_rt_fem_hom_largeRwd] = ttest2(rt_fem_largeRwd, rt_hom_largeRwd);
+
+rsvp.perf_fem_smallRwd  = sum(fem_correct(smallRwd == 1)) / sum(fem_condition(smallRwd == 1)) * 100 ;
+
+rsvp.perf_fem_largeRwd  = sum(fem_correct(largeRwd == 1)) / sum(fem_condition(largeRwd == 1)) * 100 ;
+
+rsvp.perf_hom_smallRwd  = sum(hom_correct(smallRwd == 1)) / sum(hom_condition(smallRwd == 1)) * 100;
+
+rsvp.perf_hom_largeRwd  = sum(hom_correct(largeRwd == 1)) / sum(hom_condition(largeRwd == 1)) * 100 ;
 
 %% =================== Learning & RTs Curves            ===================
 
@@ -631,7 +687,7 @@ hold off
 figure('Name', 'Gender Plots');
 
 gender_fem = {mean(perf_fem), mean(rt_fem)};
-gender_hom = {rsvp.perf_hom, rsvp.rt_hom};
+gender_hom = {mean(perf_hom), mean(rt_hom)};
 gender_labels ={'Performance','RTs'};
 gender_titles ={'Performance according to gender', 'RTs according to gender'};
 gender_axis = {[0 3 50 105], [0 3 -1 1]};
