@@ -137,9 +137,9 @@ rsvp.reject_rate        = (sum(reject)/length(nTrial))*100;
 % General performance
 rsvp.performance= nCorrect/length(nTrial)*100;
 
-disp(['Performance : ',num2str(ceil(rsvp.performance)), ...
-    '% correct trials with ',num2str(ceil(rsvp.hit_rate)), '% hits & ', ...
-    num2str(ceil(rsvp.reject_rate)), '% rejections' ]);
+disp(['Performance : ',num2str(round(rsvp.performance)), ...
+    '% correct trials with ',num2str(round(rsvp.hit_rate)), '% hits & ', ...
+    num2str(round(rsvp.reject_rate)), '% rejections' ]);
 
 %% =================== Performance - Incorrect Trials   ===================
 
@@ -190,9 +190,9 @@ rsvp.miss_rate          = (sum(miss)/length(nTrial))*100;
 % General performance
 rsvp.perf_incorrect     = nIncorrect/length(nTrial)*100;
 
-disp(['Performance : ',num2str(ceil(rsvp.perf_incorrect)), ...
-    '% incorrect trials with ',num2str(ceil(rsvp.falseAlarm_rate)), '% false alarms & ', ...
-    num2str(ceil(rsvp.miss_rate)), '% misses' ]);
+disp(['Performance : ',num2str(round(rsvp.perf_incorrect)), ...
+    '% incorrect trials with ',num2str(round(rsvp.falseAlarm_rate)), '% false alarms & ', ...
+    num2str(round(rsvp.miss_rate)), '% misses' ]);
 
 %% =================== Performance - Rewards            ===================
 
@@ -208,8 +208,8 @@ largeRwd_correct        = correct(1:length(nTrial)) == 1 & largeRwd(1:length(nTr
 largeRwd_incorrect      = incorrect(1:length(nTrial)) == 1 & largeRwd(1:length(nTrial)) == 1;
 rsvp.largeRwd_rate      = sum(largeRwd_correct)/sum(largeRwd)*100;
 
-disp(['Reward : ',num2str(ceil(rsvp.smallRwd_rate)), '% were correct for small rwd & ', ...
-    num2str(ceil(rsvp.largeRwd_rate)), '% were correct for large rwd' ]);
+disp(['Reward : ',num2str(round(rsvp.smallRwd_rate)), '% were correct for small rwd & ', ...
+    num2str(round(rsvp.largeRwd_rate)), '% were correct for large rwd' ]);
 
 %% =================== Performance - Conditions         ===================
 %(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
@@ -347,8 +347,8 @@ rsvp.perf_CC_DC         = (sum(CC_DC_correct))/sum(CC_DC_condition)*100;
 rsvp.perf_CC_BC         = (sum(CC_BC_correct))/sum(CC_BC_condition)*100; 
 rsvp.perf_CC            = (sum(CC_correct))/sum(CC_condition)*100;
 
-disp(['Performance Emotion : ',num2str(ceil(rsvp.perf_DC)), '% for detrimental condition, ', ...
-    num2str(ceil(rsvp.perf_CC)), '% for control condition & ',num2str(ceil(rsvp.perf_BC)), '% for beneficial condition']);
+disp(['Performance Emotion : ',num2str(round(rsvp.perf_DC)), '% for detrimental condition, ', ...
+    num2str(round(rsvp.perf_CC)), '% for control condition & ',num2str(round(rsvp.perf_BC)), '% for beneficial condition']);
 
 %% =================== Performance - Gender             ===================
 % Condition Gender
@@ -364,8 +364,8 @@ hom_incorrect           = incorrect(1:length(nTrial)) == 1 & hom_condition(1:len
 rsvp.perf_fem           = (sum(correct(fem_condition)))/sum(fem_condition)*100; 
 rsvp.perf_hom           = (sum(correct(hom_condition)))/sum(hom_condition)*100; 
 
-disp(['Performance Gender: ',num2str(ceil(rsvp.perf_fem)), '% for condition femme & ', ...
-    num2str(ceil(rsvp.perf_hom)), '% for condition homme ']);
+disp(['Performance Gender: ',num2str(round(rsvp.perf_fem)), '% for condition femme & ', ...
+    num2str(round(rsvp.perf_hom)), '% for condition homme ']);
 
 %% =================== Performance - Conditions & Rewards =================
 
@@ -424,8 +424,8 @@ rsvp.nlag4              = sum(lag4);
 correct_lag4            = correct(1:length(nTrial)) == 1 & lag4(1:length(nTrial)) == 1;
 rsvp.lag4_rate          = sum(correct_lag4)/rsvp.nlag4*100;
 
-disp(['Performance Lag : ',num2str(ceil(rsvp.lag2_rate)), '% were correct after a lag 2 & ', ...
-    num2str(ceil(rsvp.lag4_rate)), '% were correct after a lag 4' ]);
+disp(['Performance Lag : ',num2str(round(rsvp.lag2_rate)), '% were correct after a lag 2 & ', ...
+    num2str(round(rsvp.lag4_rate)), '% were correct after a lag 4' ]);
 
 %% =================== RTs - Correct & Incorrect Trials ===================
 

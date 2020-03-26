@@ -171,7 +171,7 @@ function varargout=sigstar(groups,stats,nosort,range_input)
 
     y=ylim;
     if range_input == 100
-        yd=myRange(y)*0.02;
+        yd=myRange(y)*0.05;
     elseif range_input == 1
         yd=myRange(y)*0.2; %separate sig bars vertically by 5%
     else 
@@ -252,7 +252,7 @@ function H=makeSignificanceBar(x,y,p,range_input)
     
     if p<=1E-3 || p<=1E-2 || p<=0.05
         if range_input == 100
-            offset=0.0009;
+            offset=0.009;
         elseif range_input == 1
             offset=0.009;
         else
@@ -261,7 +261,7 @@ function H=makeSignificanceBar(x,y,p,range_input)
         fontsize = 12;
     else
         if range_input == 100
-            offset=0.008;
+            offset=0.03;
         elseif range_input == 1
             offset=0.08;
         else

@@ -461,9 +461,9 @@ sigstar({[1,2],[1,3],[2,3]},[p_perf_DC_CC, p_perf_DC_BC, p_perf_CC_BC], 0, 100);
 xticks([1 2 3])
 xticklabels({'DC','CC','BC'})
 legend([b1 b2 b3],{'CC (DC)','CC', 'CC (BC)'},'fontsize', 6, 'location','northeast')
-ylabel('Performance','fontsize', 10)
+ylabel('Performance (mean +/- SEM %)','fontsize', 10)
 title('Performance According to Conditions','fontsize', 10)
-axis([0 4 70 105])
+axis([0 4 60 105])
 grid minor
 box on
 hold off
@@ -480,7 +480,7 @@ b3 = bar([4, 5], [hit_rate_BC, reject_rate_BC, falseAlarm_rate_BC, miss_rate_BC 
 b3(1).CData = [.7 .9 .5]; b3(2).CData = [.3 .7 .0]; b3(3).CData = [.9 .5 .7]; b3(4).CData = [.7 .0 .3];
 xticks([2 3 4])
 xticklabels({'DC','CC','BC'})
-ylabel('Performance','fontsize', 10)
+ylabel('Performance (mean %)','fontsize', 10)
 legend({'Hit', 'Reject', 'FA', 'Miss'},'fontsize', 6 , 'Location', 'southeast')
 title('STD Performance According to Conditions','fontsize', 10)
 axis([1 5 0 105])
@@ -508,7 +508,7 @@ sigstar({[1,2]},p_perf_rwd, 0, 1);
 xticks([1 2])
 legend({'Mean'}, 'Location', 'southeast')
 xticklabels({'Small Rwd','Large Rwd'})
-ylabel('Performance','fontsize', 10)
+ylabel('Performance (median +/- percentile %)','fontsize', 10)
 title('Performance According to Reward Size','fontsize', 10)
 axis([0 3 70 110])
 grid minor
@@ -548,9 +548,9 @@ sigstar({[3,3.5],[3,4],[3.5,4]},[p_perf_DC_CC_largeRwd, p_perf_DC_BC_largeRwd, p
 xticks([1.5 3.5])
 xticklabels({'Small Rwd', 'Large Rwd'})
 legend({'DC','CC (DC)','CC', 'CC (BC)', 'BC'}, 'fontsize', 6 , 'Location', 'northeast')
-ylabel('Performance','fontsize', 10)
+ylabel('Performance (mean +/- SEM %)','fontsize', 10)
 title('Performance According to Rewards and Conditions','fontsize', 10)
-axis([0 5 70 105])
+axis([0 5 60 105])
 grid minor
 box on
 hold off
@@ -578,7 +578,7 @@ legend({'Large Rwd','Small Rwd'}, 'Location', 'southeast')
 xticklabels({'DC','CC','BC '})
 ylabel('Performance (mean +/- SEM)','fontsize', 10)
 title('Performance According to Reward and Conditions','fontsize', 10)
-axis([0 4 70 105])
+axis([0 4 60 105])
 grid minor
 box on
 hold off
@@ -590,11 +590,6 @@ histogram(rt,'FaceColor',[.44, .24, .38], 'EdgeColor', [.5 .5 .5])
 xlabel('log(RTs) (mean +/- SEM)','fontsize', 10)
 ylabel('Number of Trials','fontsize', 10)
 title('Fig1. Distribution of RSVP Reaction Times','fontsize', 10)
-if h_RT == 0
-    text(-3,75,['The distribution is normal at p = ', num2str(round(p_RT,3))],'fontsize', 8)
-elseif h_RT == 1
-    text(-3,75,['The distribution is not normal at p = ', num2str(round(p_RT,3))],'fontsize', 8)
-end
 axis([-3 3 -inf inf])
 grid minor
 box on
@@ -716,9 +711,9 @@ sigstar({[1,1.5]},p_perf_gender, 0, 100);
 legend({'Female Face', 'Male Face'},'fontsize', 6 , 'Location', 'northeast')
 xticks([1 2.5 4])
 xticklabels({'General','Female pilot','Male pilot'})
-ylabel('Performance','fontsize', 10)
+ylabel('Performance (mean +/- SEM %)','fontsize', 10)
 title('Performance according to gender','fontsize', 10)
-axis([0.5 5 70 105])
+axis([0.5 5 60 105])
 grid minor
 box on
 hold off
@@ -781,14 +776,14 @@ errorbar(7, mean(perf_BC_hom_largeRwd), std(perf_BC_hom_largeRwd)/sqrt(nS), 'k.'
 xticks([1.5 5])
 xticklabels({'Female Faces', 'Male Faces'})
 legend({'DC SR', 'DC LR', 'CC SR', 'CC LR', 'BC SR', 'BC LR'},'fontsize', 6 , 'Location', 'northeast')
-ylabel('Performance','fontsize', 10)
+ylabel('Performance (mean +/- SEM %)','fontsize', 10)
 title('Performance according to gender & conditions','fontsize', 10)
-axis([0 8 70 105])
+axis([0 8 60 105])
 grid minor
 box on
 hold off
 
-fig = false; 
+fig = true; 
 if fig
     
     %% Learning Curves Plots

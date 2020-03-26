@@ -114,20 +114,20 @@ mem.perf_incorrect  = nIncorrect/length(nTrial)*100;
 
 %% =================== Performance - Rewards            ===================
 
-smallRwd            = (reward(nTrial) == 1);
-mem.smallRwdBlock   = unique(block(smallRwd == 1));
-mem.correct_smallRwd= (correct(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1);
-mem.incorrect_smallRwd= (incorrect(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1);
-mem.smallRwd_rate   = sum(mem.correct_smallRwd)/sum(smallRwd)*100;
+smallRwd                = (reward(nTrial) == 1);
+mem.smallRwdBlock      = unique(block(smallRwd == 1));
+smallRwd_correct        = correct(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1;
+smallRwd_incorrect      = incorrect(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1;
+mem.smallRwd_rate      = sum(smallRwd_correct)/sum(smallRwd)*100;
 
-largeRwd            = (reward(nTrial) == 2);
-mem.largeRwdBlock   = unique(block(largeRwd == 1));
-mem.correct_largeRwd= (correct(1:length(nTrial)) == 1 & largeRwd(1:length(nTrial)) == 1);
-mem.incorrect_largeRwd= (incorrect(1:length(nTrial)) == 1 & largeRwd(1:length(nTrial)) == 1);
-mem.largeRwd_rate   = sum(mem.correct_largeRwd)/sum(largeRwd)*100;
+largeRwd                = (reward(nTrial) == 2);
+mem.largeRwdBlock      = unique(block(largeRwd == 1));
+largeRwd_correct        = correct(1:length(nTrial)) == 1 & largeRwd(1:length(nTrial)) == 1;
+largeRwd_incorrect      = incorrect(1:length(nTrial)) == 1 & largeRwd(1:length(nTrial)) == 1;
+mem.largeRwd_rate      = sum(largeRwd_correct)/sum(largeRwd)*100;
 
-disp(['Reward : ',num2str(ceil(mem.smallRwd_rate)), '% were correct for small rwd & ', ...
-    num2str(ceil(mem.largeRwd_rate)), '% were correct for large rwd' ]);
+disp(['Reward : ',num2str(round(mem.smallRwd_rate)), '% were correct for small rwd & ', ...
+    num2str(round(mem.largeRwd_rate)), '% were correct for large rwd' ]);
 
 %% =================== Performance - Conditions         ===================
 %(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
@@ -247,7 +247,7 @@ mem.perf_CC_BC_largeRwd   = sum(CC_BC_correct(largeRwd == 1)) / sum(CC_BC_condit
 mem.perf_BC_smallRwd   = sum(BC_correct(smallRwd == 1)) / sum(BC_condition(smallRwd == 1)) * 100;
 mem.perf_BC_largeRwd   = sum(BC_correct(largeRwd == 1)) / sum(BC_condition(largeRwd == 1)) * 100 ;
 
-%% =================== Performance - Img Duration        ===================
+%% =================== Performance - Img Duration       ===================
 
 imgShort            = (imageDuration(nTrial) == 1.5);
 mem.nimgShort       = sum(imgShort);
@@ -330,7 +330,7 @@ mem.rt_BC_fem_incorrect= mean(rt(BC_fem_incorrect == 1));
 disp(['RTs Emotion : ',num2str(mem.rt_DC), ' s for detrimental condition, ', ...
     num2str(mem.rt_CC), ' s for control condition & ',num2str(mem.rt_BC), ' s for beneficial condition']);
 
-%% =================== RTs - Gender                 ===================
+%% =================== RTs - Gender                     ===================
 mem.rt_fem             = mean(rt(fem_condition == 1));
 mem.rt_fem_correct     = mean(rt(fem_correct == 1));
 mem.rt_fem_incorrect   = mean(rt(fem_incorrect == 1));
@@ -373,34 +373,74 @@ mem.rt_fast_perf       = sum(correct(rt_fast) == 1)/length(rt_fast)*100;
 %% =================== Learning Curve                   ===================
 
 mem.LC              = zeros(1,cfg_exp.nBlocksExp);
-for i = 1:cfg_exp.nBlocksExp
-    mem.LC(i)       = (sum(correct(block == i)))/(length(nTrial)/cfg_exp.nBlocksExp)*100;
+for i = 1:length(mem.LC)
+    mem.LC(i)       = (sum(correct(block == i)))/(length(nTrial(block == i)))*100;
 end
 
 mem.LC_smallRwd     = zeros(1,length(mem.smallRwdBlock));
 for i = 1:length(mem.smallRwdBlock)
-     mem.LC_smallRwd(i) = (sum(mem.correct_smallRwd(block == mem.smallRwdBlock(i))))/(length(nTrial)/cfg_exp.nBlocksExp)*100;
+     mem.LC_smallRwd(i) = (sum(correct(block == mem.smallRwdBlock(i))))/...
+         (length(nTrial(block == mem.smallRwdBlock(i))))*100;
 end
 
 mem.LC_largeRwd     = zeros(1,length(mem.largeRwdBlock));
 for i = 1:length(mem.largeRwdBlock)
-    mem.LC_largeRwd(i) = (sum(mem.correct_largeRwd(block == mem.largeRwdBlock(i))))/(length(nTrial)/cfg_exp.nBlocksExp)*100;
+    mem.LC_largeRwd(i) = (sum(correct(block == mem.largeRwdBlock(i))))/...
+        (length(nTrial(block == mem.largeRwdBlock(i))))*100;
 end
 
-mem.LC_DC     = zeros(1,length(DC_block));
-for i = 1:length(DC_block)
-     mem.LC_DC(i) = (sum(DC_correct(block == DC_block(i))))/ ...
-         (sum(condition(nTrial(block == DC_block(i))) == 1 | ...
-         condition(nTrial(block == DC_block(i))) == 2))*100;
+mem.LC_DC     = zeros(1,length(mem.DC_block));
+for i = 1:length(mem.DC_block)
+     mem.LC_DC(i) = (sum(DC_correct(block == mem.DC_block(i))))/ ...
+         sum(DC_condition(block == mem.DC_block(i)))*100;
+     % add the conditions as we do not want the CC trials
 end
 
-mem.LC_BC     = zeros(1,length(BC_block));
-for i = 1:length(BC_block)
-     mem.LC_BC(i) = (sum(BC_correct(block == BC_block(i))))/ ...
-         (sum(condition(nTrial(block == BC_block(i))) == 5 | ...
-         condition(nTrial(block == BC_block(i))) == 6))*100;
+mem.LC_BC     = zeros(1,length(mem.BC_block));
+for i = 1:length(mem.BC_block)
+     mem.LC_BC(i) = (sum(BC_correct(block == mem.BC_block(i))))/ ...
+         sum(BC_condition(block == mem.BC_block(i)))*100;
 end
 
+mem.LC_CC     = zeros(1,cfg_exp.nBlocksExp);
+for i = 1:length(mem.LC_CC)
+     mem.LC_CC(i) = (sum(CC_correct(block == i)))/ ...
+         sum(CC_condition(block == i))*100;
+end 
+
+%% =================== RTs Curves                       ===================
+
+mem.RTsC              = zeros(1,cfg_exp.nBlocksExp);
+for i = 1:cfg_exp.nBlocksExp
+    mem.RTsC(i)       = mean(rt(block == i));
+end
+
+mem.RTsC_smallRwd     = zeros(1,length(mem.smallRwdBlock));
+for i = 1:length(mem.smallRwdBlock)
+     mem.RTsC_smallRwd(i) = mean(rt(block == mem.smallRwdBlock(i)));
+end
+
+mem.RTsC_largeRwd     = zeros(1,length(mem.largeRwdBlock));
+for i = 1:length(mem.largeRwdBlock)
+    mem.RTsC_largeRwd(i) = mean(rt(block == mem.largeRwdBlock(i)));
+end
+
+mem.RTsC_DC     = zeros(1,length(mem.DC_block));
+for i = 1:length(mem.DC_block)
+     mem.RTsC_DC(i) = mean(rt(block == mem.DC_block(i) & DC_condition == 1 ));
+     % add the conditions as we do not want the CC trials 
+end
+
+mem.RTsC_BC     = zeros(1,length(mem.BC_block));
+for i = 1:length(mem.BC_block)
+     mem.RTsC_BC(i) = mean(rt(block == mem.BC_block(i) & BC_condition == 1 ));
+end
+
+mem.RTsC_CC     = zeros(1,cfg_exp.nBlocksExp);
+for i = 1:length(mem.RTsC_CC)
+     mem.RTsC_CC(i) = mean(rt(block == i & CC_condition == 1 ));
+end
+     
 %% =================== PLOT PART                        ===================
 if fig
     
