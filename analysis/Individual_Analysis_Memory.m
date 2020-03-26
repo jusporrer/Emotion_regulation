@@ -133,90 +133,119 @@ disp(['Reward : ',num2str(ceil(mem.smallRwd_rate)), '% were correct for small rw
 %(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
 
 % Detrimental condition
-DC_condtion         = (condition(nTrial) == 1 | condition(nTrial) == 2);
-DC_correct          = (correct(1:length(nTrial)) == 1 & DC_condtion(1:length(nTrial)) == 1);
-DC_block            = unique(block(DC_condtion == 1));
+DC_condition            = condition(nTrial) == 1 | condition(nTrial) == 2;
+DC_correct              = correct(1:length(nTrial)) == 1 & DC_condition(1:length(nTrial)) == 1;
+DC_incorrect            = incorrect(1:length(nTrial)) == 1 & DC_condition(1:length(nTrial)) == 1;
+mem.DC_block           = unique(block(DC_condition));
+DC_trials               = zeros(1,length(nTrial));
+for i = 1:length(mem.DC_block)
+    DC_trials           = DC_trials + (block == mem.DC_block(i));
+end 
 
-DC_hom              = (condition(nTrial) == 1);
-correct_DC_hom      = (correct(1:length(nTrial)) == 1 & DC_hom(1:length(nTrial)) == 1);
-incorrect_DC_hom    = (incorrect(1:length(nTrial)) == 1 & DC_hom(1:length(nTrial)) == 1);
-mem.DC_hom_rate     = sum(correct_DC_hom)/sum(DC_hom)*100;
+DC_hom                  = condition(nTrial) == 1;
+DC_hom_correct          = correct(1:length(nTrial)) == 1 & DC_hom(1:length(nTrial)) == 1;
+DC_hom_incorrect        = incorrect(1:length(nTrial)) == 1 & DC_hom(1:length(nTrial)) == 1;
+mem.DC_hom_rate        = sum(DC_hom_correct)/sum(DC_hom)*100;
 
-DC_fem              = (condition(nTrial) == 2);
-correct_DC_fem      = (correct(1:length(nTrial)) == 1 & DC_fem(1:length(nTrial)) == 1);
-incorrect_DC_fem    = (incorrect(1:length(nTrial)) == 1 & DC_fem(1:length(nTrial)) == 1);
-mem.DC_fem_rate     = sum(correct_DC_fem)/sum(DC_fem)*100;
-
-% Control Conditions
-CC_hom              = (condition(nTrial) == 3);
-correct_CC_hom      = (correct(1:length(nTrial)) == 1 & CC_hom(1:length(nTrial)) == 1);
-incorrect_CC_hom    = (incorrect(1:length(nTrial)) == 1 & CC_hom(1:length(nTrial)) == 1);
-mem.CC_hom_rate     = sum(correct_CC_hom)/sum(CC_hom)*100;
-
-CC_fem              = (condition(nTrial) == 4);
-correct_CC_fem      = (correct(1:length(nTrial)) == 1 & CC_fem(1:length(nTrial)) == 1);
-incorrect_CC_fem    = (incorrect(1:length(nTrial)) == 1 & CC_fem(1:length(nTrial)) == 1);
-mem.CC_fem_rate     = sum(correct_CC_fem)/sum(CC_fem)*100;
+DC_fem                  = condition(nTrial) == 2;
+DC_fem_correct          = correct(1:length(nTrial)) == 1 & DC_fem(1:length(nTrial)) == 1;
+DC_fem_incorrect        = incorrect(1:length(nTrial)) == 1 & DC_fem(1:length(nTrial)) == 1;
+mem.DC_fem_rate        = sum(DC_fem_correct)/sum(DC_fem)*100;
 
 % Beneficial Conditions
-BC_condtion         = (condition(nTrial) == 5 | condition(nTrial) == 6);
-BC_correct          = (correct(1:length(nTrial)) == 1 & BC_condtion(1:length(nTrial)) == 1);
-BC_block            = unique(block(BC_condtion == 1));
+BC_condition            = (condition(nTrial) == 5 | condition(nTrial) == 6);
+BC_correct              = (correct(1:length(nTrial)) == 1 & BC_condition(1:length(nTrial)) == 1);
+BC_incorrect            = (incorrect(1:length(nTrial)) == 1 & BC_condition(1:length(nTrial)) == 1);
+mem.BC_block           = unique(block(BC_condition));
+BC_trials               = zeros(1,length(nTrial));
+for i = 1:length(mem.BC_block)
+    BC_trials           = BC_trials + (block == mem.BC_block(i));
+end 
 
-BC_hom              = (condition(nTrial) == 5);
-correct_BC_hom      = (correct(1:length(nTrial)) == 1 & BC_hom(1:length(nTrial)) == 1);
-incorrect_BC_hom    = (incorrect(1:length(nTrial)) == 1 & BC_hom(1:length(nTrial)) == 1);
-mem.BC_hom_rate     = sum(correct_BC_hom)/sum(BC_hom)*100;
+BC_hom                  = (condition(nTrial) == 5);
+BC_hom_correct          = (correct(1:length(nTrial)) == 1 & BC_hom(1:length(nTrial)) == 1);
+BC_hom_incorrect        = (incorrect(1:length(nTrial)) == 1 & BC_hom(1:length(nTrial)) == 1);
+mem.BC_hom_rate        = sum(BC_hom_correct)/sum(BC_hom)*100;
 
-BC_fem              = (condition(nTrial) == 6);
-correct_BC_fem      = (correct(1:length(nTrial)) == 1 & BC_fem(1:length(nTrial)) == 1);
-incorrect_BC_fem    = (correct(1:length(nTrial)) == 1 & BC_fem(1:length(nTrial)) == 1);
-mem.BC_fem_rate     = sum(correct_BC_fem)/sum(BC_fem)*100;
+BC_fem                  = (condition(nTrial) == 6);
+BC_fem_correct          = (correct(1:length(nTrial)) == 1 & BC_fem(1:length(nTrial)) == 1);
+BC_fem_incorrect        = (correct(1:length(nTrial)) == 1 & BC_fem(1:length(nTrial)) == 1);
+mem.BC_fem_rate        = sum(BC_fem_correct)/sum(BC_fem)*100;
+
+% Control Conditions
+CC_DC_condition         = DC_trials & (condition(nTrial) == 3 | condition(nTrial) == 4);
+CC_DC_correct           = correct(1:length(nTrial)) == 1 & CC_DC_condition(1:length(nTrial)) == 1;
+CC_DC_incorrect         = incorrect(1:length(nTrial)) == 1 & CC_DC_condition(1:length(nTrial)) == 1;
+
+CC_BC_condition         = BC_trials & (condition(nTrial) == 3 | condition(nTrial) == 4);
+CC_BC_correct           = correct(1:length(nTrial)) == 1 & CC_BC_condition(1:length(nTrial)) == 1;
+CC_BC_incorrect         = incorrect(1:length(nTrial)) == 1 & CC_BC_condition(1:length(nTrial)) == 1;
+
+CC_condition            = condition(nTrial) == 3 | condition(nTrial) == 4;
+CC_correct              = correct(1:length(nTrial)) == 1 & CC_condition(1:length(nTrial)) == 1;
+CC_incorrect            = incorrect(1:length(nTrial)) == 1 & CC_condition(1:length(nTrial)) == 1;
+
+CC_hom                  = condition(nTrial) == 3;
+CC_hom_correct          = correct(1:length(nTrial)) == 1 & CC_hom(1:length(nTrial)) == 1;
+CC_hom_incorrect        = incorrect(1:length(nTrial)) == 1 & CC_hom(1:length(nTrial)) == 1;
+mem.CC_hom_rate        = sum(CC_hom_correct)/sum(CC_hom)*100;
+
+CC_fem                  = (condition(nTrial) == 4);
+CC_fem_correct          = (correct(1:length(nTrial)) == 1 & CC_fem(1:length(nTrial)) == 1);
+CC_fem_incorrect        = (incorrect(1:length(nTrial)) == 1 & CC_fem(1:length(nTrial)) == 1);
+mem.CC_fem_rate        = sum(CC_fem_correct)/sum(CC_fem)*100;
 
 % Number of trials in each conditions
-if sum(DC_hom) == sum(DC_fem) == sum(CC_hom) == sum(CC_fem) == sum(BC_hom) ==  sum(BC_fem)
+if sum(DC_hom) == sum(DC_fem) == sum(CC_hom) == ...
+        sum(CC_fem) == sum(BC_hom) ==  sum(BC_fem)
     disp(['All conditions have ',num2str(cfg_exp.nTrialsExp*cfg_exp.nBlocksExp/6), 'trials']);
 else
     disp(['Warning, not all condition have ',num2str(cfg_exp.nTrialsExp*cfg_exp.nBlocksExp/6), ' trials']);
 end
 
 % Condition Emotions
-mem.perf_DC         = (mem.DC_hom_rate + mem.DC_fem_rate) / 2;
-mem.perf_CC         = (mem.CC_hom_rate + mem.CC_fem_rate) / 2;
-mem.perf_BC         = (mem.BC_hom_rate + mem.BC_fem_rate) / 2;
+mem.perf_DC            = (sum(DC_correct))/sum(DC_condition)*100;  
+mem.perf_BC            = (sum(BC_correct))/sum(BC_condition)*100; 
+mem.perf_CC_DC         = (sum(CC_DC_correct))/sum(CC_DC_condition)*100; 
+mem.perf_CC_BC         = (sum(CC_BC_correct))/sum(CC_BC_condition)*100; 
+mem.perf_CC            = (sum(CC_correct))/sum(CC_condition)*100;
 
 disp(['Performance Emotion : ',num2str(ceil(mem.perf_DC)), '% for detrimental condition, ', ...
     num2str(ceil(mem.perf_CC)), '% for control condition & ',num2str(ceil(mem.perf_BC)), '% for beneficial condition']);
 
-mem.inabi_inhibit   = mem.perf_CC - mem.perf_DC;
-mem.abi_enhance     = mem.perf_BC - mem.perf_CC;
-
+%% =================== Performance - Gender             ===================
 % Condition Gender
-mem.perf_fem        = (mem.DC_fem_rate + mem.CC_fem_rate + mem.BC_fem_rate) / 3;
-mem.perf_hom        = (mem.DC_hom_rate + mem.CC_hom_rate + mem.BC_hom_rate) / 3;
+
+fem_condition           = condition(nTrial) == 2 | condition(nTrial) == 4 | condition(nTrial) == 6;
+fem_correct             = correct(1:length(nTrial)) == 1 & fem_condition(1:length(nTrial)) == 1;
+fem_incorrect           = incorrect(1:length(nTrial)) == 1 & fem_condition(1:length(nTrial)) == 1;
+
+hom_condition           = condition(nTrial) == 1 | condition(nTrial) == 3 | condition(nTrial) == 5;
+hom_correct             = correct(1:length(nTrial)) == 1 & hom_condition(1:length(nTrial)) == 1;
+hom_incorrect           = incorrect(1:length(nTrial)) == 1 & hom_condition(1:length(nTrial)) == 1;
+
+mem.perf_fem           = (sum(correct(fem_condition)))/sum(fem_condition)*100; 
+mem.perf_hom           = (sum(correct(hom_condition)))/sum(hom_condition)*100; 
 
 disp(['Performance Gender: ',num2str(ceil(mem.perf_fem)), '% for condition femme & ', ...
     num2str(ceil(mem.perf_hom)), '% for condition homme ']);
 
 %% =================== Performance - Conditions & Rewards===================
 
-mem.perf_DC_smallRwd= ((sum(correct_DC_hom(smallRwd == 1))/sum(DC_hom(smallRwd == 1)))*100 ...
-    + (sum(correct_DC_fem(smallRwd == 1))/sum(DC_fem(smallRwd == 1)))*100) / 2;
+mem.perf_DC_smallRwd   = sum(DC_correct(smallRwd == 1)) / sum(DC_condition(smallRwd == 1)) * 100 ;
+mem.perf_DC_largeRwd   = sum(DC_correct(largeRwd == 1)) / sum(DC_condition(largeRwd == 1)) * 100 ;
 
-mem.perf_DC_largeRwd= ((sum(correct_DC_hom(largeRwd ==1))/sum(DC_hom(largeRwd ==1)))*100 ...
-    + (sum(correct_DC_fem(largeRwd == 1))/sum(DC_fem(largeRwd == 1)))*100) / 2;
+mem.perf_CC_DC_smallRwd   = sum(CC_DC_correct(smallRwd == 1)) / sum(CC_DC_condition(smallRwd == 1)) * 100 ;
+mem.perf_CC_DC_largeRwd   = sum(CC_DC_correct(largeRwd == 1)) / sum(CC_DC_condition(largeRwd == 1)) * 100 ;
 
-mem.perf_CC_smallRwd= ((sum(correct_CC_hom(smallRwd == 1))/sum(CC_hom(smallRwd == 1)))*100 ...
-    + (sum(correct_CC_fem(smallRwd == 1))/sum(CC_fem(smallRwd == 1)))*100) / 2;
+mem.perf_CC_smallRwd   = sum(CC_correct(smallRwd == 1)) / sum(CC_condition(smallRwd == 1)) * 100 ;
+mem.perf_CC_largeRwd   = sum(CC_correct(largeRwd == 1)) / sum(CC_condition(largeRwd == 1)) * 100 ;
 
-mem.perf_CC_largeRwd= ((sum(correct_CC_hom(largeRwd == 1))/sum(CC_hom(largeRwd == 1)))*100 ...
-    + (sum(correct_CC_fem(largeRwd == 1))/sum(CC_fem(largeRwd == 1)))*100) / 2;
+mem.perf_CC_BC_smallRwd   = sum(CC_BC_correct(smallRwd == 1)) / sum(CC_BC_condition(smallRwd == 1)) * 100 ;
+mem.perf_CC_BC_largeRwd   = sum(CC_BC_correct(largeRwd == 1)) / sum(CC_BC_condition(largeRwd == 1)) * 100 ;
 
-mem.perf_BC_smallRwd= ((sum(correct_BC_hom(smallRwd == 1))/sum(BC_hom(smallRwd == 1)))*100 ...
-    + (sum(correct_BC_fem(smallRwd ==1))/sum(BC_fem(smallRwd ==1)))*100) / 2;
-
-mem.perf_BC_largeRwd= ((sum(correct_BC_hom(largeRwd == 1))/sum(BC_hom(largeRwd == 1)))*100 ...
-    + (sum(correct_BC_fem(largeRwd == 1))/sum(BC_fem(largeRwd == 1)))*100) / 2;
+mem.perf_BC_smallRwd   = sum(BC_correct(smallRwd == 1)) / sum(BC_condition(smallRwd == 1)) * 100;
+mem.perf_BC_largeRwd   = sum(BC_correct(largeRwd == 1)) / sum(BC_condition(largeRwd == 1)) * 100 ;
 
 %% =================== Performance - Img Duration        ===================
 
@@ -235,9 +264,9 @@ disp(['Performance Lag : ',num2str(ceil(mem.imgShort_rate)), '% were correct aft
 
 %% =================== RTs - Correct & Incorrect Trials ===================
 
-mem.rt_correct      = mean(rt(correct == 1));
+mem.rt_correct         = mean(rt(correct == 1));
 
-mem.rt_incorrect    = mean(rt(incorrect == 1));
+mem.rt_incorrect       = mean(rt(incorrect == 1));
 
 disp(['RTs correct : ',num2str(mem.rt_correct), ' s for correct trials ']);
 
@@ -245,78 +274,101 @@ disp(['RTs incorrect : ',num2str(mem.rt_incorrect), ' s for incorrect trials '])
 
 %% =================== RTs - Rewards                    ===================
 
-mem.rt_smallRwd     = mean(rt(smallRwd));
-mem.rt_smallRwd_correct = mean(rt(mem.correct_smallRwd == 1));
-mem.rt_smallRwd_incorrect = mean(rt(mem.incorrect_smallRwd == 1));
+mem.rt_smallRwd                 = mean(rt(smallRwd));
+mem.rt_smallRwd_correct         = mean(rt(smallRwd_correct == 1));
+mem.rt_smallRwd_incorrect       = mean(rt(smallRwd_incorrect == 1));
 
-mem.rt_largeRwd     = mean(rt(largeRwd));
-mem.rt_largeRwd_correct = mean(rt(mem.correct_largeRwd == 1));
-mem.rt_largeRwd_incorrect = mean(rt(mem.incorrect_smallRwd == 1));
+mem.rt_largeRwd                 = mean(rt(largeRwd));
+mem.rt_largeRwd_correct         = mean(rt(largeRwd_correct == 1));
+mem.rt_largeRwd_incorrect       = mean(rt(largeRwd_incorrect == 1));
 
 disp(['RTs reward : ',num2str(mem.rt_smallRwd), ' s for small rewards & ', ...
     num2str(mem.rt_largeRwd), ' s for large rewards ']);
 
 %% =================== RTs - Conditions                 ===================
 
-mem.rt_DC_hom       = mean(rt(DC_hom == 1));
-mem.rt_DC_hom_correct= mean(rt(correct_DC_hom == 1));
-mem.rt_DC_hom_incorrect= mean(rt(incorrect_DC_hom == 1));
+% Detrimental condition
+mem.rt_DC              = mean(rt(DC_condition == 1));
+mem.rt_DC_correct      = mean(rt(DC_correct == 1));
+mem.rt_DC_incorrect    = mean(rt(DC_incorrect == 1));
 
-mem.rt_DC_fem       = mean(rt(DC_fem == 1));
-mem.rt_DC_fem_correct= mean(rt(correct_DC_fem == 1));
-mem.rt_DC_fem_incorrect= mean(rt(incorrect_DC_fem == 1));
+mem.rt_DC_hom          = mean(rt(DC_hom == 1));
+mem.rt_DC_hom_correct  = mean(rt(DC_hom_correct == 1));
+mem.rt_DC_hom_incorrect= mean(rt(DC_hom_incorrect == 1));
 
-mem.rt_CC_hom       = mean(rt(CC_hom == 1));
-mem.rt_CC_hom_correct= mean(rt(correct_CC_hom == 1));
-mem.rt_CC_hom_incorrect= mean(rt(incorrect_CC_hom == 1));
+mem.rt_DC_fem          = mean(rt(DC_fem == 1));
+mem.rt_DC_fem_correct  = mean(rt(DC_fem_correct == 1));
+mem.rt_DC_fem_incorrect= mean(rt(DC_fem_incorrect == 1));
 
-mem.rt_CC_fem       = mean(rt(CC_fem == 1));
-mem.rt_CC_fem_correct= mean(rt(correct_CC_fem == 1));
-mem.rt_CC_fem_incorrect= mean(rt(incorrect_CC_fem == 1));
+% Control Condition
+mem.rt_CC              = mean(rt(CC_condition == 1));
+mem.rt_CC_correct      = mean(rt(CC_correct == 1));
+mem.rt_CC_incorrect    = mean(rt(CC_incorrect == 1));
 
-mem.rt_BC_hom       = mean(rt(BC_hom == 1));
-mem.rt_BC_hom_correct= mean(rt(correct_BC_hom == 1));
-mem.rt_BC_hom_incorrect= mean(rt(incorrect_BC_hom == 1));
+mem.rt_CC_hom          = mean(rt(CC_hom == 1));
+mem.rt_CC_hom_correct  = mean(rt(CC_hom_correct == 1));
+mem.rt_CC_hom_incorrect= mean(rt(CC_hom_incorrect == 1));
 
-mem.rt_BC_fem       = mean(rt(BC_fem == 1));
-mem.rt_BC_fem_correct= mean(rt(correct_BC_fem == 1));
-mem.rt_BC_fem_incorrect= mean(rt(incorrect_BC_fem == 1));
+mem.rt_CC_fem          = mean(rt(CC_fem == 1));
+mem.rt_CC_fem_correct  = mean(rt(CC_fem_correct == 1));
+mem.rt_CC_fem_incorrect= mean(rt(CC_fem_incorrect == 1));
 
-% Condition Emotions
-mem.rt_DC           = nanmean([mem.rt_DC_hom, mem.rt_DC_fem]);
-mem.rt_DC_correct   = nanmean([mem.rt_DC_hom_correct, mem.rt_DC_fem_correct]);
-mem.rt_DC_incorrect = nanmean([mem.rt_DC_hom_incorrect, mem.rt_DC_fem_incorrect]);
+% Benefitial Condition
+mem.rt_BC              = mean(rt(BC_condition == 1));
+mem.rt_BC_correct      = mean(rt(BC_correct == 1));
+mem.rt_BC_incorrect    = mean(rt(BC_incorrect == 1));
 
-mem.rt_CC           = nanmean([mem.rt_CC_hom, mem.rt_CC_fem]);
-mem.rt_CC_correct   = nanmean([mem.rt_CC_hom_correct, mem.rt_CC_fem_correct]);
-mem.rt_CC_incorrect = nanmean([mem.rt_CC_hom_incorrect, mem.rt_CC_fem_incorrect]);
+mem.rt_BC_hom          = mean(rt(BC_hom == 1));
+mem.rt_BC_hom_correct  = mean(rt(BC_hom_correct == 1));
+mem.rt_BC_hom_incorrect= mean(rt(BC_hom_incorrect == 1));
 
-mem.rt_BC           = nanmean([mem.rt_BC_hom, mem.rt_BC_fem]);
-mem.rt_BC_correct   = nanmean([mem.rt_BC_hom_correct, mem.rt_BC_fem_correct]);
-mem.rt_BC_incorrect = nanmean([mem.rt_BC_hom_incorrect, mem.rt_BC_fem_incorrect]);
+mem.rt_BC_fem          = mean(rt(BC_fem == 1));
+mem.rt_BC_fem_correct  = mean(rt(BC_fem_correct == 1));
+mem.rt_BC_fem_incorrect= mean(rt(BC_fem_incorrect == 1));
+
+
 disp(['RTs Emotion : ',num2str(mem.rt_DC), ' s for detrimental condition, ', ...
     num2str(mem.rt_CC), ' s for control condition & ',num2str(mem.rt_BC), ' s for beneficial condition']);
 
-% Condition Gender
-mem.rt_fem          = (mem.rt_DC_fem + mem.rt_CC_fem + mem.rt_BC_fem) / 3;
-mem.rt_hom          = (mem.rt_DC_hom + mem.rt_CC_hom + mem.rt_BC_hom) / 3;
+%% =================== RTs - Gender                 ===================
+mem.rt_fem             = mean(rt(fem_condition == 1));
+mem.rt_fem_correct     = mean(rt(fem_correct == 1));
+mem.rt_fem_incorrect   = mean(rt(fem_incorrect == 1));
+
+mem.rt_hom             = mean(rt(hom_condition == 1));
+mem.rt_hom_correct     = mean(rt(hom_correct == 1));
+mem.rt_hom_incorrect   = mean(rt(hom_incorrect == 1));
 
 disp(['RTs Gender: ',num2str(mem.rt_fem), ' s for condition femme & ', ...
     num2str(mem.rt_hom), ' s for condition homme ']);
 
 %% =================== RTs - Conditions & Rewards       ===================
 
-mem.rt_DC_smallRwd = (mean(rt(smallRwd == 1 & DC_hom == 1)) + mean(rt(smallRwd == 1 & DC_fem == 1)))/ 2;
+mem.rt_DC_smallRwd     = mean(rt(smallRwd == 1 & DC_condition == 1));
+mem.rt_DC_largeRwd     = mean(rt(largeRwd == 1 & DC_condition == 1));
 
-mem.rt_DC_largeRwd = (mean(rt(largeRwd == 1 & DC_hom == 1)) + mean(rt(largeRwd == 1 & DC_fem == 1)))/ 2;
+mem.rt_CC_smallRwd     = mean(rt(smallRwd == 1 & CC_condition == 1));
+mem.rt_CC_largeRwd     = mean(rt(largeRwd == 1 & CC_condition == 1));
 
-mem.rt_CC_smallRwd = (mean(rt(smallRwd == 1 & CC_hom == 1)) + mean(rt(smallRwd == 1 & CC_fem == 1)))/ 2;
+mem.rt_BC_smallRwd     = mean(rt(smallRwd == 1 & BC_condition == 1));
+mem.rt_BC_largeRwd     = mean(rt(largeRwd == 1 & BC_condition == 1));
 
-mem.rt_CC_largeRwd = (mean(rt(largeRwd == 1 & CC_hom == 1)) + mean(rt(largeRwd == 1 & CC_fem == 1)))/ 2;
+%% =================== RTs - Gender & Rewards           ===================
 
-mem.rt_BC_smallRwd = (mean(rt(smallRwd == 1 & BC_hom == 1)) + mean(rt(smallRwd == 1 & BC_fem == 1)))/ 2;
+mem.rt_fem_smallRwd     = mean(rt(smallRwd == 1 & fem_condition == 1));
+mem.rt_fem_largeRwd     = mean(rt(largeRwd == 1 & fem_condition == 1));
 
-mem.rt_BC_largeRwd = (mean(rt(largeRwd == 1 & BC_hom == 1)) + mean(rt(largeRwd == 1 & BC_fem == 1)))/ 2;
+mem.rt_hom_smallRwd     = mean(rt(smallRwd == 1 & hom_condition == 1));
+mem.rt_hom_largeRwd     = mean(rt(largeRwd == 1 & hom_condition == 1));
+
+%% =================== RTs - Link To Performance        ===================
+
+mem.rt_median          = median(rt); 
+
+rt_slow                 = find(rt > mem.rt_median); 
+mem.rt_slow_perf       = sum(correct(rt_slow) == 1)/length(rt_slow)*100;
+rt_fast                 = find(rt < mem.rt_median);
+mem.rt_fast_perf       = sum(correct(rt_fast) == 1)/length(rt_fast)*100;
 
 %% =================== Learning Curve                   ===================
 

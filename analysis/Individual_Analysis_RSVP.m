@@ -387,12 +387,28 @@ rsvp.perf_BC_largeRwd   = sum(BC_correct(largeRwd == 1)) / sum(BC_condition(larg
 %% =================== Performance - Gender & Rewards   ===================
 
 rsvp.perf_fem_smallRwd  = sum(fem_correct(smallRwd == 1)) / sum(fem_condition(smallRwd == 1)) * 100 ;
-
 rsvp.perf_fem_largeRwd  = sum(fem_correct(largeRwd == 1)) / sum(fem_condition(largeRwd == 1)) * 100 ;
 
-rsvp.perf_hom_smallRwd  = sum(hom_correct(smallRwd == 1)) / sum(hom_condition(smallRwd == 1)) * 100;
+rsvp.perf_DC_fem_smallRwd = sum(DC_fem_correct(smallRwd == 1)) / sum(DC_fem(smallRwd == 1)) * 100 ;
+rsvp.perf_DC_fem_largeRwd = sum(DC_fem_correct(largeRwd == 1)) / sum(DC_fem(largeRwd == 1)) * 100 ;
 
-rsvp.perf_hom_largeRwd  = sum(hom_correct(largeRwd == 1)) / sum(hom_condition(largeRwd == 1)) * 100 ;
+rsvp.perf_CC_fem_smallRwd = sum(CC_fem_correct(smallRwd == 1)) / sum(CC_fem(smallRwd == 1)) * 100 ;
+rsvp.perf_CC_fem_largeRwd = sum(CC_fem_correct(largeRwd == 1)) / sum(CC_fem(largeRwd == 1)) * 100 ;
+
+rsvp.perf_BC_fem_smallRwd = sum(BC_fem_correct(smallRwd == 1)) / sum(BC_fem(smallRwd == 1)) * 100 ;
+rsvp.perf_BC_fem_largeRwd = sum(BC_fem_correct(largeRwd == 1)) / sum(BC_fem(largeRwd == 1)) * 100 ;
+
+rsvp.perf_hom_smallRwd  = sum(hom_correct(smallRwd == 1)) / sum(hom_condition(smallRwd == 1)) * 100;
+rsvp.perf_hom_largeRwd  = sum(hom_correct(largeRwd == 1)) / sum(hom_condition(largeRwd == 1)) * 100;
+
+rsvp.perf_DC_hom_smallRwd = sum(DC_hom_correct(smallRwd == 1)) / sum(DC_hom(smallRwd == 1)) * 100 ;
+rsvp.perf_DC_hom_largeRwd = sum(DC_hom_correct(largeRwd == 1)) / sum(DC_hom(largeRwd == 1)) * 100 ;
+
+rsvp.perf_CC_hom_smallRwd = sum(CC_hom_correct(smallRwd == 1)) / sum(CC_hom(smallRwd == 1)) * 100 ;
+rsvp.perf_CC_hom_largeRwd = sum(CC_hom_correct(largeRwd == 1)) / sum(CC_hom(largeRwd == 1)) * 100 ;
+
+rsvp.perf_BC_hom_smallRwd = sum(BC_hom_correct(smallRwd == 1)) / sum(BC_hom(smallRwd == 1)) * 100 ;
+rsvp.perf_BC_hom_largeRwd = sum(BC_hom_correct(largeRwd == 1)) / sum(BC_hom(largeRwd == 1)) * 100 ;
 
 %% =================== Performance - Lags               ===================
 

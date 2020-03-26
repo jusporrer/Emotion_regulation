@@ -6,7 +6,7 @@ close all;
 
 %% =================== Get All Individual Data          ===================
 
-subject_ID = [81473, 74239, 98197, 12346, 81477, 90255, 33222, 90255, 48680]; 
+subject_ID = [81473, 74239, 81477, 90255 , 98197, 12346, 33222, 90255, 48680]; 
 
 for subj_idx = 1:length(subject_ID)
     disp(['=================== Subject ', ...
@@ -186,36 +186,56 @@ perf_BC_largeRwd_sem    = std([rsvpGRP.perf_BC_largeRwd])/sqrt(nS);
 
 %% =================== Performance - Gender & Rewards   ===================
 
+% Female 
 perf_fem_smallRwd         = [rsvpGRP.perf_fem_smallRwd]; 
 perf_fem_largeRwd         = [rsvpGRP.perf_fem_largeRwd]; 
-
 [h_perf_fem_rwd, p_perf_fem_rwd, ci_perf_fem_rwd, stats_perf_fem_rwd] = ttest2(perf_fem_smallRwd, perf_fem_largeRwd);
 
+perf_DC_fem                 = [rsvpGRP.DC_fem_rate]; 
+perf_CC_fem                 = [rsvpGRP.CC_fem_rate];
+perf_BC_fem                 = [rsvpGRP.BC_fem_rate]; 
+[h_perf_DC_BC_fem, p_perf_DC_BC_fem, ci_perf_DC_BC_fem, stats_perf_DC_BC_fem] = ttest2(perf_DC_fem, perf_BC_fem);
+[h_perf_DC_CC_fem, p_perf_DC_CC_fem, ci_perf_DC_CC_fem, stats_perf_DC_CC_fem] = ttest2(perf_DC_fem, perf_CC_fem);
+[h_perf_CC_BC_fem, p_perf_CC_BC_fem, ci_perf_CC_BC_fem, stats_perf_CC_BC_fem] = ttest2(perf_CC_fem, perf_BC_fem);
+
+perf_DC_fem_smallRwd = [rsvpGRP.perf_DC_fem_smallRwd];
+perf_DC_fem_largeRwd = [rsvpGRP.perf_DC_fem_largeRwd];
+
+perf_CC_fem_smallRwd = [rsvpGRP.perf_CC_fem_smallRwd];
+perf_CC_fem_largeRwd = [rsvpGRP.perf_CC_fem_largeRwd];
+
+perf_BC_fem_smallRwd = [rsvpGRP.perf_BC_fem_smallRwd];
+perf_BC_fem_largeRwd = [rsvpGRP.perf_BC_fem_largeRwd];
+
+% Male 
 perf_hom_smallRwd         = [rsvpGRP.perf_hom_smallRwd]; 
 perf_hom_largeRwd         = [rsvpGRP.perf_hom_largeRwd]; 
-
 [h_perf_hom_rwd, p_perf_hom_rwd, ci_perf_hom_rwd, stats_perf_hom_rwd] = ttest2(perf_hom_smallRwd, perf_hom_largeRwd);
 
-[h_perf_fem_hom_smallRwd, p_perf_fem_hom_smallRwd, ci_perf_fem_hom_smallRwd, stats_perf_fem_hom_smallRwd] = ttest2(rt_fem_smallRwd, rt_hom_smallRwd);
-[h_perf_fem_hom_largeRwd, p_perf_fem_hom_largeRwd, ci_perf_fem_hom_largeRwd, stats_perf_fem_hom_largeRwd] = ttest2(rt_fem_largeRwd, rt_hom_largeRwd);
+perf_DC_hom                 = [rsvpGRP.DC_hom_rate]; 
+perf_BC_hom                 = [rsvpGRP.BC_hom_rate]; 
+perf_CC_hom                 = [rsvpGRP.CC_hom_rate];
+[h_perf_DC_BC_hom, p_perf_DC_BC_hom, ci_perf_DC_BC_hom, stats_perf_DC_BC_hom] = ttest2(perf_DC_hom, perf_BC_hom);
+[h_perf_DC_CC_hom, p_perf_DC_CC_hom, ci_perf_DC_CC_hom, stats_perf_DC_CC_hom] = ttest2(perf_DC_hom, perf_CC_hom);
+[h_perf_CC_BC_hom, p_perf_CC_BC_hom, ci_perf_CC_BC_hom, stats_perf_CC_BC_hom] = ttest2(perf_CC_hom, perf_BC_hom);
 
-DC_fem_rate                 = [rsvpGRP.DC_fem_rate]; 
-CC_fem_rate                 = [rsvpGRP.CC_fem_rate];
-BC_fem_rate                 = [rsvpGRP.BC_fem_rate]; 
-[h_perf_DC_BC_fem, p_perf_DC_BC_fem, ci_perf_DC_BC_fem, stats_perf_DC_BC_fem] = ttest2(DC_fem_rate, BC_fem_rate);
-[h_perf_DC_CC_fem, p_perf_DC_CC_fem, ci_perf_DC_CC_fem, stats_perf_DC_CC_fem] = ttest2(DC_fem_rate, CC_fem_rate);
-[h_perf_CC_BC_fem, p_perf_CC_BC_fem, ci_perf_CC_BC_fem, stats_perf_CC_BC_fem] = ttest2(CC_fem_rate, BC_fem_rate);
+perf_DC_hom_smallRwd = [rsvpGRP.perf_DC_hom_smallRwd];
+perf_DC_hom_largeRwd = [rsvpGRP.perf_DC_hom_largeRwd];
 
-DC_hom_rate                 = [rsvpGRP.DC_hom_rate]; 
-BC_hom_rate                 = [rsvpGRP.BC_hom_rate]; 
-CC_hom_rate                 = [rsvpGRP.CC_hom_rate];
-[h_perf_DC_BC_hom, p_perf_DC_BC_hom, ci_perf_DC_BC_hom, stats_perf_DC_BC_hom] = ttest2(DC_hom_rate, BC_hom_rate);
-[h_perf_DC_CC_hom, p_perf_DC_CC_hom, ci_perf_DC_CC_hom, stats_perf_DC_CC_hom] = ttest2(DC_hom_rate, CC_hom_rate);
-[h_perf_CC_BC_hom, p_perf_CC_BC_hom, ci_perf_CC_BC_hom, stats_perf_CC_BC_hom] = ttest2(CC_hom_rate, BC_hom_rate);
+perf_CC_hom_smallRwd = [rsvpGRP.perf_CC_hom_smallRwd];
+perf_CC_hom_largeRwd = [rsvpGRP.perf_CC_hom_largeRwd];
 
-[h_perf_DC_gender, p_perf_DC_gender, ci_perf_DC_gender, stats_perf_DC_gender] = ttest2(DC_hom_rate, DC_fem_rate);
-[h_perf_CC_gender, p_perf_CC_gender, ci_perf_CC_gender, stats_perf_CC_gender] = ttest2(CC_hom_rate, CC_fem_rate);
-[h_perf_BC_gender, p_perf_BC_gender, ci_perf_BC_gender, stats_perf_BC_gender] = ttest2(BC_hom_rate, BC_fem_rate);
+perf_BC_hom_smallRwd = [rsvpGRP.perf_BC_hom_smallRwd];
+perf_BC_hom_largeRwd = [rsvpGRP.perf_BC_hom_largeRwd];
+
+% Between Gender 
+[h_perf_fem_hom_smallRwd, p_perf_fem_hom_smallRwd, ci_perf_fem_hom_smallRwd, stats_perf_fem_hom_smallRwd] = ttest2(perf_fem_smallRwd, perf_hom_smallRwd);
+[h_perf_fem_hom_largeRwd, p_perf_fem_hom_largeRwd, ci_perf_fem_hom_largeRwd, stats_perf_fem_hom_largeRwd] = ttest2(perf_fem_largeRwd, perf_hom_largeRwd);
+
+[h_perf_DC_gender, p_perf_DC_gender, ci_perf_DC_gender, stats_perf_DC_gender] = ttest2(perf_DC_hom, perf_DC_fem);
+[h_perf_CC_gender, p_perf_CC_gender, ci_perf_CC_gender, stats_perf_CC_gender] = ttest2(perf_CC_hom, perf_CC_fem);
+[h_perf_BC_gender, p_perf_BC_gender, ci_perf_BC_gender, stats_perf_BC_gender] = ttest2(perf_BC_hom, perf_BC_fem);
+
 
 %% =================== RTs - General                    ===================
 
@@ -377,14 +397,6 @@ rt_hom_largeRwd         = [rsvpGRP.rt_hom_largeRwd];
 
 [h_rt_fem_hom_smallRwd, p_rt_fem_hom_smallRwd, ci_rt_fem_hom_smallRwd, stats_rt_fem_hom_smallRwd] = ttest2(rt_fem_smallRwd, rt_hom_smallRwd);
 [h_rt_fem_hom_largeRwd, p_rt_fem_hom_largeRwd, ci_rt_fem_hom_largeRwd, stats_rt_fem_hom_largeRwd] = ttest2(rt_fem_largeRwd, rt_hom_largeRwd);
-
-rsvp.perf_fem_smallRwd  = sum(fem_correct(smallRwd == 1)) / sum(fem_condition(smallRwd == 1)) * 100 ;
-
-rsvp.perf_fem_largeRwd  = sum(fem_correct(largeRwd == 1)) / sum(fem_condition(largeRwd == 1)) * 100 ;
-
-rsvp.perf_hom_smallRwd  = sum(hom_correct(smallRwd == 1)) / sum(hom_condition(smallRwd == 1)) * 100;
-
-rsvp.perf_hom_largeRwd  = sum(hom_correct(largeRwd == 1)) / sum(hom_condition(largeRwd == 1)) * 100 ;
 
 %% =================== Learning & RTs Curves            ===================
 
@@ -686,41 +698,92 @@ hold off
 % Performance par gender
 figure('Name', 'Gender Plots');
 
-gender_fem = {mean(perf_fem), mean(rt_fem)};
-gender_hom = {mean(perf_hom), mean(rt_hom)};
-gender_labels ={'Performance','RTs'};
-gender_titles ={'Performance according to gender', 'RTs according to gender'};
-gender_axis = {[0 3 50 105], [0 3 -1 1]};
+subplot(2,2,1)
+hold on;
+bar(1, mean(perf_fem),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+bar(1.5, mean(perf_hom),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+bar(2.5, mean(perf_fem(1:4)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+bar(3, mean(perf_hom(1:4)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+bar(4, mean(perf_fem(5:end)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+bar(4.5, mean(perf_hom(5:end)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+errorbar(1, mean(perf_fem), std(perf_fem)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(1.5, mean(perf_hom), std(perf_hom)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(2.5, mean(perf_fem(1:4)), std(perf_fem(1:4))/sqrt(nS), 'k.','LineWidth',1)
+errorbar(3, mean(perf_hom(1:4)), std(perf_hom(1:4))/sqrt(nS), 'k.','LineWidth',1)
+errorbar(4, mean(perf_fem(5:end)), std(perf_fem(5:end))/sqrt(nS), 'k.','LineWidth',1)
+errorbar(4.5, mean(perf_hom(5:end)), std(perf_hom(5:end))/sqrt(nS), 'k.','LineWidth',1)
+sigstar({[1,1.5]},p_perf_gender, 0, 100);
+legend({'Female Face', 'Male Face'},'fontsize', 6 , 'Location', 'northeast')
+xticks([1 2.5 4])
+xticklabels({'General','Female pilot','Male pilot'})
+ylabel('Performance','fontsize', 10)
+title('Performance according to gender','fontsize', 10)
+axis([0.5 5 70 105])
+grid minor
+box on
+hold off
 
-for i = 1:2
-    subplot(2,2,i)
-    hold on;
-    bar([gender_fem{i} 0],'FaceColor',[0.85 0.55 0.65]);
-    bar([0 gender_hom{i}],'FaceColor',[0.45, 0.60, 0.70]);
-    xticks([1 2])
-    xticklabels({'Female','Male'})
-    ylabel(gender_labels{i},'fontsize', 10)
-    title(gender_titles{i},'fontsize', 10)
-    axis(gender_axis{i})
-    grid minor
-    box on
-    hold off
-end
+subplot(2,2,2)
+hold on;
+bar(1, mean(rt_fem),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+bar(1.5, mean(rt_hom),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+bar(2.5, mean(rt_fem(1:4)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+bar(3, mean(rt_hom(1:4)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+bar(4, mean(rt_fem(5:end)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+bar(4.5, mean(rt_hom(5:end)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+errorbar(1, mean(rt_fem), std(rt_fem)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(1.5, mean(rt_hom), std(rt_hom)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(2.5, mean(rt_fem(1:4)), std(rt_fem(1:4))/sqrt(nS), 'k.','LineWidth',1)
+errorbar(3, mean(rt_hom(1:4)), std(rt_hom(1:4))/sqrt(nS), 'k.','LineWidth',1)
+errorbar(4, mean(rt_fem(5:end)), std(rt_fem(5:end))/sqrt(nS), 'k.','LineWidth',1)
+errorbar(4.5, mean(rt_hom(5:end)), std(rt_hom(5:end))/sqrt(nS), 'k.','LineWidth',1)
+%sigstar({[1,1.5]},p_rt_gender, 0, 1);
+legend({'Female Face', 'Male Face'},'fontsize', 6 , 'Location', 'northeast')
+xticks([1 2.5 4])
+xticklabels({'General','Female pilot','Male pilot'})
+ylabel('log(RTs)','fontsize', 10)
+title('RTs according to gender','fontsize', 10)
+axis([0.5 5 -1 1])
+grid minor
+box on
+hold off
 
 % Performance par genre & conditions
 subplot(2,1,2)
 hold on;
-bar([rsvp.DC_fem_rate 0 0 0 0 0],'FaceColor',[0.65 0.35 0.45]);
-bar([0 rsvp.DC_hom_rate 0 0 0 0],'FaceColor',[0.45 0.15 0.25]);
-bar([0 0 rsvp.CC_fem_rate 0 0 0],'FaceColor',[0.85 0.85 0.85]);
-bar([0 0 0 rsvp.CC_hom_rate 0 0],'FaceColor',[0.65 0.65 0.65]);
-bar([0 0 0 0 rsvp.BC_fem_rate 0],'FaceColor',[0.50 0.65 0.50]);
-bar([0 0 0 0 0 rsvp.BC_hom_rate],'FaceColor',[0.30 0.45 0.30]);
-xticks([1 2 3 4 5 6])
-xticklabels({'DC Fem','DC Hom','CC Fem','CC Hom','BC Fem','BC Hom'})
+bar(1, mean(perf_DC_fem_smallRwd),'FaceColor',[0.65 0.35 0.45],'BarWidth',.45);
+bar(1.5, mean(perf_DC_fem_largeRwd),'FaceColor',[0.45 0.15 0.25],'BarWidth',.45);
+bar(2, mean(perf_CC_fem_smallRwd),'FaceColor',[0.85 0.85 0.85],'BarWidth',.45);
+bar(2.5, mean(perf_CC_fem_largeRwd),'FaceColor',[0.65 0.65 0.65],'BarWidth',.45);
+bar(3, mean(perf_BC_fem_smallRwd),'FaceColor',[0.50 0.65 0.50],'BarWidth',.45);
+bar(3.5, mean(perf_BC_fem_largeRwd),'FaceColor',[0.30 0.45 0.30],'BarWidth',.45);
+
+errorbar(1, mean(perf_DC_fem_smallRwd), std(perf_DC_fem_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(1.5, mean(perf_DC_fem_largeRwd), std(perf_DC_fem_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(2, mean(perf_CC_fem_smallRwd), std(perf_CC_fem_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(2.5, mean(perf_CC_fem_largeRwd), std(perf_CC_fem_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(3, mean(perf_BC_fem_smallRwd), std(perf_BC_fem_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(3.5, mean(perf_BC_fem_largeRwd), std(perf_BC_fem_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+
+bar(4.5, mean(perf_DC_hom_smallRwd),'FaceColor',[0.65 0.35 0.45],'BarWidth',.45);
+errorbar(4.5, mean(perf_DC_hom_smallRwd), std(perf_DC_hom_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+bar(5, mean(perf_DC_hom_largeRwd),'FaceColor',[0.45 0.15 0.25],'BarWidth',.45);
+errorbar(5, mean(perf_DC_hom_largeRwd), std(perf_DC_hom_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+bar(5.5, mean(perf_CC_hom_smallRwd),'FaceColor',[0.85 0.85 0.85],'BarWidth',.45);
+errorbar(5.5, mean(perf_CC_hom_smallRwd), std(perf_CC_hom_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+bar(6, mean(perf_CC_hom_largeRwd),'FaceColor',[0.65 0.65 0.65],'BarWidth',.45);
+errorbar(6, mean(perf_CC_hom_largeRwd), std(perf_CC_hom_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+bar(6.5, mean(perf_BC_hom_smallRwd),'FaceColor',[0.50 0.65 0.50],'BarWidth',.45);
+errorbar(6.5, mean(perf_BC_hom_smallRwd), std(perf_BC_hom_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+bar(7, mean(perf_BC_hom_largeRwd),'FaceColor',[0.30 0.45 0.30],'BarWidth',.45);
+errorbar(7, mean(perf_BC_hom_largeRwd), std(perf_BC_hom_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+
+xticks([1.5 5])
+xticklabels({'Female Faces', 'Male Faces'})
+legend({'DC SR', 'DC LR', 'CC SR', 'CC LR', 'BC SR', 'BC LR'},'fontsize', 6 , 'Location', 'northeast')
 ylabel('Performance','fontsize', 10)
 title('Performance according to gender & conditions','fontsize', 10)
-axis([0 7 40 105])
+axis([0 8 70 105])
 grid minor
 box on
 hold off

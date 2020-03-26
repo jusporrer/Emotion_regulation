@@ -39,69 +39,106 @@ disp(['Mean : ', ...
     num2str(round(perf_min)), '% & max perf : ', ...
     num2str(round(perf_max)), '%) ']) ;
 
-perf_imgShort       = mean([memGRP.imgShort_rate]);
-perf_imgShort_sem   = std([memGRP.imgShort_rate])/sqrt(nS);
-
-perf_imgLong        = mean([memGRP.imgLong_rate]);
-perf_imgLong_sem    = std([memGRP.imgLong_rate])/sqrt(nS);
+perf_imgShort       = ([memGRP.imgShort_rate]);
+perf_imgLong        = ([memGRP.imgLong_rate]);
 
 disp(['Image Presentation Duration : ', ...
-    num2str(round(perf_imgShort)), '% for 1.5 s & ', ...
-    num2str(round(perf_imgLong)), '% for 2 s ']) ;
+    num2str(mean(perf_imgShort)), '% for 1.5 s & ', ...
+    num2str(mean(perf_imgLong)), '% for 2 s ']) ;
+
+[h_perf_img, p_perf_img, ci_perf_img, stats_perf_img] = ttest2(perf_imgShort, perf_imgLong);
 
 %% =================== Performance - Rewards            ===================
-smallRwd_rate       = mean([memGRP.smallRwd_rate]);
-smallRwd_rate_sem   = std([memGRP.smallRwd_rate])/sqrt(nS);
+perf_smallRwd       = ([memGRP.smallRwd_rate]);
 
-largeRwd_rate       = mean([memGRP.largeRwd_rate]);
-largeRwd_rate_sem   = std([memGRP.largeRwd_rate])/sqrt(nS);
+perf_largeRwd       = ([memGRP.largeRwd_rate]);
 
-disp(['Reward : ',num2str(round(smallRwd_rate)), '% for small rwd & ', ...
-    num2str(round(largeRwd_rate)), '% for large rwd' ]);
+disp(['Reward : ',num2str(round(mean(perf_smallRwd))), '% for small rwd & ', ...
+    num2str(round(mean(perf_largeRwd))), '% for large rwd' ]);
+
+[h_perf_rwd, p_perf_rwd, ci_perf_rwd, stats_perf_rwd] = ttest2(perf_smallRwd, perf_largeRwd);
 
 %% =================== Performance - Genders            ===================
 
-perf_fem            = mean([memGRP.perf_fem]);
-perf_fem_sem        = std([memGRP.perf_fem]);
+perf_fem            = ([memGRP.perf_fem]);
 
-perf_hom            = mean([memGRP.perf_hom]);
-perf_hom_sem        = std([memGRP.perf_hom]);
+perf_hom            = ([memGRP.perf_hom]);
 
-disp(['Gender: ',num2str(round(perf_fem)), '% for condition femme & ', ...
-    num2str(round(perf_hom)), '% for condition homme ']);
+disp(['Gender: ',num2str(round(mean(perf_fem))), '% for condition femme & ', ...
+    num2str(round(mean(perf_hom))), '% for condition homme ']);
+
+[h_perf_gender, p_perf_gender, ci_perf_gender, stats_perf_gender] = ttest2(perf_fem, perf_hom);
 
 %% =================== Performance - Condition          ===================
 
-perf_DC         = mean([memGRP.perf_DC]);
+% Detrimental Condition 
+perf_DC         = ([memGRP.perf_DC]);
 perf_DC_sem     = std([memGRP.perf_DC])/sqrt(nS);
 
-perf_CC         = mean([memGRP.perf_CC]);
-perf_CC_sem     = std([memGRP.perf_CC])/sqrt(nS);
-
-perf_BC         = mean([memGRP.perf_BC]);
-perf_BC_sem     = std([memGRP.perf_BC])/sqrt(nS);
-
-disp(['Emotion : ',num2str(round(perf_DC)), '% for DC, ', ...
-    num2str(round(perf_CC)), '% for CC & ',...
-    num2str(ceil(perf_BC)), '% for BC']);
-
-perf_DC_smallRwd        = mean([memGRP.perf_DC_smallRwd]);
+perf_DC_smallRwd        = ([memGRP.perf_DC_smallRwd]);
 perf_DC_smallRwd_sem    = std([memGRP.perf_DC_smallRwd])/sqrt(nS);
 
-perf_DC_largeRwd        = mean([memGRP.perf_DC_largeRwd]);
+perf_DC_largeRwd        = ([memGRP.perf_DC_largeRwd]);
 perf_DC_largeRwd_sem    = std([memGRP.perf_DC_largeRwd])/sqrt(nS);
 
-perf_CC_smallRwd        = mean([memGRP.perf_CC_smallRwd]);
+[h_perf_DC_rwd, p_perf_DC_rwd, ci_perf_DC_rwd, stats_perf_DC_rwd]           = ttest2(perf_DC_smallRwd, perf_DC_largeRwd);
+
+% Control Condition 
+perf_CC         = ([memGRP.perf_CC]);
+perf_CC_sem     = std([memGRP.perf_CC])/sqrt(nS);
+
+perf_CC_smallRwd        = ([memGRP.perf_CC_smallRwd]);
 perf_CC_smallRwd_sem    = std([memGRP.perf_CC_smallRwd])/sqrt(nS);
 
-perf_CC_largeRwd        = mean([memGRP.perf_CC_largeRwd]);
+perf_CC_largeRwd        = ([memGRP.perf_CC_largeRwd]);
 perf_CC_largeRwd_sem    = std([memGRP.perf_CC_largeRwd])/sqrt(nS);
 
-perf_BC_smallRwd        = mean([memGRP.perf_BC_smallRwd]);
+[h_perf_CC_rwd, p_perf_CC_rwd, ci_perf_CC_rwd, stats_perf_CC_rwd]           = ttest2(perf_CC_smallRwd, perf_CC_largeRwd);
+
+% perf_CC_DC_smallRwd     = ([rsvpGRP.perf_CC_DC_smallRwd]);
+% perf_CC_DC_smallRwd_sem = std([rsvpGRP.perf_CC_DC_smallRwd])/sqrt(nS);
+% 
+% perf_CC_DC_largeRwd     = ([rsvpGRP.perf_CC_DC_largeRwd]);
+% perf_CC_DC_largeRwd_sem = std([rsvpGRP.perf_CC_DC_largeRwd])/sqrt(nS);
+% 
+% [h_perf_CC_DC_rwd, p_perf_CC_DC_rwd, ci_perf_CC_DC_rwd, stats_perf_CC_DC_rwd] = ttest2(perf_CC_DC_smallRwd, perf_CC_DC_largeRwd);
+% 
+% perf_CC_BC_smallRwd     = ([rsvpGRP.perf_CC_BC_smallRwd]);
+% perf_CC_BC_smallRwd_sem = std([rsvpGRP.perf_CC_BC_smallRwd])/sqrt(nS);
+% 
+% perf_CC_BC_largeRwd     = ([rsvpGRP.perf_CC_BC_largeRwd]);
+% perf_CC_BC_largeRwd_sem = std([rsvpGRP.perf_CC_BC_largeRwd])/sqrt(nS);
+% 
+% [h_perf_CC_BC_rwd, p_perf_CC_BC_rwd, ci_perf_CC_BC_rwd, stats_perf_CC_BC_rwd] = ttest2(perf_CC_BC_smallRwd, perf_CC_BC_largeRwd);
+
+% Benefitial condition 
+perf_BC         = ([memGRP.perf_BC]);
+perf_BC_sem     = std([memGRP.perf_BC])/sqrt(nS);
+
+perf_BC_smallRwd        = ([memGRP.perf_BC_smallRwd]);
 perf_BC_smallRwd_sem    = std([memGRP.perf_BC_smallRwd])/sqrt(nS);
 
-perf_BC_largeRwd        = mean([memGRP.perf_BC_largeRwd]);
+perf_BC_largeRwd        = ([memGRP.perf_BC_largeRwd]);
 perf_BC_largeRwd_sem    = std([memGRP.perf_BC_largeRwd])/sqrt(nS);
+
+[h_perf_BC_rwd, p_perf_BC_rwd, ci_perf_BC_rwd, stats_perf_BC_rwd]           = ttest2(perf_BC_smallRwd, perf_BC_largeRwd);
+
+disp(['Emotion : ',num2str(round(mean(perf_DC))), '% for DC, ', ...
+    num2str(round(mean(perf_CC))), '% for CC & ',...
+    num2str(round(mean(perf_BC))), '% for BC']);
+
+% T-test 
+[h_perf_DC_CC, p_perf_DC_CC, ci_perf_DC_CC, stats_perf_DC_CC]               = ttest2(perf_DC, perf_CC);
+[h_perf_DC_BC, p_perf_DC_BC, ci_perf_DC_BC, stats_perf_DC_BC]               = ttest2(perf_DC, perf_BC);
+[h_perf_CC_BC, p_perf_CC_BC, ci_perf_CC_BC, stats_perf_CC_BC]               = ttest2(perf_CC, perf_BC);
+
+[h_perf_DC_CC_smallRwd, p_perf_DC_CC_smallRwd, ci_perf_DC_CC_smallRwd, stats_perf_DC_CC_smallRwd] = ttest2(perf_DC_smallRwd, perf_CC_smallRwd);
+[h_perf_DC_BC_smallRwd, p_perf_DC_BC_smallRwd, ci_perf_DC_BC_smallRwd, stats_perf_DC_BC_smallRwd] = ttest2(perf_DC_smallRwd, perf_BC_smallRwd);
+[h_perf_CC_BC_smallRwd, p_perf_CC_BC_smallRwd, ci_perf_CC_BC_smallRwd, stats_perf_CC_BC_smallRwd] = ttest2(perf_CC_smallRwd, perf_BC_smallRwd);
+
+[h_perf_DC_CC_largeRwd, p_perf_DC_CC_largeRwd, ci_perf_DC_CC_largeRwd, stats_perf_DC_CC_largeRwd] = ttest2(perf_DC_largeRwd, perf_CC_largeRwd);
+[h_perf_DC_BC_largeRwd, p_perf_DC_BC_largeRwd, ci_perf_DC_BC_largeRwd, stats_perf_DC_BC_largeRwd] = ttest2(perf_DC_largeRwd, perf_BC_largeRwd);
+[h_perf_CC_BC_largeRwd, p_perf_CC_BC_largeRwd, ci_perf_CC_BC_largeRwd, stats_perf_CC_BC_largeRwd] = ttest2(perf_CC_largeRwd, perf_BC_largeRwd);
 
 %% =================== RTs - General                    ===================
 
@@ -225,52 +262,77 @@ end
 
 %% Performance Plots
 % Performance par conditions
-figure('Name', 'Memory Task Performance Plots');
+figure('Name', 'RSVP Performance Plots');
 subplot(2,3,1)
 hold on;
-bar([perf_DC 0 0],'FaceColor',[0.55 0.25 0.35]);
-bar([0 perf_CC 0],'FaceColor',[0.75 0.75 0.75]);
-bar([0 0 perf_BC],'FaceColor',[0.40 0.55 0.40]);
-errorbar(1, perf_DC, perf_DC_sem, 'k.','LineWidth',1);
-errorbar(2, perf_CC, perf_CC_sem, 'k.','LineWidth',1);
-errorbar(3, perf_BC, perf_BC_sem, 'k.','LineWidth',1);
-xticks([1 2 3 4])
-xticklabels({'DC','CC', 'BC'})
+bar(1, mean(perf_DC),'FaceColor',[.55 .25 .35])
+%b1 = bar((2-.8/3), mean(perf_CC_DC),'FaceColor',[.85 .75 .75], 'BarWidth',.8/3);
+b2 = bar((2), mean(perf_CC),'FaceColor',[.75 .75 .75], 'BarWidth',.8/3);
+%b3 = bar((2+.8/3), mean(perf_CC_BC),'FaceColor',[.75 .85 .75], 'BarWidth',.8/3);
+bar(3, mean(perf_BC),'FaceColor',[.40 .55 .40])
+errorbar(1, mean(perf_DC), perf_DC_sem, 'k.','LineWidth',1);
+%errorbar((2-.8/3), mean(perf_CC_DC), perf_CC_DC_sem, 'k.','LineWidth',.8);
+errorbar((2), mean(perf_CC), perf_CC_sem, 'k.','LineWidth',.8);
+%errorbar((2+.8/3), mean(perf_CC_BC), perf_CC_BC_sem, 'k.','LineWidth',.8);
+errorbar(3, mean(perf_BC), perf_BC_sem, 'k.','LineWidth',1);
+sigstar({[1,2],[1,3],[2,3]},[p_perf_DC_CC, p_perf_DC_BC, p_perf_CC_BC], 0, 100);
+xticks([1 2 3])
+xticklabels({'DC','CC','BC'})
+%legend([b1 b2 b3],{'CC (DC)','CC', 'CC (BC)'},'fontsize', 6, 'location','northeast')
 ylabel('Performance','fontsize', 10)
 title('Performance According to Conditions','fontsize', 10)
-axis([0 4 50 100])
-grid minor
-box on
-hold off
-
-% Performance par rewards
-subplot(2,3,2)
-hold on;
-bar([smallRwd_rate 0],'FaceColor',[0.75, 0.85, 0.90]);
-bar([0 largeRwd_rate],'FaceColor',[0.35, 0.50, 0.60]);
-errorbar(1, smallRwd_rate, smallRwd_rate_sem, 'k.','LineWidth',1)
-errorbar(2, largeRwd_rate, largeRwd_rate_sem, 'k.','LineWidth',1);
-xticks([1 2])
-xticklabels({'Small Rwd','Large Rwd'})
-ylabel('Performance','fontsize', 10)
-title('Performance According to Reward Size','fontsize', 10)
-axis([0 3 50 100])
+axis([0 4 60 100])
 grid minor
 box on
 hold off
 
 % Performance par img presentation
-subplot(2,3,3)
+subplot(2,3,2)
 hold on;
-bar([perf_imgShort 0],'FaceColor',[.9, .8, .9]);
-bar([0 perf_imgLong],'FaceColor',[.9, .7, .7]);
-errorbar(1, perf_imgShort, perf_imgShort_sem, 'k.','LineWidth',1)
-errorbar(2, perf_imgLong, perf_imgLong_sem, 'k.','LineWidth',1);
+img_plotY = [perf_imgShort.', perf_imgLong.'];
+img_plotX = [1, 2];
+img_plot_color = {[.9, .7, .7], [.9, .8, .9]};
+B = boxplot(img_plotY, img_plotX,'Widths',.7);
+get (B, 'tag'); 
+set(B(1,:), 'color', 'k'); set(B(2,:), 'color', 'k');
+set(B(6,:), 'color', 'k', 'linewidth', 2);
+scatter(img_plotX,mean(img_plotY),'k','filled','d')
+h = findobj(gca,'Tag','Box');
+ for j=1:length(h)
+    patch(get(h(j),'XData'),get(h(j),'YData'),img_plot_color{j},'FaceAlpha',.7);
+ end
 xticks([1 2])
+sigstar({[1,2]},p_perf_img, 0, 1);
 xticklabels({'1.5 s ','2 s'})
 ylabel('Performance','fontsize', 10)
 title('Performance According to Image Presentation Duration','fontsize', 10)
-axis([0 3 50 100])
+axis([0 3 60 100])
+grid minor
+box on
+hold off
+
+% Performance par rewards
+subplot(2,3,3)
+hold on;
+rwd_plotY = [perf_smallRwd.', perf_largeRwd.'];
+rwd_plotX = [1, 2];
+rwd_plot_color = {[.00, .45, .55], [.45, .75, .80]};
+B = boxplot(rwd_plotY, rwd_plotX,'Widths',.7);
+get (B, 'tag'); 
+set(B(1,:), 'color', 'k'); set(B(2,:), 'color', 'k');
+set(B(6,:), 'color', 'k', 'linewidth', 2);
+scatter(rwd_plotX,mean(rwd_plotY),'k','filled','d')
+h = findobj(gca,'Tag','Box');
+ for j=1:length(h)
+    patch(get(h(j),'XData'),get(h(j),'YData'),rwd_plot_color{j},'FaceAlpha',.7);
+ end
+sigstar({[1,2]},p_perf_rwd, 0, 1);
+xticks([1 2])
+legend({'Mean'}, 'Location', 'southeast')
+xticklabels({'Small Rwd','Large Rwd'})
+ylabel('Performance','fontsize', 10)
+title('Performance According to Reward Size','fontsize', 10)
+axis([0 3 60 100])
 grid minor
 box on
 hold off
@@ -278,50 +340,67 @@ hold off
 % Performance par conditions & rewards
 subplot(2,2,3)
 hold on;
-bar([perf_DC_smallRwd 0 0 0 0 0],'FaceColor',[0.65 0.35 0.45]);
-bar([0 perf_DC_largeRwd 0 0 0 0],'FaceColor',[0.45 0.15 0.25]);
-bar([0 0 perf_CC_smallRwd 0 0 0],'FaceColor',[0.85 0.85 0.85]);
-bar([0 0 0 perf_CC_largeRwd 0 0],'FaceColor',[0.65 0.65 0.65]);
-bar([0 0 0 0 perf_BC_smallRwd 0],'FaceColor',[0.50 0.65 0.50]);
-bar([0 0 0 0 0 perf_BC_largeRwd],'FaceColor',[0.30 0.45 0.30]);
-errorbar(1, perf_DC_smallRwd, perf_DC_smallRwd_sem, 'k.','LineWidth',1)
-errorbar(2, perf_DC_largeRwd, perf_DC_largeRwd_sem, 'k.','LineWidth',1)
-errorbar(3, perf_CC_smallRwd, perf_CC_smallRwd_sem, 'k.','LineWidth',1)
-errorbar(4, perf_CC_largeRwd, perf_CC_largeRwd_sem, 'k.','LineWidth',1)
-errorbar(5, perf_BC_smallRwd, perf_BC_smallRwd_sem, 'k.','LineWidth',1)
-errorbar(6, perf_BC_largeRwd, perf_BC_largeRwd_sem, 'k.','LineWidth',1)
-xticks([1 2 3 4 5 6])
-xticklabels({'DC SR','DC LR','CC SR','CC LR','BC SR',' BC LR'})
+bar(1, mean(perf_DC_smallRwd),'FaceColor',[0.65 0.35 0.45], 'BarWidth',.5)
+%bar(1.5-.5/3, mean(perf_CC_DC_smallRwd),'FaceColor',[0.95 0.85 0.85], 'BarWidth',.5/3)
+bar(1.5, mean(perf_CC_smallRwd),'FaceColor',[0.85 0.85 0.85], 'BarWidth',.5/3)
+%bar(1.5+.5/3, mean(perf_CC_BC_smallRwd),'FaceColor',[0.85 0.95 0.85], 'BarWidth',.5/3)
+bar(2, mean(perf_BC_smallRwd),'FaceColor',[0.50 0.65 0.50], 'BarWidth',.5)
+
+bar(3, mean(perf_DC_largeRwd),'FaceColor',[0.45 0.15 0.25], 'BarWidth',.5)
+%bar(3.5-.5/3, mean(perf_CC_DC_largeRwd),'FaceColor',[0.75 0.65 0.65], 'BarWidth',.5/3)
+bar(3.5, mean(perf_CC_largeRwd),'FaceColor',[0.65 0.65 0.65], 'BarWidth',.5/3)
+%bar(3.5+.5/3, mean(perf_CC_BC_largeRwd),'FaceColor',[0.65 0.75 0.65], 'BarWidth',.5/3)
+bar(4, mean(perf_BC_largeRwd),'FaceColor',[0.30 0.45 0.30], 'BarWidth',.5)
+
+errorbar(1, mean(perf_DC_smallRwd), perf_DC_smallRwd_sem, 'k.','LineWidth',1)
+%errorbar(1.5-.5/3, mean(perf_CC_DC_smallRwd), perf_CC_DC_smallRwd_sem, 'k.','LineWidth',.8)
+errorbar(1.5, mean(perf_CC_smallRwd), perf_CC_smallRwd_sem, 'k.','LineWidth',.8)
+%errorbar(1.5+.5/3, mean(perf_CC_BC_smallRwd), perf_CC_BC_smallRwd_sem, 'k.','LineWidth',.8)
+errorbar(2, mean(perf_BC_smallRwd), perf_BC_smallRwd_sem, 'k.','LineWidth',1)
+
+errorbar(3, mean(perf_DC_largeRwd), perf_DC_largeRwd_sem, 'k.','LineWidth',1)
+%errorbar(3.5-.5/3, mean(perf_CC_DC_largeRwd), perf_CC_DC_largeRwd_sem, 'k.','LineWidth',.8)
+errorbar(3.5, mean(perf_CC_largeRwd), perf_CC_largeRwd_sem, 'k.','LineWidth',.8)
+%errorbar(3.5+.5/3, mean(perf_CC_BC_largeRwd), perf_CC_BC_largeRwd_sem, 'k.','LineWidth',.8)
+errorbar(4, mean(perf_BC_largeRwd), perf_BC_largeRwd_sem, 'k.','LineWidth',1)
+
+sigstar({[1,1.5],[1,2],[1.5,2]},[p_perf_DC_CC_smallRwd, p_perf_DC_BC_smallRwd, p_perf_CC_BC_smallRwd], 0, 100);
+sigstar({[3,3.5],[3,4],[3.5,4]},[p_perf_DC_CC_largeRwd, p_perf_DC_BC_largeRwd, p_perf_CC_BC_largeRwd], 0, 100);
+
+xticks([1.5 3.5])
+xticklabels({'Small Rwd', 'Large Rwd'})
+legend({'DC','CC (DC)','CC', 'CC (BC)', 'BC'}, 'fontsize', 6 , 'Location', 'northeast')
 ylabel('Performance','fontsize', 10)
 title('Performance According to Rewards and Conditions','fontsize', 10)
-axis([0 7 50 100])
+axis([0 5 60 100])
 grid minor
 box on
 hold off
 
 subplot(2,2,4)
 hold on;
-p2 = plot(1:3,[perf_DC_largeRwd, perf_CC_largeRwd,perf_BC_largeRwd], 'linewidth',2.3);
-p2.Color = [.35, .5, .6];
-p1 = plot(1:3,[perf_DC_smallRwd, perf_CC_smallRwd,perf_BC_smallRwd], 'linewidth',2.3);
-p1.Color = [.75, .85, .9];
-shadedErrorBar(1:3,[perf_DC_smallRwd, perf_CC_smallRwd,perf_BC_smallRwd], ...
-    [perf_DC_smallRwd_sem, perf_CC_smallRwd_sem,perf_BC_smallRwd_sem],'lineprops',{'Color',[.75, .85, .9]},'patchSaturation',.2);
-e1 = errorbar(1:3,[perf_DC_smallRwd, perf_CC_smallRwd,perf_BC_smallRwd], ...
-    [perf_DC_smallRwd_sem, perf_CC_smallRwd_sem,perf_BC_smallRwd_sem], 'k.','LineWidth',.9);
-e1.Color = [.75, .85, .9];
-shadedErrorBar(1:3, [perf_DC_largeRwd, perf_CC_largeRwd,perf_BC_largeRwd], ...
-    [perf_DC_largeRwd_sem, perf_CC_largeRwd_sem, perf_BC_largeRwd_sem],'lineprops',{'Color',[.35, .5, .6]},'patchSaturation',.2);
-e2 = errorbar(1:3,[perf_DC_largeRwd, perf_CC_largeRwd,perf_BC_largeRwd], ...
+p2 = plot(1:3,[mean(perf_DC_largeRwd), mean(perf_CC_largeRwd), mean(perf_BC_largeRwd)], 'linewidth',2.3);
+p2.Color = [.00, .45, .55];
+p1 = plot(1:3,[mean(perf_DC_smallRwd), mean(perf_CC_smallRwd), mean(perf_BC_smallRwd)], 'linewidth',2.3);
+p1.Color = [.45, .75, .80];
+shadedErrorBar(1:3, [mean(perf_DC_largeRwd), mean(perf_CC_largeRwd), mean(perf_BC_largeRwd)], ...
+    [perf_DC_largeRwd_sem, perf_CC_largeRwd_sem, perf_BC_largeRwd_sem],'lineprops',{'Color',[.00, .45, .55]},'patchSaturation',.2);
+e2 = errorbar(1:3,[mean(perf_DC_largeRwd), mean(perf_CC_largeRwd), mean(perf_BC_largeRwd)], ...
     [perf_DC_largeRwd_sem, perf_CC_largeRwd_sem, perf_BC_largeRwd_sem], 'k.','LineWidth',.9);
-e2.Color = [.35, .5, .6];
-line([0,5], [0,0], 'color','k','LineStyle',':','LineWidth',.5)
+e2.Color = [.00, .45, .55];
+shadedErrorBar(1:3,[mean(perf_DC_smallRwd), mean(perf_CC_smallRwd), mean(perf_BC_smallRwd)], ...
+    [perf_DC_smallRwd_sem, perf_CC_smallRwd_sem,perf_BC_smallRwd_sem],'lineprops',{'Color',[.45, .75, .80]},'patchSaturation',.2);
+e1 = errorbar(1:3,[mean(perf_DC_smallRwd), mean(perf_CC_smallRwd), mean(perf_BC_smallRwd)], ...
+    [perf_DC_smallRwd_sem, perf_CC_smallRwd_sem,perf_BC_smallRwd_sem], 'k.','LineWidth',.9);
+e1.Color = [.45, .75, .80];
+line([0,5], [0,0], 'color','k','LineStyle',':','LineWidth',.8)
+sigstar({[.8,1.2],[1.8,2.2],[2.8,3.2]},[p_perf_DC_rwd, p_perf_CC_rwd, p_perf_BC_rwd], 0, 100);
 xticks([1 2 3])
-legend({'Large Rwd','Small Rwd'})
+legend({'Large Rwd','Small Rwd'}, 'Location', 'southeast')
 xticklabels({'DC','CC','BC '})
-ylabel('Performance','fontsize', 10)
+ylabel('Performance (mean +/- SEM)','fontsize', 10)
 title('Performance According to Reward and Conditions','fontsize', 10)
-axis([0 4 50 100])
+axis([0 4 60 100])
 grid minor
 box on
 hold off
