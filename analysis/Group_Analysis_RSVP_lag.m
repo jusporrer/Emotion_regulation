@@ -6,7 +6,7 @@ close all;
 
 %% =================== Get All Individual Data          ===================
 
-subject_ID = [81473, 74239, 98197, 12346, 90255, 81477, 33222, 90255, 48680]; 
+subject_ID = [81433, 79662];
 
 for subj_idx = 1:length(subject_ID)
     disp(['=================== Subject ', ...
@@ -27,14 +27,14 @@ perf_lag2_mean              = mean([rsvpGRP.performance_lag2]);
 perf_lag2_min               = min([rsvpGRP.performance_lag2]);
 perf_lag2_max               = max([rsvpGRP.performance_lag2]);
 perf_lag2_sem               = std([rsvpGRP.performance_lag2])/sqrt(nS);
-[h_lag2, p_lag2, stats_lag2 ] = adtest(perf_lag2);
+%[h_lag2, p_lag2, stats_lag2 ] = adtest(perf_lag2);
 
 perf_lag4                   = [rsvpGRP.performance_lag4];
 perf_lag4_mean              = mean([rsvpGRP.performance_lag4]);
 perf_lag4_min               = min([rsvpGRP.performance_lag4]);
 perf_lag4_max               = max([rsvpGRP.performance_lag4]);
 perf_lag4_sem               = std([rsvpGRP.performance_lag4])/sqrt(nS);
-[h_lag4, p_lag4, stats_lag4 ] = adtest(perf_lag4);
+%[h_lag4, p_lag4, stats_lag4 ] = adtest(perf_lag4);
 
 disp(['General Performance : ', ...
     num2str(round(mean(perf_lag2))), '% for lag 2 & ', ...
@@ -391,7 +391,7 @@ for i = 1:2
     xticklabels({'DC','CC','BC '})
     ylabel('Performance (mean +/- SEM)','fontsize', 10)
     title(rwd_title{i},'fontsize', 10)
-    axis([0 4 70 105])
+    axis([0 4 50 115])
     grid minor
     box on
     hold off

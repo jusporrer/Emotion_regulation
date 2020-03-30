@@ -501,7 +501,7 @@ rsvp.rt_BC_fem_incorrect= mean(rt(BC_fem_incorrect == 1));
 disp(['RTs Emotion : ',num2str(rsvp.rt_DC), ' s for detrimental condition, ', ...
     num2str(rsvp.rt_CC), ' s for control condition & ',num2str(rsvp.rt_BC), ' s for beneficial condition']);
 
-%% =================== RTs - Gender                 ===================
+%% =================== RTs - Gender                     ===================
 rsvp.rt_fem             = mean(rt(fem_condition == 1));
 rsvp.rt_fem_correct     = mean(rt(fem_correct == 1));
 rsvp.rt_fem_incorrect   = mean(rt(fem_incorrect == 1));

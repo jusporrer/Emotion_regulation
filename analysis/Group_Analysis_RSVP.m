@@ -6,7 +6,7 @@ close all;
 
 %% =================== Get All Individual Data          ===================
 
-subject_ID = [81473, 74239, 81477, 90255 , 98197, 12346, 33222, 90255, 48680];
+subject_ID = [81433, 79662];
 
 for subj_idx = 1:length(subject_ID)
     disp(['=================== Subject ', ...
@@ -32,7 +32,7 @@ disp(['Number of excluded trials : ',num2str(nExcTrial)]);
 disp('=================== Performance Information ===================');
 
 perf                    = [rsvpGRP.performance];
-[h_perf, p_perf]        = adtest(perf); % Normality Anderson-Darling test
+%[h_perf, p_perf]        = adtest(perf); % Normality Anderson-Darling test
 perf_min                = min([rsvpGRP.performance]);
 perf_max                = max([rsvpGRP.performance]);
 perf_sem                = std([rsvpGRP.performance])/sqrt(nS);
