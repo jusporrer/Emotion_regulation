@@ -2,7 +2,7 @@
 % in the memory Task
 % Creation : Mars 2020
 
-function [mem]    = Individual_Analysis_Memory(ID, fig)
+function [mem]    = Individual_Analysis_Memory_short(ID, fig)
 
 %ID              = 90255; %74239 %12346 %90255 %81473 % 33222 % 56560 %72605 %11310 %9022 %81731 % 19279; %46700; 5034 ; %10016;
 %fig             = 1;
@@ -45,7 +45,7 @@ setSizeNM       = [data_memory(nTrain+1:end).setSizeNM];
 
 %% =================== Basic Information                ===================
 
-nTrial              = 1:length(trial); % allows the indexing
+nTrial          = 1:length(trial); % allows the indexing
 
 if length(trial) == cfg_exp.nTrialsExp * cfg_exp.nBlocksExp
     disp(['No data loss : There were ',num2str(length(trial)), ' trials']);
@@ -54,30 +54,21 @@ else
         num2str(cfg_exp.nTrialsExp * cfg_exp.nBlocksExp), 'trial expected']);
 end
 
-%% =================== Exclude 3 STD RTs                ===================
 
-rt                  = (rt(nTrial));
-mean_RtExp          = mean(rt) ;
-std_RtExp           = std(rt)*3 ;
+block_DC_smallRwd = unique(block(reward(nTrial) == 1 & (condition(nTrial) == 1 | condition(nTrial) == 2)));
+block_DC_largeRwd = unique(block(reward(nTrial) == 2 & (condition(nTrial) == 1 | condition(nTrial) == 2)));
+block_BC_smallRwd = unique(block(reward(nTrial) == 1 & (condition(nTrial) == 5 | condition(nTrial) == 6)));
+block_BC_largeRwd = unique(block(reward(nTrial) == 2 & (condition(nTrial) == 5 | condition(nTrial) == 6)));
 
-% Recalculate nTrial with only non-outlier RT trials
-low_RtExp           = mean_RtExp-std_RtExp ;
-up_RtExp            = mean_RtExp+std_RtExp ;
-
-kept_RtExp          = intersect(find(rt(nTrial) > low_RtExp), find(rt(nTrial) < up_RtExp));
-excl_RtExp          = [find(rt(nTrial) < low_RtExp) find(rt(nTrial) > up_RtExp)];
-
-mem.nExcTrial       = length(excl_RtExp); 
-
-nTrial              = nTrial(kept_RtExp);
-mem.rt              = log(rt(nTrial)); 
-rt                  = log(rt(nTrial)); 
-block               = block(nTrial);
-
-if length(nTrial) < length(trial)
-    disp(['RTs warning : ',num2str(length(excl_RtExp)), ...
-        ' trial(s) had to be excluded because the RTs were over or under 3 STD']);
-end
+nTrialBlock = [nTrial(block == block_DC_smallRwd(1)), nTrial(block == block_DC_smallRwd(2)), ... 
+    nTrial(block == block_DC_largeRwd(1)), nTrial(block == block_DC_largeRwd(2)) ...
+    nTrial(block == block_BC_smallRwd(1)), nTrial(block == block_BC_smallRwd(2)) ...
+    nTrial(block == block_BC_largeRwd(1)), nTrial(block == block_BC_largeRwd(2))
+];
+nTrial                  = sort(nTrialBlock);
+mem.rt                 = log(rt(nTrial)); 
+rt                      = log(rt(nTrial)); 
+block                   = block(nTrial);
 
 %% =================== Performance - Correct Trials     ===================
 

@@ -93,7 +93,6 @@ disp(['Lag distribution : ',num2str(rsvp.nlag2), ' lag 2 trials & ', ...
 
 %% =================== Performance - Correct Lag 2      ===================
 
-% Correctly detect fem when fem was target
 correct_Fem_lag2                = lag2 & (response(nTrial) == 1 & instQuest(nTrial) == 1 ...                           % all fem targets
     & (target(nTrial) == 1 | target(nTrial) == 3));
 
@@ -127,7 +126,6 @@ disp(['Performance lag 2 : ',num2str(round(rsvp.performance_lag2)), ...
 
 %% =================== Performance - Correct Lag 4      ===================
 
-% Correctly detect fem when fem was target
 correct_Fem_lag4                = lag4 & (response(nTrial) == 1 & instQuest(nTrial) == 1 ...                           % all fem targets
     & (target(nTrial) == 1 | target(nTrial) == 3));
 
@@ -161,7 +159,6 @@ disp(['Performance lag 4 : ',num2str(round(rsvp.performance_lag4)), ...
 
 %% =================== Performance - Incorrect Lag 2    ===================
 
-% Incorrectly not detect fem when fem was target ( false alarm: says present when not present)
 incorrect_Fem_lag2              = lag2 & (response(nTrial) == 2 & instQuest(nTrial) == 1 ...                             % all fem targets
     & (target(nTrial) == 1 | target(nTrial) == 3));
 
@@ -195,7 +192,6 @@ disp(['Performance lag 2: ',num2str(round(rsvp.perf_incorrect_lag2)), ...
 
 %% =================== Performance - Incorrect Lag 4    ===================
 
-% Incorrectly not detect fem when fem was target ( false alarm: says present when not present)
 incorrect_Fem_lag4              = lag4 & (response(nTrial) == 2 & instQuest(nTrial) == 1 ...                             % all fem targets
     & (target(nTrial) == 1 | target(nTrial) == 3));
 

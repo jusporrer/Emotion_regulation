@@ -128,7 +128,11 @@ try
     %% Set Participant ID
     
     ID = ceil(100000*rand);
-        
+    
+    while isfile(['results\',num2str(ID),'_memory.mat']) || isfile(['results\',num2str(ID),'_rsvp.mat'])       
+       ID = ceil(100000*rand);
+    end
+    
     %% Start of the experiment
     
     for i = 1:2
@@ -141,10 +145,10 @@ try
     
     if rem(ID,2)==0
         % Training Period
-        [respMat_training_memory] = memory_task(ID, window, colors, screenPixels, true, stimuli);
+        %[respMat_training_memory] = memory_task(ID, window, colors, screenPixels, true, stimuli);
         
         % Experiment without Training
-        [respMat_memory] = memory_task(ID, window, colors, screenPixels, false, stimuli);
+        %[respMat_memory] = memory_task(ID, window, colors, screenPixels, false, stimuli);
         
     else
         %Training Period
@@ -159,10 +163,10 @@ try
     
     if rem(ID,2)==1
         % Training Period
-        [respMat_training_memory] = memory_task(ID, window, colors, screenPixels, true, stimuli);
+        %[respMat_training_memory] = memory_task(ID, window, colors, screenPixels, true, stimuli);
         
         % Experiment without Training
-        [respMat_memory] = memory_task(ID, window, colors, screenPixels, false, stimuli);
+        %[respMat_memory] = memory_task(ID, window, colors, screenPixels, false, stimuli);
         
     else
         
@@ -183,9 +187,9 @@ try
         mkdir results
     end
     
-    fileNameMemory = [ 'results/',num2str(ID), '_memory.mat'];
-    data_memory = [respMat_training_memory, respMat_memory];
-    save(fileNameMemory, 'data_memory');
+%     fileNameMemory = [ 'results/',num2str(ID), '_memory.mat'];
+%     data_memory = [respMat_training_memory, respMat_memory];
+%     save(fileNameMemory, 'data_memory');
     
     fileNameRSVP = ['results/',num2str(ID),'_rsvp.mat'];
     data_rsvp = [respMat_training_rsvp, respMat_rsvp];
@@ -195,7 +199,7 @@ try
     
     % Check if file was saved -> if problem, save matrices manually
     
-    if  isfile(fileNameMemory) && isfile(fileNameRSVP) 
+    if  isfile(fileNameRSVP) % isfile(fileNameMemory) &&
         warningMessage = sprintf([' End experiment: all data was saved correctly.                     \n ID : ', ...
             num2str(ID), '\n Date : ',datestr(datetime('now'))]);
         msg = msgbox(warningMessage);

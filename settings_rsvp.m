@@ -15,7 +15,7 @@ rsvpCfg.breakAfterTrials       = 100;
 rsvpCfg.setSize                = 15;
 
 % How long each image in the RSVP sequence is on screen(normally 100 ms so 0.1 s)
-rsvpCfg.imageDuration          = 0.1;
+rsvpCfg.imageDuration          = 0.07;
 
 % How long to wait (in seconds) for subject response before the trial times out
 rsvpCfg.trialTimeout           = 20;

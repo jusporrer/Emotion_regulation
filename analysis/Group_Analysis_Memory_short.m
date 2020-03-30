@@ -11,7 +11,7 @@ subject_ID = [81473, 74239, 98197, 81477, 12346, 90255, 33222, 90255, 48680];
 for subj_idx = 1:length(subject_ID)
     disp(['=================== Subject ', ...
         num2str(subject_ID(subj_idx)), ' ===================' ]);
-    memGRP(subj_idx) = Individual_Analysis_Memory(subject_ID(subj_idx), false);
+    memGRP(subj_idx) = Individual_Analysis_Memory_short(subject_ID(subj_idx), false);
 end
 
 %% =================== General Information              ===================
@@ -21,10 +21,6 @@ rt              = [memGRP.rt];
 
 nS              = length(subject_ID);
 disp(['Number of subjects: ',num2str(nS)]);
-
-nExcTrial       = [memGRP.nExcTrial];
-
-disp(['Number of excluded trials : ',num2str(mean(nExcTrial))]);
 
 %% =================== Performance - General            ===================
 disp('=================== Performance Information ===================');
@@ -366,7 +362,7 @@ for subj_idx = 1:length(subject_ID)
         
     end
     
-    for blockCondi = 1:6
+    for blockCondi = 1:2
         LC_smallRwd(subj_idx,blockCondi)  = memGRP(subj_idx).LC_smallRwd(blockCondi);
         LC_largeRwd(subj_idx,blockCondi)  = memGRP(subj_idx).LC_largeRwd(blockCondi);
         LC_DC(subj_idx,blockCondi)        = memGRP(subj_idx).LC_DC(blockCondi);

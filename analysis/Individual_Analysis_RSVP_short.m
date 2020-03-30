@@ -64,9 +64,12 @@ block_DC_smallRwd = unique(block(reward(nTrial) == 1 & (condition(nTrial) == 1 |
 block_DC_largeRwd = unique(block(reward(nTrial) == 2 & (condition(nTrial) == 1 | condition(nTrial) == 2)));
 block_BC_smallRwd = unique(block(reward(nTrial) == 1 & (condition(nTrial) == 5 | condition(nTrial) == 6)));
 block_BC_largeRwd = unique(block(reward(nTrial) == 2 & (condition(nTrial) == 5 | condition(nTrial) == 6)));
-nTrialBlock = [nTrial(block == block_DC_smallRwd(1)), nTrial(block == block_DC_largeRwd(1)), ...
-    nTrial(block == block_BC_smallRwd(1)), nTrial(block == block_BC_largeRwd(1))];
 
+nTrialBlock = [nTrial(block == block_DC_smallRwd(1)), ... %nTrial(block == block_DC_smallRwd(2)), ...
+    nTrial(block == block_DC_largeRwd(1)), ... %nTrial(block == block_DC_largeRwd(2)) ...
+    nTrial(block == block_BC_smallRwd(1)), ...%nTrial(block == block_BC_smallRwd(2)) ...
+    nTrial(block == block_BC_largeRwd(1)), ...%nTrial(block == block_BC_largeRwd(2))];
+];
 nTrial                  = sort(nTrialBlock);
 rsvp.rt                 = log(rt(nTrial)); 
 rt                      = log(rt(nTrial)); 

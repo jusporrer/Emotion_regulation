@@ -463,7 +463,7 @@ xticklabels({'DC','CC','BC'})
 legend([b1 b2 b3],{'CC (DC)','CC', 'CC (BC)'},'fontsize', 6, 'location','northeast')
 ylabel('Performance (mean +/- SEM %)','fontsize', 10)
 title('Performance According to Conditions','fontsize', 10)
-axis([0 4 60 105])
+axis([0 4 50 105])
 grid minor
 box on
 hold off
@@ -482,7 +482,7 @@ xticks([2 3 4])
 xticklabels({'DC','CC','BC'})
 ylabel('Performance (mean %)','fontsize', 10)
 legend({'Hit', 'Reject', 'FA', 'Miss'},'fontsize', 6 , 'Location', 'southeast')
-title('STD Performance According to Conditions','fontsize', 10)
+title('SDT Performance According to Conditions','fontsize', 10)
 axis([1 5 0 105])
 grid minor
 box on
@@ -510,7 +510,7 @@ legend({'Mean'}, 'Location', 'southeast')
 xticklabels({'Small Rwd','Large Rwd'})
 ylabel('Performance (median +/- percentile %)','fontsize', 10)
 title('Performance According to Reward Size','fontsize', 10)
-axis([0 3 70 110])
+axis([0 3 50 110])
 grid minor
 box on
 hold off
@@ -518,17 +518,17 @@ hold off
 % Performance par conditions & rewards
 subplot(2,2,3)
 hold on;
-bar(1, mean(perf_DC_smallRwd),'FaceColor',[0.65 0.35 0.45], 'BarWidth',.5)
-bar(1.5-.5/3, mean(perf_CC_DC_smallRwd),'FaceColor',[0.95 0.85 0.85], 'BarWidth',.5/3)
-bar(1.5, mean(perf_CC_smallRwd),'FaceColor',[0.85 0.85 0.85], 'BarWidth',.5/3)
-bar(1.5+.5/3, mean(perf_CC_BC_smallRwd),'FaceColor',[0.85 0.95 0.85], 'BarWidth',.5/3)
-bar(2, mean(perf_BC_smallRwd),'FaceColor',[0.50 0.65 0.50], 'BarWidth',.5)
+bar(1, mean(perf_DC_smallRwd),'FaceColor',[.65 .35 .45], 'BarWidth',.5)
+bar(1.5-.5/3, mean(perf_CC_DC_smallRwd),'FaceColor',[.95 .85 .85], 'BarWidth',.5/3)
+bar(1.5, mean(perf_CC_smallRwd),'FaceColor',[.85 .85 .85], 'BarWidth',.5/3)
+bar(1.5+.5/3, mean(perf_CC_BC_smallRwd),'FaceColor',[.85 .95 .85], 'BarWidth',.5/3)
+bar(2, mean(perf_BC_smallRwd),'FaceColor',[.50 .65 .50], 'BarWidth',.5)
 
-bar(3, mean(perf_DC_largeRwd),'FaceColor',[0.45 0.15 0.25], 'BarWidth',.5)
-bar(3.5-.5/3, mean(perf_CC_DC_largeRwd),'FaceColor',[0.75 0.65 0.65], 'BarWidth',.5/3)
-bar(3.5, mean(perf_CC_largeRwd),'FaceColor',[0.65 0.65 0.65], 'BarWidth',.5/3)
-bar(3.5+.5/3, mean(perf_CC_BC_largeRwd),'FaceColor',[0.65 0.75 0.65], 'BarWidth',.5/3)
-bar(4, mean(perf_BC_largeRwd),'FaceColor',[0.30 0.45 0.30], 'BarWidth',.5)
+bar(3, mean(perf_DC_largeRwd),'FaceColor',[.45 .15 .25], 'BarWidth',.5)
+bar(3.5-.5/3, mean(perf_CC_DC_largeRwd),'FaceColor',[.75 .65 .65], 'BarWidth',.5/3)
+bar(3.5, mean(perf_CC_largeRwd),'FaceColor',[.65 .65 .65], 'BarWidth',.5/3)
+bar(3.5+.5/3, mean(perf_CC_BC_largeRwd),'FaceColor',[.65 .75 .65], 'BarWidth',.5/3)
+bar(4, mean(perf_BC_largeRwd),'FaceColor',[.30 .45 .30], 'BarWidth',.5)
 
 errorbar(1, mean(perf_DC_smallRwd), perf_DC_smallRwd_sem, 'k.','LineWidth',1)
 errorbar(1.5-.5/3, mean(perf_CC_DC_smallRwd), perf_CC_DC_smallRwd_sem, 'k.','LineWidth',.8)
@@ -550,7 +550,7 @@ xticklabels({'Small Rwd', 'Large Rwd'})
 legend({'DC','CC (DC)','CC', 'CC (BC)', 'BC'}, 'fontsize', 6 , 'Location', 'northeast')
 ylabel('Performance (mean +/- SEM %)','fontsize', 10)
 title('Performance According to Rewards and Conditions','fontsize', 10)
-axis([0 5 60 105])
+axis([0 5 50 105])
 grid minor
 box on
 hold off
@@ -578,7 +578,7 @@ legend({'Large Rwd','Small Rwd'}, 'Location', 'southeast')
 xticklabels({'DC','CC','BC '})
 ylabel('Performance (mean +/- SEM)','fontsize', 10)
 title('Performance According to Reward and Conditions','fontsize', 10)
-axis([0 4 60 105])
+axis([0 4 50 105])
 grid minor
 box on
 hold off
@@ -597,7 +597,7 @@ box on
 % RTs par conditions
 subplot(2,3,2)
 hold on;
-bar([nanmean(rt_DC) 0 0],'FaceColor',[.40 .55 .40]);
+bar([nanmean(rt_DC) 0 0],'FaceColor',[.55 .25 .35]);
 bar([0 nanmean(rt_CC) 0],'FaceColor',[.75 .75 .75]);
 bar([0 0 nanmean(rt_BC)],'FaceColor',[.40 .55 .40]);
 errorbar(1, nanmean(rt_DC), nanstd(rt_DC)/sqrt(nS), 'k.','LineWidth',1)
@@ -713,7 +713,7 @@ xticks([1 2.5 4])
 xticklabels({'General','Female pilot','Male pilot'})
 ylabel('Performance (mean +/- SEM %)','fontsize', 10)
 title('Performance according to gender','fontsize', 10)
-axis([0.5 5 60 105])
+axis([0.5 5 50 105])
 grid minor
 box on
 hold off
@@ -778,7 +778,7 @@ xticklabels({'Female Faces', 'Male Faces'})
 legend({'DC SR', 'DC LR', 'CC SR', 'CC LR', 'BC SR', 'BC LR'},'fontsize', 6 , 'Location', 'northeast')
 ylabel('Performance (mean +/- SEM %)','fontsize', 10)
 title('Performance according to gender & conditions','fontsize', 10)
-axis([0 8 60 105])
+axis([0 8 50 105])
 grid minor
 box on
 hold off
@@ -865,7 +865,7 @@ if fig
     xticklabels({'Slow RTs','Fast RTs'}) %(> or < median(log(rt))
     ylabel('Performance','fontsize', 10)
     title('Performance According to Slow and Fast Response','fontsize', 10)
-    axis([0 3 60 105])
+    axis([0 3 50 105])
     grid minor
     box on
     hold off
