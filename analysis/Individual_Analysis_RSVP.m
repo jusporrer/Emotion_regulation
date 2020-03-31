@@ -1,11 +1,12 @@
-% JS initial individual analysis script for the effect of incentives on emotion regulation 
+% Individual analysis script for the effect of motivation on emotion regulation 
 % in a RSVP Task
+% Author : Juliana Sporrer 
 % Creation : February 2020
 
-%function [rsvp]    = Individual_Analysis_RSVP(ID, fig)
+function [rsvp]                 = Individual_Analysis_RSVP(ID, fig)
 
-ID                          =  90255;
-fig                         = 0;
+%ID                          =  90255;
+%fig                         = 0;
 
 %% =================== Load the data                    ===================
 resp_folder                     = '../results';
@@ -45,7 +46,7 @@ response                    = [data_rsvp(nTrain+1:end).response];
 posCritDist                 = [data_rsvp(nTrain+1:end).posCritDist];
 posTarget                   = [data_rsvp(nTrain+1:end).posTarget];
 % 1 = fearFem, 2 = fearMale, 3 = neutralFem, 4 = neutralMale)
-distractor                  = [data_rsvp(nTrain+1:end).distractor];
+%distractor                  = [data_rsvp(nTrain+1:end).distractor];
 target                      = [data_rsvp(nTrain+1:end).target];
 
 %% =================== Basic Information                ===================
@@ -93,34 +94,34 @@ end
 % Correctly detect fem when fem was target
 correct_Fem                 = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...                           % all fem targets
     & (target(nTrial) == 1 | target(nTrial) == 3));
-correct_FearFem             = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...                           % fearful fem targets
-    & target(nTrial) == 1);
-correct_NeutralFem          = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...                       % neutral fem targets
-    & target(nTrial) == 3);
+% correct_FearFem             = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...                           % fearful fem targets
+%     & target(nTrial) == 1);
+% correct_NeutralFem          = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...                       % neutral fem targets
+%     & target(nTrial) == 3);
 
 % Correctly detect hom when hom was target
 correct_Hom                 = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...                           % all hom targets
     & (target(nTrial) == 2 | target(nTrial) == 4));
-correct_FearHom             = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...                           % fearful hom targets
-    & target(nTrial) == 2);
-correct_NeutralHom          = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...                       % neutral hom taregts
-    & target(nTrial) == 4);
+% correct_FearHom             = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...                           % fearful hom targets
+%     & target(nTrial) == 2);
+% correct_NeutralHom          = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...                       % neutral hom taregts
+%     & target(nTrial) == 4);
 
 % Correctly reject fem when hom was target
 correct_NotFem              = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...
     & (target(nTrial) == 2 | target(nTrial) == 4));
-correct_NotFem_FearHom      = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...
-    & target(nTrial) == 2);
-correct_NotFem_NeutralHom   = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...
-    & target(nTrial) == 4);
+% correct_NotFem_FearHom      = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...
+%     & target(nTrial) == 2);
+% correct_NotFem_NeutralHom   = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...
+%     & target(nTrial) == 4);
 
 % Correctly reject hom when fem was target
 correct_NotHom              = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...
     & (target(nTrial) == 1 | target(nTrial) == 3));
-correct_NotHom_FearFem      = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...
-    & target(nTrial) == 1);
-correct_NotHom_NeutralFem   = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...
-    & target(nTrial) == 3);
+% correct_NotHom_FearFem      = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...
+%     & target(nTrial) == 1);
+% correct_NotHom_NeutralFem   = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...
+%     & target(nTrial) == 3);
 
 % Sum of all the correct trials
 correct                     = correct_Fem + correct_Hom + correct_NotFem + correct_NotHom;
@@ -146,34 +147,34 @@ disp(['Performance : ',num2str(round(rsvp.performance)), ...
 % Incorrectly not detect fem when fem was target ( false alarm: says present when not present)
 incorrect_Fem               = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...                             % all fem targets
     & (target(nTrial) == 1 | target(nTrial) == 3));
-incorrect_FearFem           = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...                         % fearful fem targets
-    & target(nTrial) == 1);
-incorrect_NeutralFem        = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...                      % neutral fem targets
-    & target(nTrial) == 3);
+% incorrect_FearFem           = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...                         % fearful fem targets
+%     & target(nTrial) == 1);
+% incorrect_NeutralFem        = (response(nTrial) == 2 & instQuest(nTrial) == 1 ...                      % neutral fem targets
+%     & target(nTrial) == 3);
 
 % Incorrectly not detect hom when hom was target
 incorrect_Hom               = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...                             % all hom targets
     & (target(nTrial) == 2 | target(nTrial) == 4));
-incorrect_FearHom           = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...                         % fearful hom targets
-    & target(nTrial) == 2);
-incorrect_NeutralHom        = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...                      % neutral hom taregts
-    & target(nTrial) == 4);
+% incorrect_FearHom           = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...                         % fearful hom targets
+%     & target(nTrial) == 2);
+% incorrect_NeutralHom        = (response(nTrial) == 2 & instQuest(nTrial) == 2 ...                      % neutral hom taregts
+%     & target(nTrial) == 4);
 
 % Incorrectly reject hom when hom was target ( miss: says not preset when present)
 incorrect_NotFem            = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...
     & (target(nTrial) == 2 | target(nTrial) == 4));
-incorrect_NotFem_FearHom    = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...
-    & target(nTrial) == 2);
-incorrect_NotFem_NeutralHom = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...
-    & target(nTrial) == 4);
+% incorrect_NotFem_FearHom    = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...
+%     & target(nTrial) == 2);
+% incorrect_NotFem_NeutralHom = (response(nTrial) == 1 & instQuest(nTrial) == 1 ...
+%     & target(nTrial) == 4);
 
 % Incorrectly reject fem when fem was target
 incorrect_NotHom            = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...
     & (target(nTrial) == 1 | target(nTrial) == 3));
-incorrect_NotHom_FearFem    = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...
-    & target(nTrial) == 1);
-incorrect_NotHom_NeutralFem = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...
-    & target(nTrial) == 3);
+% incorrect_NotHom_FearFem    = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...
+%     & target(nTrial) == 1);
+% incorrect_NotHom_NeutralFem = (response(nTrial) == 1 & instQuest(nTrial) == 2 ...
+%     & target(nTrial) == 3);
 
 % Sum of all the incorrect trials
 incorrect                   = incorrect_Fem + incorrect_Hom + incorrect_NotFem + incorrect_NotHom;
@@ -257,11 +258,11 @@ rsvp.BC_fem_rate            = sum(BC_fem_correct)/sum(BC_fem)*100;
 % Control Conditions
 CC_DC_condition             = DC_trials & (condition(nTrial) == 3 | condition(nTrial) == 4);
 CC_DC_correct               = correct & CC_DC_condition;
-CC_DC_incorrect             = incorrect & CC_DC_condition;
+% CC_DC_incorrect             = incorrect & CC_DC_condition;
 
 CC_BC_condition             = BC_trials & (condition(nTrial) == 3 | condition(nTrial) == 4);
 CC_BC_correct               = correct & CC_BC_condition;
-CC_BC_incorrect             = incorrect & CC_BC_condition;
+% CC_BC_incorrect             = incorrect & CC_BC_condition;
 
 CC_condition                = condition(nTrial) == 3 | condition(nTrial) == 4;
 CC_correct                  = correct & CC_condition;
@@ -849,4 +850,4 @@ if fig
 end
 
 
-%end
+end

@@ -6,7 +6,7 @@ close all;
 
 %% =================== Get All Individual Data          ===================
 
-subject_ID = [81433, 79662];
+subject_ID = [81433, 79662, 74239, 98197, 81477, 12346, 90255, 33222, 90255, 48680];
 
 for subj_idx = 1:length(subject_ID)
     disp(['=================== Subject ', ...
@@ -42,10 +42,10 @@ disp(['Mean : ', ...
     num2str(round(perf_min)), '% & max perf : ', ...
     num2str(round(perf_max)), '%) ']) ;
 
-hit_rate                = mean([rsvpGRP.hit_rate]);
-reject_rate             = mean([rsvpGRP.reject_rate]);
-miss_rate               = mean([rsvpGRP.miss_rate]);
-falseAlarm_rate         = mean([rsvpGRP.falseAlarm_rate]);
+hit_rate                = mean([rsvpGRP.hit_rate])*100;
+reject_rate             = mean([rsvpGRP.reject_rate])*100;
+miss_rate               = mean([rsvpGRP.miss_rate])*100;
+falseAlarm_rate         = mean([rsvpGRP.falseAlarm_rate])*100;
 
 disp(['Sdt : ', ...
     num2str(round(hit_rate)), '% hit rate, ', ...
@@ -100,10 +100,10 @@ disp(['Gender: ',num2str(round(perf_fem)), '% for condition femme & ', ...
 perf_DC                 = [rsvpGRP.perf_DC];
 perf_DC_sem             = std([rsvpGRP.perf_DC])/sqrt(nS);
 
-hit_rate_DC             = mean([rsvpGRP.hit_rate_DC ]);
-reject_rate_DC          = mean([rsvpGRP.reject_rate_DC ]);
-miss_rate_DC            = mean([rsvpGRP.miss_rate_DC ]);
-falseAlarm_rate_DC      = mean([rsvpGRP.falseAlarm_rate_DC ]);
+hit_rate_DC             = mean([rsvpGRP.hit_rate_DC ])*100;
+reject_rate_DC          = mean([rsvpGRP.reject_rate_DC ])*100;
+miss_rate_DC            = mean([rsvpGRP.miss_rate_DC ])*100;
+falseAlarm_rate_DC      = mean([rsvpGRP.falseAlarm_rate_DC ])*100;
 
 perf_CC_DC              = [rsvpGRP.perf_CC_DC];
 perf_CC_DC_sem          = std([rsvpGRP.perf_CC_DC])/sqrt(nS);
@@ -111,10 +111,10 @@ perf_CC_DC_sem          = std([rsvpGRP.perf_CC_DC])/sqrt(nS);
 perf_CC                 = ([rsvpGRP.perf_CC]);
 perf_CC_sem             = std([rsvpGRP.perf_CC])/sqrt(nS);
 
-hit_rate_CC             = mean([rsvpGRP.hit_rate_CC ]);
-reject_rate_CC          = mean([rsvpGRP.reject_rate_CC ]);
-miss_rate_CC            = mean([rsvpGRP.miss_rate_CC ]);
-falseAlarm_rate_CC      = mean([rsvpGRP.falseAlarm_rate_CC ]);
+hit_rate_CC             = mean([rsvpGRP.hit_rate_CC ])*100;
+reject_rate_CC          = mean([rsvpGRP.reject_rate_CC ])*100;
+miss_rate_CC            = mean([rsvpGRP.miss_rate_CC ])*100;
+falseAlarm_rate_CC      = mean([rsvpGRP.falseAlarm_rate_CC ])*100;
 
 perf_CC_BC              = ([rsvpGRP.perf_CC_BC]);
 perf_CC_BC_sem          = std([rsvpGRP.perf_CC_BC])/sqrt(nS);
@@ -122,10 +122,10 @@ perf_CC_BC_sem          = std([rsvpGRP.perf_CC_BC])/sqrt(nS);
 perf_BC                 = ([rsvpGRP.perf_BC]);
 perf_BC_sem             = std([rsvpGRP.perf_BC])/sqrt(nS);
 
-hit_rate_BC             = mean([rsvpGRP.hit_rate_BC ]);
-reject_rate_BC          = mean([rsvpGRP.reject_rate_BC ]);
-miss_rate_BC            = mean([rsvpGRP.miss_rate_BC ]);
-falseAlarm_rate_BC      = mean([rsvpGRP.falseAlarm_rate_BC ]);
+hit_rate_BC             = mean([rsvpGRP.hit_rate_BC ])*100;
+reject_rate_BC          = mean([rsvpGRP.reject_rate_BC ])*100;
+miss_rate_BC            = mean([rsvpGRP.miss_rate_BC ])*100;
+falseAlarm_rate_BC      = mean([rsvpGRP.falseAlarm_rate_BC ])*100;
 
 disp(['Emotion : ',num2str(round(mean(perf_DC))), '% for DC, ', ...
     num2str(round(mean(perf_CC))), '% for CC & ',...
@@ -236,6 +236,20 @@ perf_BC_hom_largeRwd = [rsvpGRP.perf_BC_hom_largeRwd];
 [h_perf_CC_gender, p_perf_CC_gender, ci_perf_CC_gender, stats_perf_CC_gender] = ttest2(perf_CC_hom, perf_CC_fem);
 [h_perf_BC_gender, p_perf_BC_gender, ci_perf_BC_gender, stats_perf_BC_gender] = ttest2(perf_BC_hom, perf_BC_fem);
 
+%% =================== Signal Detection Theory          ===================
+
+dprime                  = [rsvpGRP.dprime];
+dprime_DC               = [rsvpGRP.dprime_DC];
+dprime_CC               = [rsvpGRP.dprime_CC];
+dprime_BC               = [rsvpGRP.dprime_BC];
+
+criterion               = [rsvpGRP.criterion];
+criterion_DC            = [rsvpGRP.criterion_DC];
+criterion_CC            = [rsvpGRP.criterion_CC];
+criterion_BC            = [rsvpGRP.criterion_BC];
+
+aprime                  = [rsvpGRP.aprime];
+bprime                  = [rsvpGRP.bprime];
 
 %% =================== RTs - General                    ===================
 
