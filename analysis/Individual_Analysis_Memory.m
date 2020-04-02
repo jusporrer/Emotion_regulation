@@ -2,10 +2,10 @@
 % in the memory Task
 % Creation : Mars 2020
 
-function [mem]    = Individual_Analysis_Memory(ID, fig)
+%function [mem]              = Individual_Analysis_Memory(ID, fig)
 
-%ID              = 90255; %74239 %12346 %90255 %81473 % 33222 % 56560 %72605 %11310 %9022 %81731 % 19279; %46700; 5034 ; %10016;
-%fig             = 1;
+ID                         = 93841; %74239 %12346 %90255 %81473 % 33222 % 56560 %72605 %11310 %9022 %81731 % 19279; %46700; 5034 ; %10016;
+fig                        = 1;
 
 %% =================== Load the data                    ===================
 resp_folder     = '../results';
@@ -23,29 +23,29 @@ end
 
 %% =================== Initialise                       ===================
 
-cfg_training    = data_memory(1).cfg;
-nTrain          = cfg_training.nTrialsTrain * cfg_training.nBlocksTrain;
-cfg_exp         = data_memory(nTrain+1).cfg;
-imageDuration   = [data_memory(nTrain+1:end).imgDur];
+cfg_training                = data_memory(1).cfg;
+nTrain                      = cfg_training.nTrialsTrain * cfg_training.nBlocksTrain;
+cfg_exp                     = data_memory(nTrain+1).cfg;
+imageDuration               = [data_memory(nTrain+1:end).imgDur];
 %(0 = training, 1 = Small reward, 2 = Large reward)
-reward          = [data_memory(nTrain+1:end).reward];
+reward                      = [data_memory(nTrain+1:end).reward];
 %(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
-condition       = [data_memory(nTrain+1:end).condition];
-instCondit      = [data_memory(nTrain+1:end).instCondit];
-block           = [data_memory(nTrain+1:end).block];
-trial           = [data_memory(nTrain+1:end).trial];
-rt              = [data_memory(nTrain+1:end).RTs];
+condition                   = [data_memory(nTrain+1:end).condition];
+instCondit                  = [data_memory(nTrain+1:end).instCondit];
+block                       = [data_memory(nTrain+1:end).block];
+trial                       = [data_memory(nTrain+1:end).trial];
+rt                          = [data_memory(nTrain+1:end).RTs];
 % (1 = femKey/f; 2=hommeKey/h)
-response        = [data_memory(nTrain+1:end).response];
-setSizeFF       = [data_memory(nTrain+1:end).setSizeFF];
-setSizeNF       = [data_memory(nTrain+1:end).setSizeNF];
+response                    = [data_memory(nTrain+1:end).response];
+setSizeFF                   = [data_memory(nTrain+1:end).setSizeFF];
+setSizeNF                   = [data_memory(nTrain+1:end).setSizeNF];
 % 1 = fearFem, 2 = fearMale, 3 = neutralFem, 4 = neutralMale)
-setSizeFM       = [data_memory(nTrain+1:end).setSizeFM];
-setSizeNM       = [data_memory(nTrain+1:end).setSizeNM];
+setSizeFM                   = [data_memory(nTrain+1:end).setSizeFM];
+setSizeNM                   = [data_memory(nTrain+1:end).setSizeNM];
 
 %% =================== Basic Information                ===================
 
-nTrial              = 1:length(trial); % allows the indexing
+nTrial                      = 1:length(trial); % allows the indexing
 
 if length(trial) == cfg_exp.nTrialsExp * cfg_exp.nBlocksExp
     disp(['No data loss : There were ',num2str(length(trial)), ' trials']);
@@ -81,44 +81,42 @@ end
 
 %% =================== Performance - Correct Trials     ===================
 
-% Correctly detect fem when fem was main
-
-correct_fem         = (response(nTrial) == 1 & ((setSizeFF(nTrial) + setSizeNF(nTrial)) > (setSizeFM(nTrial) + setSizeNM(nTrial))));
+correct_Fem                 = (response(nTrial) == 1 & ((setSizeFF(nTrial) + setSizeNF(nTrial)) > (setSizeFM(nTrial) + setSizeNM(nTrial))));
 % correct_fem = (response(nTrial) == 1 & (condition(nTrial)==2 | condition(nTrial)==4 | condition(nTrial)==6));
 
-correct_hom         = (response(nTrial) == 2 & ((setSizeFM(nTrial) + setSizeNM(nTrial)) > (setSizeFF(nTrial) + setSizeNF(nTrial))));
+correct_Hom                 = (response(nTrial) == 2 & ((setSizeFM(nTrial) + setSizeNM(nTrial)) > (setSizeFF(nTrial) + setSizeNF(nTrial))));
 
 % Sum of all the correct trials
-correct             = (correct_fem) + (correct_hom);
-nCorrect            = sum(correct);
+correct                     = correct_Fem + correct_Hom;
+nCorrect                    = sum(correct);
 
 % General performance
-mem.performance     = nCorrect/length(nTrial)*100;
+mem.performance             = nCorrect / length(nTrial)*100;
 
 disp(['Performance : ',num2str(ceil(mem.performance)),'%']);
 
 %% =================== Performance - Incorrect Trials   ===================
 
 % Incorrectly not detect fem when fem was target ( false alarm: says present when not present)
-incorrect_Fem       = (response(nTrial) == 2 & ((setSizeFF(nTrial) + setSizeNF(nTrial)) > (setSizeFM(nTrial) + setSizeNM(nTrial))));
+incorrect_Fem               = (response(nTrial) == 2 & ((setSizeFF(nTrial) + setSizeNF(nTrial)) > (setSizeFM(nTrial) + setSizeNM(nTrial))));
 
 % Incorrectly not detect hom when hom was target
-incorrect_Hom       = (response(nTrial) == 1 & ((setSizeFM(nTrial) + setSizeNM(nTrial)) > (setSizeFF(nTrial) + setSizeNF(nTrial))));
+incorrect_Hom               = (response(nTrial) == 1 & ((setSizeFM(nTrial) + setSizeNM(nTrial)) > (setSizeFF(nTrial) + setSizeNF(nTrial))));
 
 % Sum of all the incorrect trials
-incorrect           = (incorrect_Fem) + (incorrect_Hom);
-nIncorrect          = sum(incorrect);
+incorrect                   = incorrect_Fem + incorrect_Hom;
+nIncorrect                  = sum(incorrect);
 
 % General performance
-mem.perf_incorrect  = nIncorrect/length(nTrial)*100;
+mem.perf_incorrect          = nIncorrect / length(nTrial)*100;
 
 %% =================== Performance - Rewards            ===================
 
-smallRwd                = (reward(nTrial) == 1);
-mem.smallRwdBlock      = unique(block(smallRwd == 1));
-smallRwd_correct        = correct(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1;
-smallRwd_incorrect      = incorrect(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1;
-mem.smallRwd_rate      = sum(smallRwd_correct)/sum(smallRwd)*100;
+smallRwd                    = reward(nTrial) == 1;
+mem.smallRwdBlock           = unique(block(smallRwd == 1));
+smallRwd_correct            = correct & smallRwd;
+smallRwd_incorrect          = incorrect(1:length(nTrial)) == 1 & smallRwd(1:length(nTrial)) == 1;
+mem.smallRwd_rate           = sum(smallRwd_correct)/sum(smallRwd)*100;
 
 largeRwd                = (reward(nTrial) == 2);
 mem.largeRwdBlock      = unique(block(largeRwd == 1));
@@ -650,5 +648,5 @@ if fig
 end
 
 
-end
+%end
 

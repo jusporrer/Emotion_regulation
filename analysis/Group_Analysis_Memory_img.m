@@ -6,7 +6,7 @@ close all;
 
 %% =================== Get All Individual Data          ===================
 
-subject_ID = [81473, 74239, 98197, 12346, 90255, 81477, 33222, 90255, 48680]; 
+subject_ID = [4515]; 
 
 for subj_idx = 1:length(subject_ID)
     disp(['=================== Subject ', ...
@@ -27,14 +27,14 @@ perf_short_mean              = mean([memGRP.performance_short]);
 perf_short_min               = min([memGRP.performance_short]);
 perf_short_max               = max([memGRP.performance_short]);
 perf_short_sem               = std([memGRP.performance_short])/sqrt(nS);
-[h_short, p_short, stats_short ] = adtest(perf_short);
+%[h_short, p_short, stats_short ] = adtest(perf_short);
 
 perf_long                   = [memGRP.performance_long];
 perf_long_mean              = mean([memGRP.performance_long]);
 perf_long_min               = min([memGRP.performance_long]);
 perf_long_max               = max([memGRP.performance_long]);
 perf_long_sem               = std([memGRP.performance_long])/sqrt(nS);
-[h_long, p_long, stats_long ] = adtest(perf_long);
+%[h_long, p_long, stats_long ] = adtest(perf_long);
 
 disp(['General Performance : ', ...
     num2str(round(mean(perf_short))), '% for Short & ', ...

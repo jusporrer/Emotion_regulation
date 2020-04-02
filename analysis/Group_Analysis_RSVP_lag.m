@@ -6,7 +6,7 @@ close all;
 
 %% =================== Get All Individual Data          ===================
 
-subject_ID = [81433, 79662];
+subject_ID = [81433, 79662, 90580];
 
 for subj_idx = 1:length(subject_ID)
     disp(['=================== Subject ', ...

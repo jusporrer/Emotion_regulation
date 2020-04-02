@@ -11,7 +11,7 @@ subject_ID = [81473, 74239, 98197, 81477, 12346, 90255, 33222, 90255, 48680];
 for subj_idx = 1:length(subject_ID)
     disp(['=================== Subject ', ...
         num2str(subject_ID(subj_idx)), ' ===================' ]);
-    memGRP(subj_idx) = Individual_Analysis_Memory(subject_ID(subj_idx), false);
+    memGRP(subj_idx) = Individual_Analysis_Memory(subject_ID(subj_idx), true);
 end
 
 %% =================== General Information              ===================

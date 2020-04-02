@@ -6,7 +6,7 @@ close all;
 
 %% =================== Get All Individual Data          ===================
 
-subject_ID = [81433, 79662, 74239, 98197, 81477, 12346, 90255, 33222, 90255, 48680];
+subject_ID = [81433, 79662, 90580];
 
 for subj_idx = 1:length(subject_ID)
     disp(['=================== Subject ', ...
@@ -704,98 +704,98 @@ hold off
 
 %% Gender Plots
 
-% Performance par gender
-figure('Name', 'Gender Plots');
-
-subplot(2,2,1)
-hold on;
-bar(1, mean(perf_fem),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
-bar(1.5, mean(perf_hom),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
-bar(2.5, mean(perf_fem(1:4)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
-bar(3, mean(perf_hom(1:4)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
-bar(4, mean(perf_fem(5:end)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
-bar(4.5, mean(perf_hom(5:end)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
-errorbar(1, mean(perf_fem), std(perf_fem)/sqrt(nS), 'k.','LineWidth',1)
-errorbar(1.5, mean(perf_hom), std(perf_hom)/sqrt(nS), 'k.','LineWidth',1)
-errorbar(2.5, mean(perf_fem(1:4)), std(perf_fem(1:4))/sqrt(nS), 'k.','LineWidth',1)
-errorbar(3, mean(perf_hom(1:4)), std(perf_hom(1:4))/sqrt(nS), 'k.','LineWidth',1)
-errorbar(4, mean(perf_fem(5:end)), std(perf_fem(5:end))/sqrt(nS), 'k.','LineWidth',1)
-errorbar(4.5, mean(perf_hom(5:end)), std(perf_hom(5:end))/sqrt(nS), 'k.','LineWidth',1)
-sigstar({[1,1.5]},p_perf_gender, 0, 100);
-legend({'Female Face', 'Male Face'},'fontsize', 6 , 'Location', 'northeast')
-xticks([1 2.5 4])
-xticklabels({'General','Female pilot','Male pilot'})
-ylabel('Performance (mean +/- SEM %)','fontsize', 10)
-title('Performance according to gender','fontsize', 10)
-axis([0.5 5 50 105])
-grid minor
-box on
-hold off
-
-subplot(2,2,2)
-hold on;
-bar(1, mean(rt_fem),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
-bar(1.5, mean(rt_hom),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
-bar(2.5, mean(rt_fem(1:4)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
-bar(3, mean(rt_hom(1:4)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
-bar(4, mean(rt_fem(5:end)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
-bar(4.5, mean(rt_hom(5:end)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
-errorbar(1, mean(rt_fem), std(rt_fem)/sqrt(nS), 'k.','LineWidth',1)
-errorbar(1.5, mean(rt_hom), std(rt_hom)/sqrt(nS), 'k.','LineWidth',1)
-errorbar(2.5, mean(rt_fem(1:4)), std(rt_fem(1:4))/sqrt(nS), 'k.','LineWidth',1)
-errorbar(3, mean(rt_hom(1:4)), std(rt_hom(1:4))/sqrt(nS), 'k.','LineWidth',1)
-errorbar(4, mean(rt_fem(5:end)), std(rt_fem(5:end))/sqrt(nS), 'k.','LineWidth',1)
-errorbar(4.5, mean(rt_hom(5:end)), std(rt_hom(5:end))/sqrt(nS), 'k.','LineWidth',1)
-%sigstar({[1,1.5]},p_rt_gender, 0, 1);
-legend({'Female Face', 'Male Face'},'fontsize', 6 , 'Location', 'northeast')
-xticks([1 2.5 4])
-xticklabels({'General','Female pilot','Male pilot'})
-ylabel('log(RTs)','fontsize', 10)
-title('RTs according to gender','fontsize', 10)
-axis([0.5 5 -1 1])
-grid minor
-box on
-hold off
-
-% Performance par genre & conditions
-subplot(2,1,2)
-hold on;
-bar(1, mean(perf_DC_fem_smallRwd),'FaceColor',[0.65 0.35 0.45],'BarWidth',.45);
-bar(1.5, mean(perf_DC_fem_largeRwd),'FaceColor',[0.45 0.15 0.25],'BarWidth',.45);
-bar(2, mean(perf_CC_fem_smallRwd),'FaceColor',[0.85 0.85 0.85],'BarWidth',.45);
-bar(2.5, mean(perf_CC_fem_largeRwd),'FaceColor',[0.65 0.65 0.65],'BarWidth',.45);
-bar(3, mean(perf_BC_fem_smallRwd),'FaceColor',[0.50 0.65 0.50],'BarWidth',.45);
-bar(3.5, mean(perf_BC_fem_largeRwd),'FaceColor',[0.30 0.45 0.30],'BarWidth',.45);
-
-errorbar(1, mean(perf_DC_fem_smallRwd), std(perf_DC_fem_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
-errorbar(1.5, mean(perf_DC_fem_largeRwd), std(perf_DC_fem_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
-errorbar(2, mean(perf_CC_fem_smallRwd), std(perf_CC_fem_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
-errorbar(2.5, mean(perf_CC_fem_largeRwd), std(perf_CC_fem_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
-errorbar(3, mean(perf_BC_fem_smallRwd), std(perf_BC_fem_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
-errorbar(3.5, mean(perf_BC_fem_largeRwd), std(perf_BC_fem_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
-
-bar(4.5, mean(perf_DC_hom_smallRwd),'FaceColor',[0.65 0.35 0.45],'BarWidth',.45);
-errorbar(4.5, mean(perf_DC_hom_smallRwd), std(perf_DC_hom_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
-bar(5, mean(perf_DC_hom_largeRwd),'FaceColor',[0.45 0.15 0.25],'BarWidth',.45);
-errorbar(5, mean(perf_DC_hom_largeRwd), std(perf_DC_hom_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
-bar(5.5, mean(perf_CC_hom_smallRwd),'FaceColor',[0.85 0.85 0.85],'BarWidth',.45);
-errorbar(5.5, mean(perf_CC_hom_smallRwd), std(perf_CC_hom_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
-bar(6, mean(perf_CC_hom_largeRwd),'FaceColor',[0.65 0.65 0.65],'BarWidth',.45);
-errorbar(6, mean(perf_CC_hom_largeRwd), std(perf_CC_hom_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
-bar(6.5, mean(perf_BC_hom_smallRwd),'FaceColor',[0.50 0.65 0.50],'BarWidth',.45);
-errorbar(6.5, mean(perf_BC_hom_smallRwd), std(perf_BC_hom_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
-bar(7, mean(perf_BC_hom_largeRwd),'FaceColor',[0.30 0.45 0.30],'BarWidth',.45);
-errorbar(7, mean(perf_BC_hom_largeRwd), std(perf_BC_hom_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
-
-xticks([1.5 5])
-xticklabels({'Female Faces', 'Male Faces'})
-legend({'DC SR', 'DC LR', 'CC SR', 'CC LR', 'BC SR', 'BC LR'},'fontsize', 6 , 'Location', 'northeast')
-ylabel('Performance (mean +/- SEM %)','fontsize', 10)
-title('Performance according to gender & conditions','fontsize', 10)
-axis([0 8 50 105])
-grid minor
-box on
-hold off
+% % Performance par gender
+% figure('Name', 'Gender Plots');
+% 
+% subplot(2,2,1)
+% hold on;
+% bar(1, mean(perf_fem),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+% bar(1.5, mean(perf_hom),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+% bar(2.5, mean(perf_fem(1:4)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+% bar(3, mean(perf_hom(1:4)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+% bar(4, mean(perf_fem(5:end)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+% bar(4.5, mean(perf_hom(5:end)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+% errorbar(1, mean(perf_fem), std(perf_fem)/sqrt(nS), 'k.','LineWidth',1)
+% errorbar(1.5, mean(perf_hom), std(perf_hom)/sqrt(nS), 'k.','LineWidth',1)
+% errorbar(2.5, mean(perf_fem(1:4)), std(perf_fem(1:4))/sqrt(nS), 'k.','LineWidth',1)
+% errorbar(3, mean(perf_hom(1:4)), std(perf_hom(1:4))/sqrt(nS), 'k.','LineWidth',1)
+% errorbar(4, mean(perf_fem(5:end)), std(perf_fem(5:end))/sqrt(nS), 'k.','LineWidth',1)
+% errorbar(4.5, mean(perf_hom(5:end)), std(perf_hom(5:end))/sqrt(nS), 'k.','LineWidth',1)
+% sigstar({[1,1.5]},p_perf_gender, 0, 100);
+% legend({'Female Face', 'Male Face'},'fontsize', 6 , 'Location', 'northeast')
+% xticks([1 2.5 4])
+% xticklabels({'General','Female pilot','Male pilot'})
+% ylabel('Performance (mean +/- SEM %)','fontsize', 10)
+% title('Performance according to gender','fontsize', 10)
+% axis([0.5 5 50 105])
+% grid minor
+% box on
+% hold off
+% 
+% subplot(2,2,2)
+% hold on;
+% bar(1, mean(rt_fem),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+% bar(1.5, mean(rt_hom),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+% bar(2.5, mean(rt_fem(1:4)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+% bar(3, mean(rt_hom(1:4)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+% bar(4, mean(rt_fem(5:end)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+% bar(4.5, mean(rt_hom(5:end)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+% errorbar(1, mean(rt_fem), std(rt_fem)/sqrt(nS), 'k.','LineWidth',1)
+% errorbar(1.5, mean(rt_hom), std(rt_hom)/sqrt(nS), 'k.','LineWidth',1)
+% errorbar(2.5, mean(rt_fem(1:4)), std(rt_fem(1:4))/sqrt(nS), 'k.','LineWidth',1)
+% errorbar(3, mean(rt_hom(1:4)), std(rt_hom(1:4))/sqrt(nS), 'k.','LineWidth',1)
+% errorbar(4, mean(rt_fem(5:end)), std(rt_fem(5:end))/sqrt(nS), 'k.','LineWidth',1)
+% errorbar(4.5, mean(rt_hom(5:end)), std(rt_hom(5:end))/sqrt(nS), 'k.','LineWidth',1)
+% %sigstar({[1,1.5]},p_rt_gender, 0, 1);
+% legend({'Female Face', 'Male Face'},'fontsize', 6 , 'Location', 'northeast')
+% xticks([1 2.5 4])
+% xticklabels({'General','Female pilot','Male pilot'})
+% ylabel('log(RTs)','fontsize', 10)
+% title('RTs according to gender','fontsize', 10)
+% axis([0.5 5 -1 1])
+% grid minor
+% box on
+% hold off
+% 
+% % Performance par genre & conditions
+% subplot(2,1,2)
+% hold on;
+% bar(1, mean(perf_DC_fem_smallRwd),'FaceColor',[0.65 0.35 0.45],'BarWidth',.45);
+% bar(1.5, mean(perf_DC_fem_largeRwd),'FaceColor',[0.45 0.15 0.25],'BarWidth',.45);
+% bar(2, mean(perf_CC_fem_smallRwd),'FaceColor',[0.85 0.85 0.85],'BarWidth',.45);
+% bar(2.5, mean(perf_CC_fem_largeRwd),'FaceColor',[0.65 0.65 0.65],'BarWidth',.45);
+% bar(3, mean(perf_BC_fem_smallRwd),'FaceColor',[0.50 0.65 0.50],'BarWidth',.45);
+% bar(3.5, mean(perf_BC_fem_largeRwd),'FaceColor',[0.30 0.45 0.30],'BarWidth',.45);
+% 
+% errorbar(1, mean(perf_DC_fem_smallRwd), std(perf_DC_fem_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+% errorbar(1.5, mean(perf_DC_fem_largeRwd), std(perf_DC_fem_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+% errorbar(2, mean(perf_CC_fem_smallRwd), std(perf_CC_fem_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+% errorbar(2.5, mean(perf_CC_fem_largeRwd), std(perf_CC_fem_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+% errorbar(3, mean(perf_BC_fem_smallRwd), std(perf_BC_fem_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+% errorbar(3.5, mean(perf_BC_fem_largeRwd), std(perf_BC_fem_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+% 
+% bar(4.5, mean(perf_DC_hom_smallRwd),'FaceColor',[0.65 0.35 0.45],'BarWidth',.45);
+% errorbar(4.5, mean(perf_DC_hom_smallRwd), std(perf_DC_hom_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+% bar(5, mean(perf_DC_hom_largeRwd),'FaceColor',[0.45 0.15 0.25],'BarWidth',.45);
+% errorbar(5, mean(perf_DC_hom_largeRwd), std(perf_DC_hom_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+% bar(5.5, mean(perf_CC_hom_smallRwd),'FaceColor',[0.85 0.85 0.85],'BarWidth',.45);
+% errorbar(5.5, mean(perf_CC_hom_smallRwd), std(perf_CC_hom_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+% bar(6, mean(perf_CC_hom_largeRwd),'FaceColor',[0.65 0.65 0.65],'BarWidth',.45);
+% errorbar(6, mean(perf_CC_hom_largeRwd), std(perf_CC_hom_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+% bar(6.5, mean(perf_BC_hom_smallRwd),'FaceColor',[0.50 0.65 0.50],'BarWidth',.45);
+% errorbar(6.5, mean(perf_BC_hom_smallRwd), std(perf_BC_hom_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+% bar(7, mean(perf_BC_hom_largeRwd),'FaceColor',[0.30 0.45 0.30],'BarWidth',.45);
+% errorbar(7, mean(perf_BC_hom_largeRwd), std(perf_BC_hom_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+% 
+% xticks([1.5 5])
+% xticklabels({'Female Faces', 'Male Faces'})
+% legend({'DC SR', 'DC LR', 'CC SR', 'CC LR', 'BC SR', 'BC LR'},'fontsize', 6 , 'Location', 'northeast')
+% ylabel('Performance (mean +/- SEM %)','fontsize', 10)
+% title('Performance according to gender & conditions','fontsize', 10)
+% axis([0 8 50 105])
+% grid minor
+% box on
+% hold off
 
 %% Learning Curves Plots
 fig = true;
