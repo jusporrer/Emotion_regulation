@@ -2,10 +2,10 @@
 % in the memory Task
 % Creation : Mars 2020
 
-%function [mem]              = Individual_Analysis_Memory(ID, fig)
+function [mem]              = Individual_Analysis_Memory(ID, fig)
 
-ID                         = 93841; %74239 %12346 %90255 %81473 % 33222 % 56560 %72605 %11310 %9022 %81731 % 19279; %46700; 5034 ; %10016;
-fig                        = 1;
+%ID                         = 4515; %74239 %12346 %90255 %81473 % 33222 % 56560 %72605 %11310 %9022 %81731 % 19279; %46700; 5034 ; %10016;
+%fig                        = 1;
 
 %% =================== Load the data                    ===================
 resp_folder     = '../results';
@@ -404,12 +404,12 @@ end
 
 mem.LC_smallRwd                 = zeros(1,length(mem.smallRwdBlock));
 for i = 1:length(mem.smallRwdBlock)
-     mem.LC_smallRwd(i)         = (sum(correct(block == mem.smallRwdBlock(i))))/(smallRwd(block == mem.smallRwdBlock(i)))*100;
+     mem.LC_smallRwd(i)         = (sum(correct(block == mem.smallRwdBlock(i))))/sum(smallRwd(block == mem.smallRwdBlock(i)))*100;
 end
 
 mem.LC_largeRwd                 = zeros(1,length(mem.largeRwdBlock));
 for i = 1:length(mem.largeRwdBlock)
-    mem.LC_largeRwd(i)          = (sum(correct(block == mem.largeRwdBlock(i))))/(largeRwd(block == mem.largeRwdBlock(i)))*100;
+    mem.LC_largeRwd(i)          = (sum(correct(block == mem.largeRwdBlock(i))))/sum(largeRwd(block == mem.largeRwdBlock(i)))*100;
 end
 
 mem.LC_DC                       = zeros(1,length(mem.DC_block));
@@ -431,31 +431,31 @@ end
 
 mem.RTsC                        = zeros(1,cfg_exp.nBlocksExp);
 for i = 1:cfg_exp.nBlocksExp
-    mem.RTsC(i)       = mean(rt(block == i));
+    mem.RTsC(i)                 = mean(rt(block == i));
 end
 
-mem.RTsC_smallRwd     = zeros(1,length(mem.smallRwdBlock));
+mem.RTsC_smallRwd               = zeros(1,length(mem.smallRwdBlock));
 for i = 1:length(mem.smallRwdBlock)
-     mem.RTsC_smallRwd(i) = mean(rt(block == mem.smallRwdBlock(i)));
+     mem.RTsC_smallRwd(i)       = mean(rt(block == mem.smallRwdBlock(i)));
 end
 
-mem.RTsC_largeRwd     = zeros(1,length(mem.largeRwdBlock));
+mem.RTsC_largeRwd               = zeros(1,length(mem.largeRwdBlock));
 for i = 1:length(mem.largeRwdBlock)
-    mem.RTsC_largeRwd(i) = mean(rt(block == mem.largeRwdBlock(i)));
+    mem.RTsC_largeRwd(i)        = mean(rt(block == mem.largeRwdBlock(i)));
 end
 
-mem.RTsC_DC     = zeros(1,length(mem.DC_block));
+mem.RTsC_DC                     = zeros(1,length(mem.DC_block));
 for i = 1:length(mem.DC_block)
-     mem.RTsC_DC(i) = mean(rt(block == mem.DC_block(i) & DC_condition == 1 ));
+     mem.RTsC_DC(i)             = mean(rt(block == mem.DC_block(i) & DC_condition == 1 ));
      % add the conditions as we do not want the CC trials 
 end
 
-mem.RTsC_BC     = zeros(1,length(mem.BC_block));
+mem.RTsC_BC                     = zeros(1,length(mem.BC_block));
 for i = 1:length(mem.BC_block)
      mem.RTsC_BC(i) = mean(rt(block == mem.BC_block(i) & BC_condition == 1 ));
 end
 
-mem.RTsC_CC     = zeros(1,cfg_exp.nBlocksExp);
+mem.RTsC_CC                     = zeros(1,cfg_exp.nBlocksExp);
 for i = 1:length(mem.RTsC_CC)
      mem.RTsC_CC(i) = mean(rt(block == i & CC_condition == 1 ));
 end
@@ -465,17 +465,20 @@ if fig
     
     %% Performance Plots
     % Performance par conditions
-    figure('Name', 'Performance Plots');
+    figure('Name', ['Performance Plots for pilot n°',num2str(ID)]);
     subplot(2,2,1)
     hold on;
-    bar([mem.perf_DC 0 0],'FaceColor',[0.55 0.25 0.35]);
-    bar([0 mem.perf_CC 0],'FaceColor',[0.75 0.75 0.75]);
-    bar([0 0 mem.perf_BC],'FaceColor',[0.40 0.55 0.40]);
+    bar(1, mem.perf_DC,'FaceColor',[.55 .25 .35])
+    b1 = bar((2-.8/3), mem.perf_CC_DC,'FaceColor',[.85 .75 .75], 'BarWidth',.8/3);
+    b2 = bar((2), mem.perf_CC,'FaceColor',[.75 .75 .75], 'BarWidth',.8/3);
+    b3 = bar((2+.8/3), mem.perf_CC_BC, 'FaceColor',[.75 .85 .75], 'BarWidth',.8/3);
+    bar(3, mem.perf_BC,'FaceColor',[.40 .55 .40])
     xticks([1 2 3 4])
-    xticklabels({'DC','CC', 'BC'})
-    ylabel('Performance','fontsize', 10)
+    xticklabels({'DC','CC','BC'})
+    legend([b1 b2 b3],{'CC (DC)','CC', 'CC (BC)'},'fontsize', 6, 'location','northeast')
+    ylabel('Performance (mean %)','fontsize', 10)
     title('Performance according to conditions','fontsize', 10)
-    axis([0 4 40 100])
+    axis([0 4 50 100])
     grid minor
     box on
     hold off
@@ -483,48 +486,56 @@ if fig
     % Performance par rewards
     subplot(2,2,2)
     hold on;
-    bar([mem.smallRwd_rate 0],'FaceColor',[0.75, 0.85, 0.90]);
-    bar([0 mem.largeRwd_rate],'FaceColor',[0.35, 0.50, 0.60]);
+    bar([mem.smallRwd_rate 0],'FaceColor',[.45, .75, .80]);
+    bar([0 mem.largeRwd_rate],'FaceColor',[.00, .45, .55]);
     xticks([1 2])
     xticklabels({'Small Reward','Large Reward'})
     ylabel('Performance','fontsize', 10)
-    title('Performance according to reward','fontsize', 10)
-    axis([0 3 40 100])
+    title('Performance According to Reward','fontsize', 10)
+    axis([0 3 50 100])
     grid minor
     box on
     hold off
     
     % Performance par conditions & rewards
-    subplot(2,1,2)
+    subplot(2,2,3)
     hold on;
-    bar([mem.perf_DC_smallRwd 0 0 0 0 0],'FaceColor',[0.65 0.35 0.45]);
-    bar([0 mem.perf_DC_largeRwd 0 0 0 0],'FaceColor',[0.45 0.15 0.25]);
-    bar([0 0 mem.perf_CC_smallRwd 0 0 0],'FaceColor',[0.85 0.85 0.85]);
-    bar([0 0 0 mem.perf_CC_largeRwd 0 0],'FaceColor',[0.65 0.65 0.65]);
-    bar([0 0 0 0 mem.perf_BC_smallRwd 0],'FaceColor',[0.50 0.65 0.50]);
-    bar([0 0 0 0 0 mem.perf_BC_largeRwd],'FaceColor',[0.30 0.45 0.30]);
-    xticks([1 2 3 4 5 6])
-    xticklabels({'DC Small Rwd','DC Large Rwd','CC Small Rwd','CC Large Rwd','BC Small Rwd',' BC Large Rwd'})
+    bar(1, mem.perf_DC_smallRwd,'FaceColor',[.65 .35 .45], 'BarWidth',.5)
+    bar(1.5-.5/3, mem.perf_CC_DC_smallRwd,'FaceColor',[.95 .85 .85], 'BarWidth',.5/3)
+    bar(1.5, mem.perf_CC_smallRwd,'FaceColor',[.85 .85 .85], 'BarWidth',.5/3)
+    bar(1.5+.5/3, mem.perf_CC_BC_smallRwd,'FaceColor',[.85 .95 .85], 'BarWidth',.5/3)
+    bar(2, mem.perf_BC_smallRwd,'FaceColor',[.50 .65 .50], 'BarWidth',.5)
+    bar(3, mem.perf_DC_largeRwd,'FaceColor',[.45 .15 .25], 'BarWidth',.5)
+    bar(3.5-.5/3, mem.perf_CC_DC_largeRwd,'FaceColor',[.75 .65 .65], 'BarWidth',.5/3)
+    bar(3.5, mem.perf_CC_largeRwd,'FaceColor',[.65 .65 .65], 'BarWidth',.5/3)
+    bar(3.5+.5/3, mem.perf_CC_BC_largeRwd,'FaceColor',[.65 .75 .65], 'BarWidth',.5/3)
+    bar(4, mem.perf_BC_largeRwd,'FaceColor',[.30 .45 .30], 'BarWidth',.5)
+    xticks([1.5 3.5])
+    xticklabels({'Small Rwd', 'Large Rwd'})
+    legend({'DC','CC (DC)','CC', 'CC (BC)', 'BC'}, 'fontsize', 6 , 'Location', 'northeast','NumColumns',2)
     ylabel('Performance','fontsize', 10)
-    title('Performance according to reward & conditions','fontsize', 10)
-    axis([0 7 40 100])
+    title(['Performance Plots for Pilot n°',num2str(ID)],'fontsize', 10)
+    axis([0 5 40 100])
     grid minor
     box on
     hold off
+    
+    % Title of the whole plot 
+    sgtitle(['Performance Plots for Pilot n°',num2str(ID)])
     
     %% RTs Plots
     % RTs par conditions
     figure('Name', 'RTs Plots');
     subplot(2,2,1)
     hold on;
-    bar([mem.rt_DC 0 0],'FaceColor',[0.75 0.45 0.55]);
-    bar([0 mem.rt_CC 0],'FaceColor',[0.75 0.75 0.75]);
-    bar([0 0 mem.rt_BC],'FaceColor',[0.40 0.55 0.40]);
+    bar([mem.rt_DC 0 0],'FaceColor',[.55 .25 .35]);
+    bar([0 mem.rt_CC 0],'FaceColor',[.75 .75 .75]);
+    bar([0 0 mem.rt_BC],'FaceColor',[.40 .55 .40]);
     xticks([1 2 3 4])
     xticklabels({'DC','CC', 'BC'})
     ylabel('RTs','fontsize', 10)
     title('RTs according to conditions','fontsize', 10)
-    axis([0 4 0 2])
+    axis([0 4 -1 1])
     grid minor
     box on
     hold off
@@ -532,13 +543,13 @@ if fig
     % RTs par rewards
     subplot(2,2,2)
     hold on;
-    bar([mem.rt_smallRwd 0],'FaceColor',[0.75, 0.85, 0.90]);
-    bar([0 mem.rt_largeRwd],'FaceColor',[0.35, 0.50, 0.60]);
+    bar([mem.rt_smallRwd 0],'FaceColor',[.45, .75, .80]);
+    bar([0 mem.rt_largeRwd],'FaceColor',[.00, .45, .55]);
     xticks([1 2])
     xticklabels({'Small Reward','Large Reward'})
     ylabel('RTs','fontsize', 10)
     title('RTs according to reward','fontsize', 10)
-    axis([0 3 0 2])
+    axis([0 3 -1 1])
     grid minor
     box on
     hold off
@@ -556,92 +567,112 @@ if fig
     xticklabels({'DC Small Rwd','DC Large Rwd','CC Small Rwd','CC Large Rwd','CC Small Rwd',' CC Large Rwd'})
     ylabel('RTs','fontsize', 10)
     title('RTs according to reward & conditions','fontsize', 10)
-    axis([0 7 0 2])
+    axis([0 7 -1 1])
     grid minor
     box on
     hold off
     
+    % Title of the whole plot 
+    sgtitle(['RTs Plots for Pilot n°',num2str(ID)])
+    
     %% Learning Curves Plots
     figure('Name', 'Learning Curve Plots');
-    LC_plots    = {mem.LC, mem.LC_smallRwd, mem.LC_largeRwd};
-    LC_titles   = {'Learning Curve Experiment', 'Learning Curve for Small Rewards', 'Learning Curve for Large Rewards'};
-    LC_xtick    = {unique(block), mem.smallRwdBlock, mem.largeRwdBlock};
-    LC_color    = {[0 0 0], [0.75, 0.85, 0.90], [0.35, 0.50, 0.60]};
-    for i = 1:3
-        subplot(2,2,i)
-        p = plot(1:(length(LC_plots{i})), LC_plots{i},'linew',1.5);
-        p.Color = LC_color{i};
-        ylabel('Performance','fontsize', 10)
-        xlabel('Number of blocks','fontsize', 10)
-        xticks(1:(length(LC_plots{i})))
-        xticklabels(LC_xtick{i})
-        title(LC_titles{i},'fontsize', 10)
-        axis([0 (length(LC_plots{i})+1) 40 100])
-        grid minor
-        box on
-    end
     
-    subplot(2,2,4)
+    subplot(2,1,1)
+    p = plot(1:(length(mem.LC)), mem.LC,'linew',1.5);
+    p.Color = [0 0 0];
+    line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
+    ylabel('Performance (Mean)','fontsize', 10)
+    xlabel('Number of blocks','fontsize', 10)
+    xticks(1:(length(mem.LC)))
+    xticklabels(unique(block))
+    title('Learning Curve Experiment','fontsize', 10)
+    axis([0 (length(mem.LC)+1) 40 105])
+    grid minor
+    box on
+    
+    subplot(2,2,3)
     hold on
-    p1 = plot(mem.smallRwdBlock, LC_plots{2},'linew',1.5);
-    p1.Color = LC_color{2};
-    p2 = plot(mem.largeRwdBlock, LC_plots{3},'linew',1.5);
-    p2.Color = LC_color{3};
-    ylabel('Performance','fontsize', 10)
+    p1 = plot(mem.smallRwdBlock, mem.LC_smallRwd,'-x','linew',1.5);
+    p1.Color = [0.75, 0.85, 0.90];
+    p2 = plot(mem.largeRwdBlock, mem.LC_largeRwd,'-o','linew',1.5);
+    p2.Color = [0.35, 0.50, 0.60];
+    line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
+    ylabel('Performance (Mean)','fontsize', 10)
     xlabel('Number of blocks','fontsize', 10)
     xticks(1:12); xticklabels(unique(block))
     title('Learning Curve for Small and Large Rewards','fontsize', 10)
-    axis([0 (length(unique(block))+1) 40 100])
+    axis([0 (length(unique(block))+1) 40 110])
+    hold off
+    grid minor
+    box on
+    
+    subplot(2,2,4)
+    hold on
+    p1 = plot(mem.DC_block, mem.LC_DC,'-x','linew',1.5);
+    p1.Color = [.75 .45 .55];
+    p2 = plot(unique(block), mem.LC_CC,'-+','linew',1.5);
+    p2.Color = [.5 .5 .5];
+    p3 = plot(mem.BC_block, mem.LC_BC,'-o','linew',1.5);
+    p3.Color = [.40 .55 .40];
+    line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
+    ylabel('Performance (Mean)','fontsize', 10)
+    xlabel('Number of blocks','fontsize', 10)
+    xticks(1:12); xticklabels(unique(block))
+    title('Learning Curve for DC and BC','fontsize', 10)
+    axis([0 (length(unique(block))+1) 40 110])
     hold off
     grid minor
     box on
 
+    % Title of the whole plot 
+    sgtitle(['Learning Curve for Pilot n°',num2str(ID)])
     
     %% Gender Plots
     
     % Performance par gender
-    figure('Name', 'Gender Plots');
-    
-    gender_fem = {mem.perf_fem, mem.rt_fem};
-    gender_hom = {mem.perf_hom, mem.rt_hom};
-    gender_labels ={'Performance','RTs'};
-    gender_titles ={'Performance according to gender', 'RTs according to gender'};
-    gender_axis = {[0 3 40 100], [0 3 0 2]};
-    
-    for i = 1:2
-        subplot(2,2,i)
-        hold on;
-        bar([gender_fem{i} 0],'FaceColor',[0.85 0.55 0.65]);
-        bar([0 gender_hom{i}],'FaceColor',[0.45, 0.60, 0.70]);
-        xticks([1 2])
-        xticklabels({'Female','Male'})
-        ylabel(gender_labels{i},'fontsize', 10)
-        title(gender_titles{i},'fontsize', 10)
-        axis(gender_axis{i})
-        grid minor
-        box on
-        hold off
-    end
-    
-    % Performance par genre & conditions
-    subplot(2,1,2)
-    hold on;
-    bar([mem.DC_fem_rate 0 0 0 0 0],'FaceColor',[0.65 0.35 0.45]);
-    bar([0 mem.DC_hom_rate 0 0 0 0],'FaceColor',[0.45 0.15 0.25]);
-    bar([0 0 mem.CC_fem_rate 0 0 0],'FaceColor',[0.85 0.85 0.85]);
-    bar([0 0 0 mem.CC_hom_rate 0 0],'FaceColor',[0.65 0.65 0.65]);
-    bar([0 0 0 0 mem.BC_fem_rate 0],'FaceColor',[0.50 0.65 0.50]);
-    bar([0 0 0 0 0 mem.BC_hom_rate],'FaceColor',[0.30 0.45 0.30]);
-    xticks([1 2 3 4 5 6])
-    xticklabels({'DC Fem','DC Hom','CC Fem','CC Hom','BC Fem','BC Hom'})
-    ylabel('Performance','fontsize', 10)
-    title('Performance according to gender & conditions','fontsize', 10)
-    axis([0 7 40 100])
-    grid minor
-    box on
-    hold off
+%     figure('Name', 'Gender Plots');
+%     
+%     gender_fem = {mem.perf_fem, mem.rt_fem};
+%     gender_hom = {mem.perf_hom, mem.rt_hom};
+%     gender_labels ={'Performance','RTs'};
+%     gender_titles ={'Performance according to gender', 'RTs according to gender'};
+%     gender_axis = {[0 3 40 100], [0 3 0 2]};
+%     
+%     for i = 1:2
+%         subplot(2,2,i)
+%         hold on;
+%         bar([gender_fem{i} 0],'FaceColor',[0.85 0.55 0.65]);
+%         bar([0 gender_hom{i}],'FaceColor',[0.45, 0.60, 0.70]);
+%         xticks([1 2])
+%         xticklabels({'Female','Male'})
+%         ylabel(gender_labels{i},'fontsize', 10)
+%         title(gender_titles{i},'fontsize', 10)
+%         axis(gender_axis{i})
+%         grid minor
+%         box on
+%         hold off
+%     end
+%     
+%     % Performance par genre & conditions
+%     subplot(2,1,2)
+%     hold on;
+%     bar([mem.DC_fem_rate 0 0 0 0 0],'FaceColor',[0.65 0.35 0.45]);
+%     bar([0 mem.DC_hom_rate 0 0 0 0],'FaceColor',[0.45 0.15 0.25]);
+%     bar([0 0 mem.CC_fem_rate 0 0 0],'FaceColor',[0.85 0.85 0.85]);
+%     bar([0 0 0 mem.CC_hom_rate 0 0],'FaceColor',[0.65 0.65 0.65]);
+%     bar([0 0 0 0 mem.BC_fem_rate 0],'FaceColor',[0.50 0.65 0.50]);
+%     bar([0 0 0 0 0 mem.BC_hom_rate],'FaceColor',[0.30 0.45 0.30]);
+%     xticks([1 2 3 4 5 6])
+%     xticklabels({'DC Fem','DC Hom','CC Fem','CC Hom','BC Fem','BC Hom'})
+%     ylabel('Performance','fontsize', 10)
+%     title('Performance according to gender & conditions','fontsize', 10)
+%     axis([0 7 40 100])
+%     grid minor
+%     box on
+%     hold off
 end
 
 
-%end
+end
 

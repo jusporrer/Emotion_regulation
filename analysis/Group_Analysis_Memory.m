@@ -6,12 +6,12 @@ close all;
 
 %% =================== Get All Individual Data          ===================
 
-subject_ID = [81473, 74239, 98197, 81477, 12346, 90255, 33222, 90255, 48680];
+subject_ID = [81473, 74239, 98197, 81477, 12346, 90255, 33222, 90255, 48680, 4515, 93841];
 
 for subj_idx = 1:length(subject_ID)
     disp(['=================== Subject ', ...
         num2str(subject_ID(subj_idx)), ' ===================' ]);
-    memGRP(subj_idx) = Individual_Analysis_Memory(subject_ID(subj_idx), true);
+    memGRP(subj_idx) = Individual_Analysis_Memory(subject_ID(subj_idx), false);
 end
 
 %% =================== General Information              ===================
@@ -122,8 +122,8 @@ perf_BC_hom_largeRwd = [memGRP.perf_BC_hom_largeRwd];
 %% =================== Performance - Condition          ===================
 
 % Detrimental Condition
-perf_DC         = ([memGRP.perf_DC]);
-perf_DC_sem     = std([memGRP.perf_DC])/sqrt(nS);
+perf_DC                 = ([memGRP.perf_DC]);
+perf_DC_sem             = std([memGRP.perf_DC])/sqrt(nS);
 
 perf_DC_smallRwd        = ([memGRP.perf_DC_smallRwd]);
 perf_DC_smallRwd_sem    = std([memGRP.perf_DC_smallRwd])/sqrt(nS);
@@ -402,7 +402,7 @@ errorbar(3, mean(perf_BC), perf_BC_sem, 'k.','LineWidth',1);
 sigstar({[1,2],[1,3],[2,3]},[p_perf_DC_CC, p_perf_DC_BC, p_perf_CC_BC], 0, 100);
 xticks([1 2 3])
 xticklabels({'DC','CC','BC'})
-legend([b1 b2 b3],{'CC (DC)','CC', 'CC (BC)'},'fontsize', 6, 'location','northeast')
+legend([b1 b2 b3],{'CC (DC)','CC', 'CC (BC)'},'fontsize', 6, 'location','southeast')
 ylabel('Performance (mean +/- SEM %)','fontsize', 10)
 title('Fig1. Performance According to Conditions','fontsize', 10)
 axis([0 4 50 100])
@@ -494,7 +494,7 @@ sigstar({[3,3.5],[3,4],[3.5,4]},[p_perf_DC_CC_largeRwd, p_perf_DC_BC_largeRwd, p
 
 xticks([1.5 3.5])
 xticklabels({'Small Rwd', 'Large Rwd'})
-legend({'DC','CC (DC)','CC', 'CC (BC)', 'BC'}, 'fontsize', 6 , 'Location', 'northeast')
+legend({'DC','CC (DC)','CC', 'CC (BC)', 'BC'}, 'fontsize', 6 , 'Location', 'southeast')
 ylabel('Performance (mean +/- SEM %)','fontsize', 10)
 title('Fig4. Performance According to Rewards and Conditions','fontsize', 10)
 axis([0 5 50 100])
@@ -524,7 +524,7 @@ xticks([1 2 3])
 legend({'Large Rwd','Small Rwd'}, 'Location', 'southeast')
 xticklabels({'DC','CC','BC '})
 ylabel('Performance (mean +/- SEM)','fontsize', 10)
-title('Performance According to Reward and Conditions','fontsize', 10)
+title('Fig5. Performance According to Reward & Conditions','fontsize', 10)
 axis([0 4 50 100])
 grid minor
 box on

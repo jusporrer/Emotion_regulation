@@ -705,7 +705,7 @@ hold off
 %% Gender Plots
 
 % % Performance par gender
-% figure('Name', 'Gender Plots');
+ figure('Name', 'Gender Plots');
 % 
 % subplot(2,2,1)
 % hold on;
@@ -757,45 +757,45 @@ hold off
 % box on
 % hold off
 % 
-% % Performance par genre & conditions
-% subplot(2,1,2)
-% hold on;
-% bar(1, mean(perf_DC_fem_smallRwd),'FaceColor',[0.65 0.35 0.45],'BarWidth',.45);
-% bar(1.5, mean(perf_DC_fem_largeRwd),'FaceColor',[0.45 0.15 0.25],'BarWidth',.45);
-% bar(2, mean(perf_CC_fem_smallRwd),'FaceColor',[0.85 0.85 0.85],'BarWidth',.45);
-% bar(2.5, mean(perf_CC_fem_largeRwd),'FaceColor',[0.65 0.65 0.65],'BarWidth',.45);
-% bar(3, mean(perf_BC_fem_smallRwd),'FaceColor',[0.50 0.65 0.50],'BarWidth',.45);
-% bar(3.5, mean(perf_BC_fem_largeRwd),'FaceColor',[0.30 0.45 0.30],'BarWidth',.45);
-% 
-% errorbar(1, mean(perf_DC_fem_smallRwd), std(perf_DC_fem_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
-% errorbar(1.5, mean(perf_DC_fem_largeRwd), std(perf_DC_fem_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
-% errorbar(2, mean(perf_CC_fem_smallRwd), std(perf_CC_fem_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
-% errorbar(2.5, mean(perf_CC_fem_largeRwd), std(perf_CC_fem_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
-% errorbar(3, mean(perf_BC_fem_smallRwd), std(perf_BC_fem_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
-% errorbar(3.5, mean(perf_BC_fem_largeRwd), std(perf_BC_fem_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
-% 
-% bar(4.5, mean(perf_DC_hom_smallRwd),'FaceColor',[0.65 0.35 0.45],'BarWidth',.45);
-% errorbar(4.5, mean(perf_DC_hom_smallRwd), std(perf_DC_hom_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
-% bar(5, mean(perf_DC_hom_largeRwd),'FaceColor',[0.45 0.15 0.25],'BarWidth',.45);
-% errorbar(5, mean(perf_DC_hom_largeRwd), std(perf_DC_hom_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
-% bar(5.5, mean(perf_CC_hom_smallRwd),'FaceColor',[0.85 0.85 0.85],'BarWidth',.45);
-% errorbar(5.5, mean(perf_CC_hom_smallRwd), std(perf_CC_hom_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
-% bar(6, mean(perf_CC_hom_largeRwd),'FaceColor',[0.65 0.65 0.65],'BarWidth',.45);
-% errorbar(6, mean(perf_CC_hom_largeRwd), std(perf_CC_hom_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
-% bar(6.5, mean(perf_BC_hom_smallRwd),'FaceColor',[0.50 0.65 0.50],'BarWidth',.45);
-% errorbar(6.5, mean(perf_BC_hom_smallRwd), std(perf_BC_hom_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
-% bar(7, mean(perf_BC_hom_largeRwd),'FaceColor',[0.30 0.45 0.30],'BarWidth',.45);
-% errorbar(7, mean(perf_BC_hom_largeRwd), std(perf_BC_hom_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
-% 
-% xticks([1.5 5])
-% xticklabels({'Female Faces', 'Male Faces'})
-% legend({'DC SR', 'DC LR', 'CC SR', 'CC LR', 'BC SR', 'BC LR'},'fontsize', 6 , 'Location', 'northeast')
-% ylabel('Performance (mean +/- SEM %)','fontsize', 10)
-% title('Performance according to gender & conditions','fontsize', 10)
-% axis([0 8 50 105])
-% grid minor
-% box on
-% hold off
+% Performance par genre & conditions
+subplot(2,1,2)
+hold on;
+bar(1, mean(perf_DC_fem_smallRwd),'FaceColor',[0.65 0.35 0.45],'BarWidth',.45);
+bar(1.5, mean(perf_DC_fem_largeRwd),'FaceColor',[0.45 0.15 0.25],'BarWidth',.45);
+bar(2, mean(perf_CC_fem_smallRwd),'FaceColor',[0.85 0.85 0.85],'BarWidth',.45);
+bar(2.5, mean(perf_CC_fem_largeRwd),'FaceColor',[0.65 0.65 0.65],'BarWidth',.45);
+bar(3, mean(perf_BC_fem_smallRwd),'FaceColor',[0.50 0.65 0.50],'BarWidth',.45);
+bar(3.5, mean(perf_BC_fem_largeRwd),'FaceColor',[0.30 0.45 0.30],'BarWidth',.45);
+
+errorbar(1, mean(perf_DC_fem_smallRwd), std(perf_DC_fem_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(1.5, mean(perf_DC_fem_largeRwd), std(perf_DC_fem_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(2, mean(perf_CC_fem_smallRwd), std(perf_CC_fem_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(2.5, mean(perf_CC_fem_largeRwd), std(perf_CC_fem_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(3, mean(perf_BC_fem_smallRwd), std(perf_BC_fem_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(3.5, mean(perf_BC_fem_largeRwd), std(perf_BC_fem_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+
+bar(4.5, mean(perf_DC_hom_smallRwd),'FaceColor',[0.65 0.35 0.45],'BarWidth',.45);
+errorbar(4.5, mean(perf_DC_hom_smallRwd), std(perf_DC_hom_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+bar(5, mean(perf_DC_hom_largeRwd),'FaceColor',[0.45 0.15 0.25],'BarWidth',.45);
+errorbar(5, mean(perf_DC_hom_largeRwd), std(perf_DC_hom_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+bar(5.5, mean(perf_CC_hom_smallRwd),'FaceColor',[0.85 0.85 0.85],'BarWidth',.45);
+errorbar(5.5, mean(perf_CC_hom_smallRwd), std(perf_CC_hom_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+bar(6, mean(perf_CC_hom_largeRwd),'FaceColor',[0.65 0.65 0.65],'BarWidth',.45);
+errorbar(6, mean(perf_CC_hom_largeRwd), std(perf_CC_hom_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+bar(6.5, mean(perf_BC_hom_smallRwd),'FaceColor',[0.50 0.65 0.50],'BarWidth',.45);
+errorbar(6.5, mean(perf_BC_hom_smallRwd), std(perf_BC_hom_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
+bar(7, mean(perf_BC_hom_largeRwd),'FaceColor',[0.30 0.45 0.30],'BarWidth',.45);
+errorbar(7, mean(perf_BC_hom_largeRwd), std(perf_BC_hom_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
+
+xticks([1.5 5])
+xticklabels({'Female Faces', 'Male Faces'})
+legend({'DC SR', 'DC LR', 'CC SR', 'CC LR', 'BC SR', 'BC LR'},'fontsize', 6 , 'Location', 'northeast')
+ylabel('Performance (mean +/- SEM %)','fontsize', 10)
+title('Performance according to gender & conditions','fontsize', 10)
+axis([0 8 50 105])
+grid minor
+box on
+hold off
 
 %% Learning Curves Plots
 fig = true;
@@ -812,7 +812,7 @@ if fig
     xticks(1:(length(LC)))
     xticklabels(1:12)
     title('Learning Curve RSVP Experiment','fontsize', 10)
-    axis([0 (length(LC)+1) 70 100])
+    axis([0 (length(LC)+1) 40 100])
     grid minor
     box on
     
@@ -830,7 +830,7 @@ if fig
     xlabel('Number of Blocks','fontsize', 10)
     xticks(1:6); xticklabels(1:6)
     title('Learning Curve for Small and Large Rewards','fontsize', 10)
-    axis([0 7 70 100])
+    axis([0 7 40 100])
     hold off
     grid minor
     box on
@@ -852,7 +852,7 @@ if fig
     xlabel('Number of Blocks','fontsize', 10)
     xticks(1:6); xticklabels(1:6)
     title('Learning Curve for Each Conditions','fontsize', 10)
-    axis([0 7 70 100])
+    axis([0 7 40 100])
     hold off
     grid minor
     box on
