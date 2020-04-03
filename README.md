@@ -20,6 +20,6 @@ This project carried at the ICM (France) aims to investigate the possible upregu
 
 ### Versions
 
-Matlab r2019b
-CFD Version 2.0.3
-PsychToolBox 3.0.16
+- Matlab r2019b
+- CFD Version 2.0.3
+- PsychToolBox 3.0.16
