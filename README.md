@@ -8,7 +8,7 @@ This project carried at the ICM (France) aims to investigate the possible upregu
 - Download the [(Chicago Face Database)](https://chicagofaces.org/default/)
 - Put the new downloaded folder *CFD Version X* in the same directory as "emotion_regulation"
 - Run the file *processingImgCFD.m* from the folder *CDF_processing*. The current settings only select caucasian male and females which are not rated as more than three std from the mean in terms of unusuality, looking afraid or surprised (when doing a neutral expression).This results in 177 out of 597 people remaining, and 454 images.
-- Run the file *processExpImg.m* from the folder *CDF_processing*. This requires "Image Processing Toolbox" on Matlab. The image is cropped in a square and resized for the rsvp task (700p) and for the visual search task (300p). The images as then saved in a matrix.
+- Run the file *processExpImg.m* from the folder *CDF_processing*. This requires "Image Processing Toolbox" on Matlab. The image is cropped in a square and resized for the rsvp task (700p) and for the visual search task (300p). The images are then saved in a matrix.
 
 |                         | Female                         | Male                            | Total                           |
 | :----------------------:|:------------------------------:| :------------------------------:| :------------------------------:|
