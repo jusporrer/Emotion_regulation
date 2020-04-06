@@ -2,10 +2,10 @@
 nSection = 4;
 
 %% Load the initial matrices 
-load('../exp_images/WMN_img_rsvp.mat');
-load('../exp_images/WMF_img_rsvp.mat');
-load('../exp_images/WFN_img_rsvp.mat');
-load('../exp_images/WFF_img_rsvp.mat');
+load('../exp_images/WMN_img.mat');
+load('../exp_images/WMF_img.mat');
+load('../exp_images/WFN_img.mat');
+load('../exp_images/WFF_img.mat');
 
 %% Transform them into scrambled images 
 WMN_img_scramble = cell(1,size(WMN_img_rsvp,2));

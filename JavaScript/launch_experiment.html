@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <title> My experiment</title>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+      <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+      <script src="jspsych-6.0.5/jspsych.js"></script>
+      <script src="jspsych-6.0.5/plugins/fullscreen-moodconf.js"></script>
+      <script src="jspsych-6.0.5/plugins/jspsych-html-keyboard-response.js"></script>
+      <script src="jspsych-6.0.5/plugins/jspsych-external-html.js"></script>
+      <script src="jspsych-6.0.5/plugins/mooddisplay2figures.js"></script>
+      <script src="jspsych-6.0.5/plugins/feedback-response.js"></script>
+      <script src="jspsych-6.0.5/plugins/slider-response.js"></script>
+      <script src="jspsych-6.0.5/plugins/jspsych-survey-text.js"></script>
+      <script src="jspsych-6.0.5/plugins/pract-slider-response.js"></script>
+      <script src="jspsych-6.0.5/plugins/confdisplay2boxes.js"></script>
+      <script src="confdrawblankstimulus.js"></script>
+      <script src="confdrawstimulus.js"></script>
+      <script src="Mood_task.js"></script>
+      <script src="Conf_task.js"></script>
+      <script src="task.js"></script>
+      <script src="practmoodconf.js"></script>
+      <link href="jspsych-6.0.5/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+      <style id="cursornone"> html { cursor: none; };  </style>
+    </head>
+  <body>
+    <div id='jspsych-target' style='width:800; height:auto; position:relative;'></div>
+    <canvas class = "canvas" id="myCanvas"></canvas>
+    <canvas class = "stimulusCanvas" id="myInnerCanvas"></canvas>
+    <canvas class = "stimulusCanvas" id="myInnerCanvas2"></canvas>
+    <canvas class = "canvas" id="myBlankstimCanvas"></canvas>
+    <canvas class = "canvas" id="myFeedbackCanvas"></canvas>
+  </body>
+  <script>
+
+
+  //CODE THAT CHECKS IF THE BROWSER IS CHROME OR FIREFOX MOZ
+  function getBrowserInfo()
+  {
+          var ua = navigator.userAgent, tem,
+          M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+          if(/trident/i.test(M[1]))
+          {
+                  tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
+                  return 'IE '+(tem[1] || '');
+          }
+          if(M[1]=== 'Chrome')
+          {
+                  tem= ua.match(/\b(OPR|Edge)\/(\d+)/);
+                  if(tem!= null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+          }
+          M = M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+          if((tem= ua.match(/version\/(\d+)/i))!= null)
+                  M.splice(1, 1, tem[1]);
+          return { 'browser': M[0], 'version': M[1] };
+  }
+
+  var browserInfo = getBrowserInfo();
+  if(browserInfo.browser !== 'Chrome' && browserInfo.browser !== 'Firefox')
+  {
+          var wrong_browser =
+          {
+                  type: 'text',
+                  text: '<p>This experiment only has support for Google Chrome or Mozilla Firefox.</p>'
+                           +'<p>Please reopen the experiment in one of these browsers.</p>',
+          };
+          jsPsych.init({
+                  timeline: [wrong_browser],
+          });
+  }
+  else
+  //IF BROWSER IS OK, LEAD ON TO THE EXPERIMENT
+
+  //CODE TO RUN THE EXPERIMENT STARTS HERE
+  {
+    let cursornone = document.getElementById("cursornone").innerHTML;
+    //WEB AND CANVAS PARAMETERS
+    var images = ['img/instructions11.bmp', 'img/instructions22.bmp', 'img/mood_coin.bmp','img/mood_coinlose.bmp', 'img/M11.bmp','img/M12.bmp','img/nonselect.bmp','img/M21.bmp','img/M22.bmp','img/M31.bmp','img/M32.bmp','img/M41.bmp','img/M42.bmp','img/M51.bmp','img/M52.bmp','img/M61.bmp','img/M62.bmp'];
+      //Set up the canvas and get the window height and width.
+      var canvas = document.getElementById("myCanvas");
+      var context = canvas.getContext("2d");
+      context.canvas.width  = 800;
+      context.canvas.height =  600 * 9.0 / 10.0;
+    	var centerWidth = canvas.width / 2.0;
+    	var centerHeight = canvas.height / 2.0;
+
+    //Canvas for stimulus 1
+    	var innerCanvas = document.getElementById("myInnerCanvas");
+    	var innerContext = innerCanvas.getContext("2d");
+    	innerContext.canvas.width  = 800/2; // 800/3.2 is 250px
+    	innerContext.canvas.height = 600 * 9.0 / 21.5; // Leave room for prompts
+    	var innerCenterWidth = innerCanvas.width / 2.0;
+    	var innerCenterHeight = innerCanvas.height / 2.0;
+
+    //Canvas for stimulus 2
+    	var innerCanvas2 = document.getElementById("myInnerCanvas2");
+    	var innerContext2 = innerCanvas2.getContext("2d");
+    	innerContext2.canvas.width  = 800/2;
+    	innerContext2.canvas.height = 600 * 9.0 / 21.5; // Leave room for prompts
+    	var innerCenterWidth2 = innerCanvas2.width / 2.0;
+    	var innerCenterHeight2 = innerCanvas2.height / 2.0;
+
+
+      //CODE TO SAVE FULLDATA AT THE END
+      function save_data(alldata){
+        var data_table = 'mvaghi_moco'; // change this for different experiments
+        $.ajax({
+            type:'post',
+            cache: false,
+            url: 'savedata.php',
+            data: {
+               table: data_table,
+               json: JSON.stringify(alldata)
+            },
+           success: function(output) {} // write the result to javascript console
+         });
+      };
+
+
+      //CODE TO SAVE DATA PER TRIAL
+      function save_data_pt(alldata){
+        var data_table = 'mvaghi_moco'; // change this for different experiments
+        $.ajax({
+            type:'post',
+            cache: false,
+            url: 'savedata.php',
+            data: {
+               table: data_table,
+               json: JSON.stringify(alldata)
+            },
+           success: function(output) {} // write the result to javascript console
+         });
+      }		;
+
+
+
+      ////////////////////////////////
+      //START OF EXPERIMENT PLUGINS//
+      ///////////////////////////////
+
+      //FULL SCREEN PLUGIN
+       var fullscreen =	{
+          type: 'fullscreen',
+          message: '<p> To take part in the experiment, your browser must be in fullscreen mode. </p><p>Exiting fullscreen mode will pause the experiment. </p><p> Please click the button below to enable fullscreen mode and continue.</p>',
+          button_label: 'Put in Fullscreen',
+          delay_after: 300,
+          check_fullscreen: true,
+          data: {
+              test_part: 'fullscreen',
+              blocknumber: 888,
+              trialnumber: 888,
+              winorloseblock: 888,
+              winorlosepos: 888,
+              winorlosehigh: 888,
+              winorloselow: 888,
+            },
+        };
+
+        var infopg = {
+          type:"external-html",
+          url: "infopg2019_mv.html",
+          cont_btn: "continue",
+          data: {
+            test_part: 'infopg',
+            blocknumber: 888,
+            trialnumber: 888,
+            winorloseblock: 888,
+            winorlosepos: 888,
+            winorlosehigh: 888,
+            winorloselow: 888,
+          },
+          on_start: function(){
+              var res = cursornone.replace("none", "default");
+              document.getElementById("cursornone").innerHTML = res;
+          },
+          on_finish: function(){
+              var res = cursornone.replace("default", "none");
+              document.getElementById("cursornone").innerHTML = res;
+          },
+         };
+
+         var check_consent = function(elem) {
+              if ($('#consent_checkbox').is(':checked')) {
+                return true;
+              }
+              else {
+                alert("If you wish to participate, you must check the box next to the statement 'I agree to participate in this study.'");
+                return false;
+              }
+              return false;
+            };
+
+        var consentpg = {
+          type:'external-html',
+          url: "consentpg2019_mv.html",
+          cont_btn: "start",
+          check_fn: check_consent,
+          data: {
+            test_part: 'consentpg',
+            blocknumber: 888,
+            trialnumber: 888,
+            winorloseblock: 888,
+            winorlosepos: 888,
+            winorlosehigh: 888,
+            winorloselow: 888,
+          },
+          on_start: function(){
+              var res = cursornone.replace("none", "default");
+              document.getElementById("cursornone").innerHTML = res;
+          },
+          on_finish: function(){
+              var res = cursornone.replace("default", "none");
+              document.getElementById("cursornone").innerHTML = res;
+          },
+        };
+
+        //ENTER SUBJECT DETAILS PLUGIN
+        	    var subdetails = {
+        	   		type: 'survey-text',
+        	    	preamble: ['<p style = "text-align: center; font-size: 28px">Please enter the following:</p>'],
+        	    	questions: [{prompt: "Worker ID?", rows: 3, columns: 40}],
+        	   		data: {test_part: 'subdetails',
+                  blocknumber: 888,
+                  trialnumber: 888,
+                  winorloseblock: 888,
+                  winorlosepos: 888,
+                  winorlosehigh: 888,
+                  winorloselow: 888,
+                  },
+                on_start: function(){
+                    var res = cursornone.replace("none", "default");
+                    document.getElementById("cursornone").innerHTML = res;
+                },
+                on_finish: function(){
+                    var res = cursornone.replace("default", "none");
+                    document.getElementById("cursornone").innerHTML = res;
+                },
+        	    };
+
+        	    var subdetails2 = {
+        	   		type: 'survey-text',
+        	    	preamble: ['<p style = "text-align: center; font-size: 28px">Please enter the following:</p>'],
+        	    	questions: [{prompt: "Gender (F/M)?", rows: 3, columns: 40}, {prompt: "Age?", rows: 3, columns: 40}],
+        	   		data: {test_part: 'subdetails',
+                    blocknumber: 888,
+                    trialnumber: 888,
+                    winorloseblock: 888,
+                    winorlosepos: 888,
+                    winorlosehigh: 888,
+                    winorloselow: 888,
+                  },
+                on_start: function(){
+                    var res = cursornone.replace("none", "default");
+                    document.getElementById("cursornone").innerHTML = res;
+                },
+                on_finish: function(){
+                    var res = cursornone.replace("default", "none");
+                    document.getElementById("cursornone").innerHTML = res;
+                },
+        	    };
+
+
+
+
+
+
+
+
+      /////////////////////////////////////////////////
+      ///////////// EXPERIMENT PARAMETERS /////////////
+      /////////////////////////////////////////////////
+          var numPrac   = 10; //10
+          var NumBlocks = 2;  //6
+      		var NumTrials = 12; //12
+          var subject_id = Math.floor(Math.random()*9000000) + 1000000; /// now there is a new extention, i.e. var subject_id = jsPsych.randomization.randomID(15);
+
+          var task = task(NumBlocks, NumTrials);
+          var practice = practmoodconf(numPrac);
+
+
+/*  function save_data_pt(data) {
+      var data_table = "mvaghi_test";
+      $.ajax({
+          type: 'post',
+          cache: false,
+          url: 'savedata.php', // change this to point to your php file.
+          // opt_data is to add additional values to every row, like a subject ID
+          // replace 'key' with the column name, and 'value' with the value.
+          data: {
+              table: data_table,
+              json: JSON.stringify(data)
+          },
+          success: function(output) {} // write the result to javascript console
+      });
+  }
+*/
+var tasks = [];
+        tasks.push(fullscreen);
+      //  tasks.push(subdetails);
+    	 // tasks.push(subdetails2);
+      //  tasks.push(infopg);
+      //  tasks.push(consentpg);
+
+      //  for(var i = 0; i < practice.length; i++){tasks.push(practice[i]); };
+        for(var i = 0; i < task.length; i++){tasks.push(task[i]);	};
+
+          //EXECUTE RUN FOR THE EXPERIMENT
+          jsPsych.init({
+              preload_images: images,
+              timeline: tasks,
+
+              on_trial_finish: function() {
+                  jsPsych.data.addProperties({
+                      subject_id: subject_id
+                  });
+                  var data = JSON.parse(jsPsych.data.getLastTrialData().json());
+
+                  save_data_pt(data);
+              },
+              on_finish: function() {
+                //jsPsych.data.localSave('mome' + subject_id + 'local.csv', 'csv');
+              //  jsPsych.data.displayData();
+          		document.write('<p><br></br><br></br><center>Thank you for participating! <br></br> Your data code is <strong>'+subject_id+'</strong>.<br></center><p>')
+}
+              // on_finish: function(data) {
+              //     var res = cursornone.replace("default", "none");
+              //     document.getElementById("cursornone").innerHTML = res;
+              //     //jsPsych.data.displayData();
+              // }
+
+              });
+
+            }; // end else
+
+  </script>
+</html>
