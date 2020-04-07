@@ -6,7 +6,7 @@ close all;
 
 %% =================== Get All Individual Data          ===================
 
-subject_ID = [81433, 79662, 90580]; %[81473, 74239, 98197, 12346, 81477, 90255, 33222, 90255, 48680]; 
+subject_ID = [81433, 79662, 90580] %[98197, 81477, 90255, 90266]; % [81473, 74239, 98197, 12346, 81477, 90255, 90266, 33222, 48680];  %  [81433, 79662, 90580];
 
 for subj_idx = 1:length(subject_ID)
     disp(['=================== Subject ', ...
@@ -18,7 +18,7 @@ end
 disp('=================== General Group Information ===================');
 
 rt                      = [rsvpGRP.rt];
-[h_RT, p_RT]            = adtest(rt); % Normality Anderson-Darling test
+%[h_RT, p_RT]            = adtest(rt); % Normality Anderson-Darling test
 
 nS                      = length(subject_ID);
 disp(['Number of subjects: ',num2str(nS)]);
@@ -100,10 +100,10 @@ disp(['Gender: ',num2str(round(perf_fem)), '% for condition femme & ', ...
 perf_DC                 = [rsvpGRP.perf_DC];
 perf_DC_sem             = std([rsvpGRP.perf_DC])/sqrt(nS);
 
-hit_rate_DC             = mean([rsvpGRP.hit_rate_DC ])*100;
-reject_rate_DC          = mean([rsvpGRP.reject_rate_DC ])*100;
-miss_rate_DC            = mean([rsvpGRP.miss_rate_DC ])*100;
-falseAlarm_rate_DC      = mean([rsvpGRP.falseAlarm_rate_DC ])*100;
+hit_rate_DC             = ([rsvpGRP.hit_rate_DC ]);
+reject_rate_DC          = ([rsvpGRP.reject_rate_DC ]);
+miss_rate_DC            = ([rsvpGRP.miss_rate_DC ]);
+falseAlarm_rate_DC      = ([rsvpGRP.falseAlarm_rate_DC ]);
 
 perf_CC_DC              = [rsvpGRP.perf_CC_DC];
 perf_CC_DC_sem          = std([rsvpGRP.perf_CC_DC])/sqrt(nS);
@@ -111,10 +111,10 @@ perf_CC_DC_sem          = std([rsvpGRP.perf_CC_DC])/sqrt(nS);
 perf_CC                 = ([rsvpGRP.perf_CC]);
 perf_CC_sem             = std([rsvpGRP.perf_CC])/sqrt(nS);
 
-hit_rate_CC             = mean([rsvpGRP.hit_rate_CC ])*100;
-reject_rate_CC          = mean([rsvpGRP.reject_rate_CC ])*100;
-miss_rate_CC            = mean([rsvpGRP.miss_rate_CC ])*100;
-falseAlarm_rate_CC      = mean([rsvpGRP.falseAlarm_rate_CC ])*100;
+hit_rate_CC             = [rsvpGRP.hit_rate_CC ];
+reject_rate_CC          = [rsvpGRP.reject_rate_CC ];
+miss_rate_CC            = [rsvpGRP.miss_rate_CC ];
+falseAlarm_rate_CC      = [rsvpGRP.falseAlarm_rate_CC ];
 
 perf_CC_BC              = ([rsvpGRP.perf_CC_BC]);
 perf_CC_BC_sem          = std([rsvpGRP.perf_CC_BC])/sqrt(nS);
@@ -122,10 +122,10 @@ perf_CC_BC_sem          = std([rsvpGRP.perf_CC_BC])/sqrt(nS);
 perf_BC                 = ([rsvpGRP.perf_BC]);
 perf_BC_sem             = std([rsvpGRP.perf_BC])/sqrt(nS);
 
-hit_rate_BC             = mean([rsvpGRP.hit_rate_BC ])*100;
-reject_rate_BC          = mean([rsvpGRP.reject_rate_BC ])*100;
-miss_rate_BC            = mean([rsvpGRP.miss_rate_BC ])*100;
-falseAlarm_rate_BC      = mean([rsvpGRP.falseAlarm_rate_BC ])*100;
+hit_rate_BC             = ([rsvpGRP.hit_rate_BC ]);
+reject_rate_BC          = ([rsvpGRP.reject_rate_BC ]);
+miss_rate_BC            = ([rsvpGRP.miss_rate_BC ]);
+falseAlarm_rate_BC      = ([rsvpGRP.falseAlarm_rate_BC ]);
 
 disp(['Emotion : ',num2str(round(mean(perf_DC))), '% for DC, ', ...
     num2str(round(mean(perf_CC))), '% for CC & ',...
@@ -137,7 +137,7 @@ perf_DC_smallRwd_sem    = std([rsvpGRP.perf_DC_smallRwd])/sqrt(nS);
 perf_DC_largeRwd        = ([rsvpGRP.perf_DC_largeRwd]);
 perf_DC_largeRwd_sem    = std([rsvpGRP.perf_DC_largeRwd])/sqrt(nS);
 
-[h_perf_DC_rwd, p_perf_DC_rwd, ci_perf_DC_rwd, stats_perf_DC_rwd]           = ttest2(perf_DC_smallRwd, perf_DC_largeRwd);
+[h_perf_DC_rwd, p_perf_DC_rwd, ci_perf_DC_rwd, stats_perf_DC_rwd]          = ttest2(perf_DC_smallRwd, perf_DC_largeRwd);
 
 perf_CC_smallRwd        = ([rsvpGRP.perf_CC_smallRwd]);
 perf_CC_smallRwd_sem    = std([rsvpGRP.perf_CC_smallRwd])/sqrt(nS);
@@ -145,7 +145,7 @@ perf_CC_smallRwd_sem    = std([rsvpGRP.perf_CC_smallRwd])/sqrt(nS);
 perf_CC_largeRwd        = ([rsvpGRP.perf_CC_largeRwd]);
 perf_CC_largeRwd_sem    = std([rsvpGRP.perf_CC_largeRwd])/sqrt(nS);
 
-[h_perf_CC_rwd, p_perf_CC_rwd, ci_perf_CC_rwd, stats_perf_CC_rwd]           = ttest2(perf_CC_smallRwd, perf_CC_largeRwd);
+[h_perf_CC_rwd, p_perf_CC_rwd, ci_perf_CC_rwd, stats_perf_CC_rwd]          = ttest2(perf_CC_smallRwd, perf_CC_largeRwd);
 
 perf_CC_DC_smallRwd     = ([rsvpGRP.perf_CC_DC_smallRwd]);
 perf_CC_DC_smallRwd_sem = std([rsvpGRP.perf_CC_DC_smallRwd])/sqrt(nS);
@@ -169,13 +169,13 @@ perf_BC_smallRwd_sem    = std([rsvpGRP.perf_BC_smallRwd])/sqrt(nS);
 perf_BC_largeRwd        = ([rsvpGRP.perf_BC_largeRwd]);
 perf_BC_largeRwd_sem    = std([rsvpGRP.perf_BC_largeRwd])/sqrt(nS);
 
-[h_perf_BC_rwd, p_perf_BC_rwd, ci_perf_BC_rwd, stats_perf_BC_rwd]           = ttest2(perf_BC_smallRwd, perf_BC_largeRwd);
+[h_perf_BC_rwd, p_perf_BC_rwd, ci_perf_BC_rwd, stats_perf_BC_rwd]          = ttest2(perf_BC_smallRwd, perf_BC_largeRwd);
 
 % T-test
-[h_perf_DC_CC, p_perf_DC_CC, ci_perf_DC_CC, stats_perf_DC_CC]               = ttest2(perf_DC, perf_CC);
-[h_perf_DC_BC, p_perf_DC_BC, ci_perf_DC_BC, stats_perf_DC_BC]               = ttest2(perf_DC, perf_BC);
-[h_perf_CC_BC, p_perf_CC_BC, ci_perf_CC_BC, stats_perf_CC_BC]               = ttest2(perf_CC, perf_BC);
-[h_perf_CC_both, p_perf_CC_both, ci_perf_CC_both, stats_perf_CC_both]       = ttest2(perf_CC_DC, perf_CC_BC);
+[h_perf_DC_CC, p_perf_DC_CC, ci_perf_DC_CC, stats_perf_DC_CC]              = ttest2(perf_DC, perf_CC);
+[h_perf_DC_BC, p_perf_DC_BC, ci_perf_DC_BC, stats_perf_DC_BC]              = ttest2(perf_DC, perf_BC);
+[h_perf_CC_BC, p_perf_CC_BC, ci_perf_CC_BC, stats_perf_CC_BC]              = ttest2(perf_CC, perf_BC);
+[h_perf_CC_both, p_perf_CC_both, ci_perf_CC_both, stats_perf_CC_both]      = ttest2(perf_CC_DC, perf_CC_BC);
 
 [h_perf_DC_CC_smallRwd, p_perf_DC_CC_smallRwd, ci_perf_DC_CC_smallRwd, stats_perf_DC_CC_smallRwd] = ttest2(perf_DC_smallRwd, perf_CC_smallRwd);
 [h_perf_DC_BC_smallRwd, p_perf_DC_BC_smallRwd, ci_perf_DC_BC_smallRwd, stats_perf_DC_BC_smallRwd] = ttest2(perf_DC_smallRwd, perf_BC_smallRwd);
@@ -242,6 +242,13 @@ perf_BC_hom_largeRwd = [rsvpGRP.perf_BC_hom_largeRwd];
 
 %% =================== Signal Detection Theory          ===================
 
+dprime_smallRwd      = [rsvpGRP.dprime_smallRwd];
+dprime_smallRwd_sem  = std(dprime_smallRwd)/sqrt(nS);
+dprime_largeRwd      = [rsvpGRP.dprime_largeRwd];
+dprime_largeRwd_sem  = std(dprime_largeRwd)/sqrt(nS);
+
+[h_dprime_rwd, p_dprime_rwd, ci_dprime_rwd, stats_dprime_rwd]              = ttest2(dprime_smallRwd, dprime_largeRwd);
+
 dprime                  = [rsvpGRP.dprime];
 disp(['Dprime : ',num2str(mean(dprime))]);
 
@@ -280,10 +287,14 @@ dprime_BC_smallRwd_sem  = std(dprime_BC_smallRwd)/sqrt(nS);
 dprime_BC_largeRwd      = [rsvpGRP.dprime_BC_largeRwd];
 dprime_BC_largeRwd_sem  = std(dprime_BC_largeRwd)/sqrt(nS);
 
-[h_dprime_DC_CC, p_dprime_DC_CC, ci_dprime_DC_CC, stats_dprime_DC_CC]               = ttest2(dprime_DC, dprime_CC);
-[h_dprime_DC_BC, p_dprime_DC_BC, ci_dprime_DC_BC, stats_dprime_DC_BC]               = ttest2(dprime_DC, dprime_BC);
-[h_dprime_CC_BC, p_dprime_CC_BC, ci_dprime_CC_BC, stats_dprime_CC_BC]               = ttest2(dprime_CC, dprime_BC);
-[h_dprime_CC_both, p_dprime_CC_both, ci_dprime_CC_both, stats_dprime_CC_both]       = ttest2(dprime_CC_DC, dprime_CC_BC);
+[h_dprime_DC_CC, p_dprime_DC_CC, ci_dprime_DC_CC, stats_dprime_DC_CC]      = ttest2(dprime_DC, dprime_CC);
+[h_dprime_DC_BC, p_dprime_DC_BC, ci_dprime_DC_BC, stats_dprime_DC_BC]      = ttest2(dprime_DC, dprime_BC);
+[h_dprime_CC_BC, p_dprime_CC_BC, ci_dprime_CC_BC, stats_dprime_CC_BC]      = ttest2(dprime_CC, dprime_BC);
+[h_dprime_CC_both, p_dprime_CC_both, ci_dprime_CC_both, stats_dprime_CC_both] = ttest2(dprime_CC_DC, dprime_CC_BC);
+
+[h_dprime_DC_rwd, p_dprime_DC_rwd, ci_dprime_DC_rwd, stats_dprime_DC_rwd]  = ttest2(dprime_DC_smallRwd, dprime_DC_largeRwd);
+[h_dprime_CC_rwd, p_dprime_CC_rwd, ci_dprime_CC_rwd, stats_dprime_CC_rwd]  = ttest2(dprime_CC_smallRwd, dprime_CC_largeRwd);
+[h_dprime_BC_rwd, p_dprime_BC_rwd, ci_dprime_BC_rwd, stats_dprime_BC_rwd]  = ttest2(dprime_BC_smallRwd, dprime_BC_largeRwd);
 
 criterion               = [rsvpGRP.criterion];
 disp(['Criterion : ',num2str(mean(criterion))]);
@@ -299,10 +310,10 @@ criterion_CC_BC_sem     = std(criterion_CC_BC)/sqrt(nS);
 criterion_BC            = [rsvpGRP.criterion_BC];
 criterion_BC_sem        = std(criterion_BC)/sqrt(nS);
 
-[h_crit_DC_CC, p_crit_DC_CC, ci_crit_DC_CC, stats_crit_DC_CC]               = ttest2(criterion_DC, criterion_CC);
-[h_crit_DC_BC, p_crit_DC_BC, ci_crit_DC_BC, stats_crit_DC_BC]               = ttest2(criterion_DC, criterion_BC);
-[h_crit_CC_BC, p_crit_CC_BC, ci_crit_CC_BC, stats_crit_CC_BC]               = ttest2(criterion_CC, criterion_BC);
-[h_crit_CC_both, p_crit_CC_both, ci_crit_CC_both, stats_crit_CC_both]       = ttest2(criterion_CC_DC, criterion_CC_BC);
+[h_crit_DC_CC, p_crit_DC_CC, ci_crit_DC_CC, stats_crit_DC_CC]              = ttest2(criterion_DC, criterion_CC);
+[h_crit_DC_BC, p_crit_DC_BC, ci_crit_DC_BC, stats_crit_DC_BC]              = ttest2(criterion_DC, criterion_BC);
+[h_crit_CC_BC, p_crit_CC_BC, ci_crit_CC_BC, stats_crit_CC_BC]              = ttest2(criterion_CC, criterion_BC);
+[h_crit_CC_both, p_crit_CC_both, ci_crit_CC_both, stats_crit_CC_both]      = ttest2(criterion_CC_DC, criterion_CC_BC);
 
 aprime                  = [rsvpGRP.aprime];
 bprime                  = [rsvpGRP.bprime];
@@ -639,49 +650,23 @@ sgtitle(['Performance Plots for ',num2str(nS), ' Pilots'])
 figure('Name', 'RSVP SDT Plots');
 subplot(2,3,1)
 hold on;
-b1 = bar([2, 3], [hit_rate_DC, reject_rate_DC, falseAlarm_rate_DC, miss_rate_DC ; 0 0 0 0], 'stacked', 'FaceColor','flat');
-b1(1).CData = [.7 .9 .5]; b1(2).CData = [.3 .7 .0]; b1(3).CData = [.9 .5 .7]; b1(4).CData = [.7 .0 .3];
-b2 = bar([3, 4], [hit_rate_CC, reject_rate_CC, falseAlarm_rate_CC, miss_rate_CC ; 0 0 0 0], 'stacked', 'FaceColor','flat');
-b2(1).CData = [.7 .9 .5]; b2(2).CData = [.3 .7 .0]; b2(3).CData = [.9 .5 .7]; b2(4).CData = [.7 .0 .3];
-b3 = bar([4, 5], [hit_rate_BC, reject_rate_BC, falseAlarm_rate_BC, miss_rate_BC ; 0 0 0 0], 'stacked', 'FaceColor','flat');
-b3(1).CData = [.7 .9 .5]; b3(2).CData = [.3 .7 .0]; b3(3).CData = [.9 .5 .7]; b3(4).CData = [.7 .0 .3];
+b1 = bar([2, 3], [mean(hit_rate_DC), mean(reject_rate_DC), mean(falseAlarm_rate_DC), mean(miss_rate_DC) ; 0 0 0 0], 'stacked', 'FaceColor','flat');
+b1(1).CData = [.70 .84 .77]; b1(2).CData = [.40 .54 .47]; b1(3).CData = [.88 .74 .74]; b1(4).CData = [.73 .37 .37];
+b2 = bar([3, 4], [mean(hit_rate_CC), mean(reject_rate_CC), mean(falseAlarm_rate_CC), mean(miss_rate_CC) ; 0 0 0 0], 'stacked', 'FaceColor','flat');
+b2(1).CData = [.70 .84 .77]; b2(2).CData = [.40 .54 .47]; b2(3).CData = [.88 .74 .74]; b2(4).CData = [.73 .37 .37];
+b3 = bar([4, 5], [mean(hit_rate_BC), mean(reject_rate_BC), mean(falseAlarm_rate_BC), mean(miss_rate_BC) ; 0 0 0 0], 'stacked', 'FaceColor','flat');
+b3(1).CData = [.70 .84 .77]; b3(2).CData = [.40 .54 .47]; b3(3).CData = [.88 .74 .74]; b3(4).CData = [.73 .37 .37];
 xticks([2 3 4])
 xticklabels({'DC','CC','BC'})
-ylabel('Performance (mean %)','fontsize', 10)
+ylabel('Probability','fontsize', 10)
 legend({'Hit', 'Reject', 'FA', 'Miss'},'fontsize', 6 , 'Location', 'southeast')
 title('SDT Performance According to Conditions','fontsize', 10)
-axis([1 5 0 105])
+axis([1 5 0 1])
 grid minor
 box on
 hold off
 
-% Performance par conditions & rewards
 subplot(2,3,2)
-hold on;
-errorbar(1, mean(dprime_DC), dprime_DC_sem, 'k.','LineWidth',1)
-errorbar(1.5-.5/3, mean(dprime_CC_DC), dprime_CC_DC_sem, 'k.','LineWidth',.8)
-errorbar(1.5, mean(dprime_CC), dprime_CC_sem, 'k.','LineWidth',.8)
-errorbar(1.5+.5/3, mean(dprime_CC_BC), dprime_CC_BC_sem, 'k.','LineWidth',.8)
-errorbar(2, mean(dprime_BC), dprime_BC_sem, 'k.','LineWidth',1)
-
-bar(1, mean(dprime_DC),'FaceColor',[.65 .35 .45], 'BarWidth',.5, 'FaceAlpha', .9);
-b2 = bar(1.5-.5/3, mean(dprime_CC_DC),'FaceColor',[.95 .85 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
-b3 = bar(1.5, mean(dprime_CC),'FaceColor',[.85 .85 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
-b4 = bar(1.5+.5/3, mean(dprime_CC_BC),'FaceColor',[.85 .95 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
-bar(2, mean(dprime_BC),'FaceColor',[.50 .65 .50], 'BarWidth',.5, 'FaceAlpha', .9);
-
-sigstar({[1,1.5],[1,2],[1.5,2]},[p_dprime_DC_CC, p_dprime_DC_BC, p_dprime_CC_BC], 0, 100);
-xticks([1 1.5 2])
-xticklabels({'DC','CC','BC'})
-legend([b2 b3 b4],{'CC (DC)','CC', 'CC (BC)'},'fontsize', 6, 'location','southeast')
-ylabel('D prime (mean +/- SEM %)','fontsize', 10)
-title('Sensitivty Index According to the Conditions','fontsize', 10)
-axis([0 3 0 1.5])
-grid minor
-box on
-hold off
-
-subplot(2,3,3)
 hold on;
 errorbar(1, mean(criterion_DC), criterion_DC_sem, 'k.','LineWidth',1)
 errorbar(1.5-.5/3, mean(criterion_CC_DC), criterion_CC_DC_sem, 'k.','LineWidth',.8)
@@ -689,11 +674,11 @@ errorbar(1.5, mean(criterion_CC), criterion_CC_sem, 'k.','LineWidth',.8)
 errorbar(1.5+.5/3, mean(criterion_CC_BC), criterion_CC_BC_sem, 'k.','LineWidth',.8)
 errorbar(2, mean(criterion_BC), criterion_BC_sem, 'k.','LineWidth',1)
 
-bar(1, mean(criterion_DC),'FaceColor',[.45 .15 .25], 'BarWidth',.5, 'FaceAlpha', .9);
-b5 = bar(1.5-.5/3, mean(criterion_CC_DC),'FaceColor',[.75 .65 .65], 'BarWidth',.5/3, 'FaceAlpha', .9);
+bar(1, mean(criterion_DC),'FaceColor',[.70 .60 .70], 'BarWidth',.5, 'FaceAlpha', .9);
+b5 = bar(1.5-.5/3, mean(criterion_CC_DC),'FaceColor',[0.73,0.68,0.73], 'BarWidth',.5/3, 'FaceAlpha', .9);
 b6 = bar(1.5, mean(criterion_CC),'FaceColor',[.65 .65 .65], 'BarWidth',.5/3, 'FaceAlpha', .9);
-b7 = bar(1.5+.5/3, mean(criterion_CC_BC),'FaceColor',[.65 .75 .65], 'BarWidth',.5/3, 'FaceAlpha', .9);
-bar(2, mean(criterion_BC),'FaceColor',[.30 .45 .30], 'BarWidth',.5, 'FaceAlpha', .9);
+b7 = bar(1.5+.5/3, mean(criterion_CC_BC),'FaceColor',[0.54,0.47,0.54], 'BarWidth',.5/3, 'FaceAlpha', .9);
+bar(2, mean(criterion_BC),'FaceColor',[0.52,0.37,0.52], 'BarWidth',.5, 'FaceAlpha', .9);
 
 sigstar({[1,1.5],[1,2],[1.5,2]},[p_crit_DC_CC, p_crit_DC_BC, p_crit_CC_BC], 0, 100);
 xticks([1 1.5 2])
@@ -706,18 +691,49 @@ grid minor
 box on
 hold off
 
-subplot(2,2,3)
-scatter(dprime, perf, 30, 'MarkerFaceColor', 'k','MarkerEdgeColor','k' )
-line([0, 100], [0, 100], 'color', 'r','LineStyle','--','LineWidth',1.5);
+subplot(2,3,3)
+hold on
+scatter(mean(dprime_DC), mean(perf_DC), 30, 'MarkerFaceColor', 'r' ,'MarkerEdgeColor','k')
+scatter(mean(dprime_CC), mean(perf_CC), 30, 'MarkerFaceColor', 'k' ,'MarkerEdgeColor','k')
+scatter(mean(dprime_BC), mean(perf_BC), 30, 'MarkerFaceColor', 'g' ,'MarkerEdgeColor','k')
+legend({'DC','CC', 'BC'},'fontsize', 6, 'location','southeast')
+%line([0, 1], [0, 100], 'color', 'r','LineStyle','--','LineWidth',1.5);
 xlim([0 1]); ylim([0 100]);
 xlabel('D Prime', 'fontsize', 10);
 ylabel('Performance', 'fontsize', 10);
-title('Higher happiness in HWB','fontsize', 10);
+title("Link betwene Performance and D'",'fontsize', 10);
 grid minor
 box on
+hold off
 
 % Performance par conditions & rewards
-subplot(2,2,4)
+subplot(2,3,4)
+hold on;
+errorbar(1, mean(dprime_DC), dprime_DC_sem, 'k.','LineWidth',1)
+errorbar(1.5-.5/3, mean(dprime_CC_DC), dprime_CC_DC_sem, 'k.','LineWidth',.8)
+errorbar(1.5, mean(dprime_CC), dprime_CC_sem, 'k.','LineWidth',.8)
+errorbar(1.5+.5/3, mean(dprime_CC_BC), dprime_CC_BC_sem, 'k.','LineWidth',.8)
+errorbar(2, mean(dprime_BC), dprime_BC_sem, 'k.','LineWidth',1)
+
+bar(1, mean(dprime_DC),'FaceColor',[.90 .58 .69], 'BarWidth',.5, 'FaceAlpha', .9);
+b2 = bar(1.5-.5/3, mean(dprime_CC_DC),'FaceColor',[.95 .85 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
+b3 = bar(1.5, mean(dprime_CC),'FaceColor',[.85 .85 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
+b4 = bar(1.5+.5/3, mean(dprime_CC_BC),'FaceColor',[.85 .95 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
+bar(2, mean(dprime_BC),'FaceColor',[.63 .82 .75], 'BarWidth',.5, 'FaceAlpha', .9);
+
+sigstar({[1,1.5],[1,2],[1.5,2]},[p_dprime_DC_CC, p_dprime_DC_BC, p_dprime_CC_BC], 0, 100);
+xticks([1 1.5 2])
+xticklabels({'DC','CC','BC'})
+legend([b2 b3 b4],{'CC (DC)','CC', 'CC (BC)'},'fontsize', 6, 'location','southeast')
+ylabel('D prime (mean +/- SEM %)','fontsize', 10)
+title('Sensitivty Index According to the Conditions','fontsize', 10)
+axis([0 3 0 1.5])
+grid minor
+box on
+hold off
+
+% Performance par conditions & rewards
+subplot(2,3,5:6)
 hold on;
 errorbar(1, mean(dprime_DC_smallRwd), dprime_DC_smallRwd_sem, 'k.','LineWidth',1)
 errorbar(1.5-.5/3, mean(dprime_CC_DC_smallRwd), dprime_CC_DC_smallRwd_sem, 'k.','LineWidth',.8)
@@ -731,26 +747,25 @@ errorbar(3.5, mean(dprime_CC_largeRwd), dprime_CC_largeRwd_sem, 'k.','LineWidth'
 errorbar(3.5+.5/3, mean(dprime_CC_BC_largeRwd), dprime_CC_BC_largeRwd_sem, 'k.','LineWidth',.8)
 errorbar(4, mean(dprime_BC_largeRwd), dprime_BC_largeRwd_sem, 'k.','LineWidth',1)
 
-b1 = bar(1, mean(dprime_DC_smallRwd),'FaceColor',[.65 .35 .45], 'BarWidth',.5, 'FaceAlpha', .9);
+b1 = bar(1, mean(dprime_DC_smallRwd),'FaceColor',[.95 .63 .75], 'BarWidth',.5, 'FaceAlpha', .9);
 b2 = bar(1.5-.5/3, mean(dprime_CC_DC_smallRwd),'FaceColor',[.95 .85 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
 b3 = bar(1.5, mean(dprime_CC_smallRwd),'FaceColor',[.85 .85 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
 b4 = bar(1.5+.5/3, mean(dprime_CC_BC_smallRwd),'FaceColor',[.85 .95 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
-b5 = bar(2, mean(dprime_BC_smallRwd),'FaceColor',[.50 .65 .50], 'BarWidth',.5, 'FaceAlpha', .9);
+b5 = bar(2, mean(dprime_BC_smallRwd),'FaceColor',[.68 .88 .80], 'BarWidth',.5, 'FaceAlpha', .9);
 
-bar(3, mean(dprime_DC_largeRwd),'FaceColor',[.45 .15 .25], 'BarWidth',.5, 'FaceAlpha', .9);
+bar(3, mean(dprime_DC_largeRwd),'FaceColor',[.85 .52 .61], 'BarWidth',.5, 'FaceAlpha', .9);
 bar(3.5-.5/3, mean(dprime_CC_DC_largeRwd),'FaceColor',[.75 .65 .65], 'BarWidth',.5/3, 'FaceAlpha', .9);
 bar(3.5, mean(dprime_CC_largeRwd),'FaceColor',[.65 .65 .65], 'BarWidth',.5/3, 'FaceAlpha', .9);
 bar(3.5+.5/3, mean(dprime_CC_BC_largeRwd),'FaceColor',[.65 .75 .65], 'BarWidth',.5/3, 'FaceAlpha', .9);
-bar(4, mean(dprime_BC_largeRwd),'FaceColor',[.30 .45 .30], 'BarWidth',.5, 'FaceAlpha', .9);
+bar(4, mean(dprime_BC_largeRwd),'FaceColor',[.58 .77 .70], 'BarWidth',.5, 'FaceAlpha', .9);
 
-%sigstar({[1,1.5],[1,2],[1.5,2]},[p_perf_DC_CC_smallRwd, p_perf_DC_BC_smallRwd, p_perf_CC_BC_smallRwd], 0, 100);
-%sigstar({[3,3.5],[3,4],[3.5,4]},[p_perf_DC_CC_largeRwd, p_perf_DC_BC_largeRwd, p_perf_CC_BC_largeRwd], 0, 100);
+sigstar({[1,3],[1.5,3.5],[2,4]},[p_dprime_DC_rwd, p_dprime_CC_rwd, p_dprime_BC_rwd], 0, 100);
 
 xticks([1.5 3.5])
 xticklabels({'Small Rwd', 'Large Rwd'})
 legend([b1 b2 b3 b4 b5],{'DC','CC (DC)','CC', 'CC (BC)', 'BC'}, 'fontsize', 6 , 'Location', 'southeast')
 ylabel('D prime (mean +/- SEM %)','fontsize', 10)
-title('D Prime According to Rewards and Conditions','fontsize', 10)
+title('Sensitivty Index According to Rewards and Conditions','fontsize', 10)
 axis([0 5 0 1.5])
 grid minor
 box on

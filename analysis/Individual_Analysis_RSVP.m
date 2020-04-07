@@ -3,10 +3,10 @@
 % Author : Juliana Sporrer 
 % Creation : February 2020
 
-function [rsvp]                 = Individual_Analysis_RSVP(ID, fig)
+%function [rsvp]                 = Individual_Analysis_RSVP(ID, fig)
 
-%ID                          =  90255;
-%fig                         = 0;
+ID                          =  90255;
+fig                         = 0;
 
 %% =================== Load the data                    ===================
 resp_folder                     = '../results';
@@ -203,11 +203,21 @@ smallRwd_correct            = correct & smallRwd;
 smallRwd_incorrect          = incorrect & smallRwd;
 rsvp.smallRwd_rate          = sum(smallRwd_correct)/sum(smallRwd)*100;
 
+% SDT: smallRwd 
+hit_rate_smallRwd           = (sum(smallRwd & (correct_Fem | correct_Hom)) / sum(smallRwd));
+falseAlarm_rate_smallRwd    = (sum(smallRwd & (incorrect_Fem | incorrect_Hom)) / sum(smallRwd));
+[rsvp.dprime_smallRwd, rsvp.criterion_smallRwd, rsvp.aprime_smallRwd, rsvp.bprime_smallRwd] = sdt_measures(hit_rate_smallRwd, falseAlarm_rate_smallRwd); 
+
 largeRwd                    = reward(nTrial) == 2;
 rsvp.largeRwdBlock          = unique(block(largeRwd == 1));
 largeRwd_correct            = correct & largeRwd;
 largeRwd_incorrect          = incorrect & largeRwd;
 rsvp.largeRwd_rate          = sum(largeRwd_correct)/sum(largeRwd)*100;
+
+% SDT: CC 
+hit_rate_largeRwd           = (sum(largeRwd & (correct_Fem | correct_Hom)) / sum(largeRwd));
+falseAlarm_rate_largeRwd    = (sum(largeRwd & (incorrect_Fem | incorrect_Hom)) / sum(largeRwd));
+[rsvp.dprime_largeRwd, rsvp.criterion_largeRwd, rsvp.aprime_largeRwd, rsvp.bprime_largeRwd] = sdt_measures(hit_rate_largeRwd, falseAlarm_rate_largeRwd); 
 
 disp(['Reward : ',num2str(round(rsvp.smallRwd_rate)), '% were correct for small rwd & ', ...
     num2str(round(rsvp.largeRwd_rate)), '% were correct for large rwd' ]);
@@ -383,13 +393,13 @@ rsvp.falseAlarm_rate_DC     = sum(DC_condition & (incorrect_Fem | incorrect_Hom)
 rsvp.miss_rate_DC           = sum(DC_condition & (incorrect_NotFem | incorrect_NotHom)) / sum(DC_condition);
 [rsvp.dprime_DC, rsvp.criterion_DC, rsvp.aprime_DC, rsvp.bprime_DC] = sdt_measures(rsvp.hit_rate_DC, rsvp.falseAlarm_rate_DC); 
 
-hit_rate_DC_smallRwd        = sum(smallRwd & DC_condition & (correct_Fem | correct_Hom)) / sum(DC_condition);
-falseAlarm_rate_DC_smallRwd = sum(smallRwd & DC_condition & (incorrect_Fem | incorrect_Hom)) / sum(DC_condition);
+hit_rate_DC_smallRwd        = sum(smallRwd & DC_condition & (correct_Fem | correct_Hom)) / sum(smallRwd & DC_condition);
+falseAlarm_rate_DC_smallRwd = sum(smallRwd & DC_condition & (incorrect_Fem | incorrect_Hom)) / sum(smallRwd & DC_condition);
 [rsvp.dprime_DC_smallRwd, rsvp.criterion_DC_smallRwd, rsvp.aprime_DC_smallRwd, rsvp.bprime_DC_smallRwd] = ...
     sdt_measures(hit_rate_DC_smallRwd, falseAlarm_rate_DC_smallRwd); 
 
-hit_rate_DC_largeRwd        = sum(largeRwd & DC_condition & (correct_Fem | correct_Hom)) / sum(DC_condition);
-falseAlarm_rate_DC_largeRwd = sum(largeRwd & DC_condition & (incorrect_Fem | incorrect_Hom)) / sum(DC_condition);
+hit_rate_DC_largeRwd        = sum(largeRwd & DC_condition & (correct_Fem | correct_Hom)) / sum(largeRwd & DC_condition);
+falseAlarm_rate_DC_largeRwd = sum(largeRwd & DC_condition & (incorrect_Fem | incorrect_Hom)) / sum( largeRwd & DC_condition);
 [rsvp.dprime_DC_largeRwd, rsvp.criterion_DC_largeRwd, rsvp.aprime_DC_largeRwd, rsvp.bprime_DC_largeRwd] = ...
     sdt_measures(hit_rate_DC_largeRwd, falseAlarm_rate_DC_largeRwd); 
 
@@ -400,13 +410,13 @@ rsvp.falseAlarm_rate_BC     = sum(BC_condition & (incorrect_Fem | incorrect_Hom)
 rsvp.miss_rate_BC           = sum(BC_condition & (incorrect_NotFem | incorrect_NotHom))/ sum(BC_condition);
 [rsvp.dprime_BC, rsvp.criterion_BC, rsvp.aprime_BC, rsvp.bprime_BC] = sdt_measures(rsvp.hit_rate_BC, rsvp.falseAlarm_rate_BC); 
 
-hit_rate_BC_smallRwd        = sum(smallRwd & BC_condition & (correct_Fem | correct_Hom)) / sum(BC_condition);
-falseAlarm_rate_BC_smallRwd = sum(smallRwd & BC_condition & (incorrect_Fem | incorrect_Hom)) / sum(BC_condition);
+hit_rate_BC_smallRwd        = sum(smallRwd & BC_condition & (correct_Fem | correct_Hom)) / sum(smallRwd & BC_condition);
+falseAlarm_rate_BC_smallRwd = sum(smallRwd & BC_condition & (incorrect_Fem | incorrect_Hom)) / sum(smallRwd & BC_condition);
 [rsvp.dprime_BC_smallRwd, rsvp.criterion_BC_smallRwd, rsvp.aprime_BC_smallRwd, rsvp.bprime_BC_smallRwd] = ...
     sdt_measures(hit_rate_BC_smallRwd, falseAlarm_rate_BC_smallRwd); 
 
-hit_rate_BC_largeRwd        = sum(largeRwd & BC_condition & (correct_Fem | correct_Hom)) / sum(BC_condition);
-falseAlarm_rate_BC_largeRwd = sum(largeRwd & BC_condition & (incorrect_Fem | incorrect_Hom)) / sum(BC_condition);
+hit_rate_BC_largeRwd        = sum(largeRwd & BC_condition & (correct_Fem | correct_Hom)) / sum(largeRwd & BC_condition);
+falseAlarm_rate_BC_largeRwd = sum(largeRwd & BC_condition & (incorrect_Fem | incorrect_Hom)) / sum(largeRwd & BC_condition);
 [rsvp.dprime_BC_largeRwd, rsvp.criterion_BC_largeRwd, rsvp.aprime_BC_largeRwd, rsvp.bprime_BC_largeRwd] = ...
     sdt_measures(hit_rate_BC_largeRwd, falseAlarm_rate_BC_largeRwd); 
 
@@ -417,13 +427,13 @@ rsvp.falseAlarm_rate_CC_DC  = (sum(CC_DC_condition & (incorrect_Fem | incorrect_
 rsvp.miss_rate_CC_DC        = (sum(CC_DC_condition & (incorrect_NotFem | incorrect_NotHom))/ sum(CC_DC_condition));
 [rsvp.dprime_CC_DC, rsvp.criterion_CC_DC, rsvp.aprime_CC_DC, rsvp.bprime_CC_DC] = sdt_measures(rsvp.hit_rate_CC_DC, rsvp.falseAlarm_rate_CC_DC); 
 
-hit_rate_CC_DC_smallRwd     = sum(smallRwd & CC_DC_condition & (correct_Fem | correct_Hom)) / sum(CC_DC_condition);
-falseAlarm_rate_CC_DC_smallRwd = sum(smallRwd & CC_DC_condition & (incorrect_Fem | incorrect_Hom)) / sum(CC_DC_condition);
+hit_rate_CC_DC_smallRwd     = sum(smallRwd & CC_DC_condition & (correct_Fem | correct_Hom)) / sum(smallRwd & CC_DC_condition);
+falseAlarm_rate_CC_DC_smallRwd = sum(smallRwd & CC_DC_condition & (incorrect_Fem | incorrect_Hom)) / sum(smallRwd & CC_DC_condition);
 [rsvp.dprime_CC_DC_smallRwd, rsvp.criterion_CC_DC_smallRwd, rsvp.aprime_CC_DC_smallRwd, rsvp.bprime_CC_DC_smallRwd] = ...
     sdt_measures(hit_rate_CC_DC_smallRwd, falseAlarm_rate_CC_DC_smallRwd); 
 
-hit_rate_CC_DC_largeRwd     = sum(largeRwd & CC_DC_condition & (correct_Fem | correct_Hom)) / sum(CC_DC_condition);
-falseAlarm_rate_CC_DC_largeRwd = sum(largeRwd & CC_DC_condition & (incorrect_Fem | incorrect_Hom)) / sum(CC_DC_condition);
+hit_rate_CC_DC_largeRwd     = sum(largeRwd & CC_DC_condition & (correct_Fem | correct_Hom)) / sum(largeRwd & CC_DC_condition);
+falseAlarm_rate_CC_DC_largeRwd = sum(largeRwd & CC_DC_condition & (incorrect_Fem | incorrect_Hom)) / sum(largeRwd & CC_DC_condition);
 [rsvp.dprime_CC_DC_largeRwd, rsvp.criterion_CC_DC_largeRwd, rsvp.aprime_CC_DC_largeRwd, rsvp.bprime_CC_DC_largeRwd] = ...
     sdt_measures(hit_rate_CC_DC_largeRwd, falseAlarm_rate_CC_DC_largeRwd); 
 
@@ -434,13 +444,13 @@ rsvp.falseAlarm_rate_CC_BC  = (sum(CC_BC_condition & (incorrect_Fem | incorrect_
 rsvp.miss_rate_CC_BC        = (sum(CC_BC_condition & (incorrect_NotFem | incorrect_NotHom))/ sum(CC_BC_condition));
 [rsvp.dprime_CC_BC, rsvp.criterion_CC_BC, rsvp.aprime_CC_BC, rsvp.bprime_CC_BC] = sdt_measures(rsvp.hit_rate_CC_BC, rsvp.falseAlarm_rate_CC_BC); 
 
-hit_rate_CC_BC_smallRwd     = sum(smallRwd & CC_BC_condition & (correct_Fem | correct_Hom)) / sum(CC_BC_condition);
-falseAlarm_rate_CC_BC_smallRwd = sum(smallRwd & CC_BC_condition & (incorrect_Fem | incorrect_Hom)) / sum(CC_BC_condition);
+hit_rate_CC_BC_smallRwd     = sum(smallRwd & CC_BC_condition & (correct_Fem | correct_Hom)) / sum(smallRwd & CC_BC_condition);
+falseAlarm_rate_CC_BC_smallRwd = sum(smallRwd & CC_BC_condition & (incorrect_Fem | incorrect_Hom)) / sum(smallRwd & CC_BC_condition);
 [rsvp.dprime_CC_BC_smallRwd, rsvp.criterion_CC_BC_smallRwd, rsvp.aprime_CC_BC_smallRwd, rsvp.bprime_CC_BC_smallRwd] = ...
     sdt_measures(hit_rate_CC_BC_smallRwd, falseAlarm_rate_CC_BC_smallRwd); 
 
-hit_rate_CC_BC_largeRwd     = sum(largeRwd & CC_BC_condition & (correct_Fem | correct_Hom)) / sum(CC_BC_condition);
-falseAlarm_rate_CC_BC_largeRwd  = sum(largeRwd & CC_BC_condition & (incorrect_Fem | incorrect_Hom)) / sum(CC_BC_condition);
+hit_rate_CC_BC_largeRwd     = sum(largeRwd & CC_BC_condition & (correct_Fem | correct_Hom)) / sum(largeRwd & CC_BC_condition);
+falseAlarm_rate_CC_BC_largeRwd  = sum(largeRwd & CC_BC_condition & (incorrect_Fem | incorrect_Hom)) / sum(largeRwd & CC_BC_condition);
 [rsvp.dprime_CC_BC_largeRwd, rsvp.criterion_CC_BC_largeRwd, rsvp.aprime_CC_BC_largeRwd, rsvp.bprime_CC_BC_largeRwd] = ...
     sdt_measures(hit_rate_CC_BC_largeRwd, falseAlarm_rate_CC_BC_largeRwd); 
 
@@ -451,13 +461,13 @@ rsvp.falseAlarm_rate_CC     = (sum(CC_condition & (incorrect_Fem | incorrect_Hom
 rsvp.miss_rate_CC           = (sum(CC_condition & (incorrect_NotFem | incorrect_NotHom))/ sum(CC_condition));
 [rsvp.dprime_CC, rsvp.criterion_CC, rsvp.aprime_CC, rsvp.bprime_CC] = sdt_measures(rsvp.hit_rate_CC, rsvp.falseAlarm_rate_CC); 
 
-hit_rate_CC_smallRwd        = sum(smallRwd & CC_condition & (correct_Fem | correct_Hom)) / sum(CC_condition);
-falseAlarm_rate_CC_smallRwd = sum(smallRwd & CC_condition & (incorrect_Fem | incorrect_Hom)) / sum(CC_condition);
+hit_rate_CC_smallRwd        = sum(smallRwd & CC_condition & (correct_Fem | correct_Hom)) / sum(smallRwd & CC_condition);
+falseAlarm_rate_CC_smallRwd = sum(smallRwd & CC_condition & (incorrect_Fem | incorrect_Hom)) / sum(smallRwd & CC_condition);
 [rsvp.dprime_CC_smallRwd, rsvp.criterion_CC_smallRwd, rsvp.aprime_CC_smallRwd, rsvp.bprime_CC_smallRwd] = ...
     sdt_measures(hit_rate_CC_smallRwd, falseAlarm_rate_CC_smallRwd); 
 
-hit_rate_CC_largeRwd        = sum(largeRwd & CC_condition & (correct_Fem | correct_Hom)) / sum(CC_condition);
-falseAlarm_rate_CC_largeRwd = sum(largeRwd & CC_condition & (incorrect_Fem | incorrect_Hom)) / sum(CC_condition);
+hit_rate_CC_largeRwd        = sum(largeRwd & CC_condition & (correct_Fem | correct_Hom)) / sum(largeRwd & CC_condition);
+falseAlarm_rate_CC_largeRwd = sum(largeRwd & CC_condition & (incorrect_Fem | incorrect_Hom)) / sum(largeRwd & CC_condition);
 [rsvp.dprime_CC_largeRwd, rsvp.criterion_CC_largeRwd, rsvp.aprime_CC_largeRwd, rsvp.bprime_CC_largeRwd] = ...
     sdt_measures(hit_rate_CC_largeRwd, falseAlarm_rate_CC_largeRwd); 
 
@@ -575,6 +585,9 @@ rsvp.rt_slow_perf           = sum(correct(rt_slow))/length(rt_slow)*100;
 rt_fast                     = find(rt < rsvp.rt_median);
 rsvp.rt_fast_perf           = sum(correct(rt_fast))/length(rt_fast)*100;
 
+
+
+
 %% =================== Learning Curves                  ===================
 
 rsvp.LC                     = zeros(1,cfg_exp.nBlocksExp);
@@ -691,6 +704,9 @@ if fig
     box on 
     hold off
 
+    % Title of the whole plot 
+    sgtitle(['Performance Plots for Pilot n°',num2str(ID)])
+    
     %% RTs Plots 
     figure('Name', 'RTs Plots');
     [h_RT, p_RT] = adtest(rt);
@@ -755,6 +771,9 @@ if fig
     box on 
     hold off
     
+    % Title of the whole plot
+    sgtitle(['RTs Plots for Pilot n°',num2str(ID)])
+    
     %% Learning Curves Plots
     figure('Name', 'Learning Curve Plots');
 
@@ -804,6 +823,9 @@ if fig
     hold off
     grid minor
     box on
+    
+    % Title of the whole plot
+    sgtitle(['Learning Curve for Pilot n°',num2str(ID)])
     
     %% RTs Curves Plots
     figure('Name', ' RSVP RTs Curve Plots');
@@ -902,4 +924,4 @@ if fig
 end
 
 
-end
+%end

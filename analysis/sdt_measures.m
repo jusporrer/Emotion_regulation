@@ -14,7 +14,7 @@ function [dprime, criterion, aprime, bprime] = sdt_measures(hit_rate, falseAlarm
 dprime              = norminv(hit_rate) - norminv(falseAlarm_rate);
 
 %% C, Parametric response bias (Macmillan, 1993)
-criterion           = -(norminv(hit_rate)+ norminv(falseAlarm_rate))/2; 
+criterion           = -(norminv(hit_rate) + norminv(falseAlarm_rate))/2; 
 
 %% A', Non-parametric measure of sensitivity (Pollack and Norman, 1964) 
     % Can range from .5, which indicates that signals cannot be distinguished from noise, 
