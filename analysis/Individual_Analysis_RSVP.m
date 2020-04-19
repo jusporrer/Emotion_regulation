@@ -585,7 +585,8 @@ rsvp.rt_slow_perf           = sum(correct(rt_slow))/length(rt_slow)*100;
 rt_fast                     = find(rt < rsvp.rt_median);
 rsvp.rt_fast_perf           = sum(correct(rt_fast))/length(rt_fast)*100;
 
-
+linearMdl                   = fitlm(correct,rt);
+rsvp.linearCoef             = linearMdl.Coefficients.Estimate(2);
 
 
 %% =================== Learning Curves                  ===================

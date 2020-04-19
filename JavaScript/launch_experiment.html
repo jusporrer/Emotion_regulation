@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-      <title> My experiment</title>
+      <title> My experiment </title>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
       <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-      <script src="jspsych-6.0.5/jspsych.js"></script>
-      <script src="jspsych-6.0.5/plugins/fullscreen-moodconf.js"></script>
+      <script src="jspsych-master/jspsych.js"></script> // imports the library, shoudl be downloaded and put into your experiment folder
+      <script src="jspsych-6.0.5/plugins_JS/fullscreen_emo.js"></script>
       <script src="jspsych-6.0.5/plugins/jspsych-html-keyboard-response.js"></script>
       <script src="jspsych-6.0.5/plugins/jspsych-external-html.js"></script>
       <script src="jspsych-6.0.5/plugins/mooddisplay2figures.js"></script>
@@ -16,12 +16,6 @@
       <script src="jspsych-6.0.5/plugins/jspsych-survey-text.js"></script>
       <script src="jspsych-6.0.5/plugins/pract-slider-response.js"></script>
       <script src="jspsych-6.0.5/plugins/confdisplay2boxes.js"></script>
-      <script src="confdrawblankstimulus.js"></script>
-      <script src="confdrawstimulus.js"></script>
-      <script src="Mood_task.js"></script>
-      <script src="Conf_task.js"></script>
-      <script src="task.js"></script>
-      <script src="practmoodconf.js"></script>
       <link href="jspsych-6.0.5/css/jspsych.css" rel="stylesheet" type="text/css"></link>
       <style id="cursornone"> html { cursor: none; };  </style>
     </head>
@@ -37,25 +31,20 @@
 
 
   //CODE THAT CHECKS IF THE BROWSER IS CHROME OR FIREFOX MOZ
-  function getBrowserInfo()
-  {
+  function getBrowserInfo(){
           var ua = navigator.userAgent, tem,
           M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-          if(/trident/i.test(M[1]))
-          {
+          if(/trident/i.test(M[1])){
                   tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
-                  return 'IE '+(tem[1] || '');
-          }
-          if(M[1]=== 'Chrome')
-          {
+                  return 'IE '+(tem[1] || '');}
+          if(M[1]=== 'Chrome'){
                   tem= ua.match(/\b(OPR|Edge)\/(\d+)/);
-                  if(tem!= null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
-          }
+                  if(tem!= null)
+                  return tem.slice(1).join(' ').replace('OPR', 'Opera');}
           M = M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
           if((tem= ua.match(/version\/(\d+)/i))!= null)
                   M.splice(1, 1, tem[1]);
-          return { 'browser': M[0], 'version': M[1] };
-  }
+          return { 'browser': M[0], 'version': M[1] }; }
 
   var browserInfo = getBrowserInfo();
   if(browserInfo.browser !== 'Chrome' && browserInfo.browser !== 'Firefox')
@@ -63,8 +52,8 @@
           var wrong_browser =
           {
                   type: 'text',
-                  text: '<p>This experiment only has support for Google Chrome or Mozilla Firefox.</p>'
-                           +'<p>Please reopen the experiment in one of these browsers.</p>',
+                  text: '<p> This experiment only has support for Google Chrome or Mozilla Firefox. </p>'
+                           +'<p> Please reopen the experiment in one of these browsers. </p>',
           };
           jsPsych.init({
                   timeline: [wrong_browser],
@@ -76,6 +65,7 @@
   //CODE TO RUN THE EXPERIMENT STARTS HERE
   {
     let cursornone = document.getElementById("cursornone").innerHTML;
+
     //WEB AND CANVAS PARAMETERS
     var images = ['img/instructions11.bmp', 'img/instructions22.bmp', 'img/mood_coin.bmp','img/mood_coinlose.bmp', 'img/M11.bmp','img/M12.bmp','img/nonselect.bmp','img/M21.bmp','img/M22.bmp','img/M31.bmp','img/M32.bmp','img/M41.bmp','img/M42.bmp','img/M51.bmp','img/M52.bmp','img/M61.bmp','img/M62.bmp'];
       //Set up the canvas and get the window height and width.
@@ -105,7 +95,7 @@
 
       //CODE TO SAVE FULLDATA AT THE END
       function save_data(alldata){
-        var data_table = 'mvaghi_moco'; // change this for different experiments
+        var data_table = 'js_emo_exp'; // change this for different experiments
         $.ajax({
             type:'post',
             cache: false,
@@ -121,7 +111,7 @@
 
       //CODE TO SAVE DATA PER TRIAL
       function save_data_pt(alldata){
-        var data_table = 'mvaghi_moco'; // change this for different experiments
+        var data_table = 'js_emo_exp'; // change this for different experiments
         $.ajax({
             type:'post',
             cache: false,
@@ -263,21 +253,16 @@
 
 
 
-
-
-
-
-
       /////////////////////////////////////////////////
       ///////////// EXPERIMENT PARAMETERS /////////////
       /////////////////////////////////////////////////
           var numPrac   = 10; //10
           var NumBlocks = 2;  //6
-      		var NumTrials = 12; //12
+          var NumTrials = 12; //12
           var subject_id = Math.floor(Math.random()*9000000) + 1000000; /// now there is a new extention, i.e. var subject_id = jsPsych.randomization.randomID(15);
 
-          var task = task(NumBlocks, NumTrials);
-          var practice = practmoodconf(numPrac);
+         // var task = task(NumBlocks, NumTrials);
+          // var practice = practmoodconf(numPrac);
 
 
 /*  function save_data_pt(data) {

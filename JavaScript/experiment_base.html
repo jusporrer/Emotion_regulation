@@ -1,0 +1,185 @@
+<!--  Base code for experiment online using Javascript and jsPsych Library
+            Author: Juliana Sporrer (juliana.sporrer.18@ucl.ac.uk)
+            Creation date: 17 March 2020
+
+      Advice:
+            Open with your browser (best with Chrome) and click on F12 to have your console. Use F5 to refresh after each save.
+            Use "console.log(var)" to print something in your console
+            Comments inside the script : // (keymap: "Ctrl + /")
+
+      Useful material:
+            https://www.w3schools.com/html/default.asp
+            https://www.jspsych.org/tutorials/hello-world/
+
+            if you use Atom as text editor : https://www.sitepoint.com/12-favorite-atom-tips-and-shortcuts-to-improve-your-workflow/
+
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>   My experiment EMO</title>
+        <script   src = "jspsych-master/jspsych.js"></script> <!-- imports the library, should be downloaded and put into your experiment folder -->
+        <link     href = "jspsych-master/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+        <script   src = "jspsych-master/plugins/jspsych-html-keyboard-response.js"></script>  <!-- every pluggin that you use from the library needs to be added here -->
+        <script   src = "jspsych-master/plugins/jspsych-survey-text.js"></script>
+        <script   src = "jspsych-master/plugins/jspsych-image-keyboard-response.js"></script>
+        <script   src = "jspsych-master/plugins_JS/fullscreen-emo.js"></script> <!-- pluggin that I modified -->
+        <script   src = "getBrowserInfo.js"></script> <!-- add the external functions-->
+        <script   src = "rsvp.js"></script>
+        <script   src = "instr.js"></script>
+        <style    id ="cursornone"> html { cursor: none; };  </style> <!-- removes the cursor, delete if cursor needed -->
+    </head>
+    <body>
+          <div id='jspsych-target' style='width:auto; height:auto; position:relative;'></div>
+          <canvas class = "canvas" id="myCanvas"></canvas>
+   </body>
+   <script>
+
+// --------------------------------- PARAMETERS --------------------------------- //
+
+    // Parameters (put here all your parameters, there will be global)
+    var numPrac     = 1;
+    var NumBlocks   = 1;
+    var NumTrials   = 1;
+    var nbInstr     = 14; // how many Instr Slides you have
+    var debug       = true; // if true, skips fullscreen and info
+
+// --------------------------------- INITIALISATION  --------------------------------- //
+
+    // Checks if the browser is Chrome or Firefox (best compatibility)
+    var browserInfo = getBrowserInfo(); // Call the function that I specified in the head
+
+    if(browserInfo.browser !== 'Chrome' && browserInfo.browser !== 'Firefox'){
+            var wrong_browser = {
+                    type: 'html-keyboard-response',
+                    stimulus: '<p> This experiment only has support for Google Chrome or Mozilla Firefox. </p>'
+                             +'<p> Please re-open the experiment in one of these browsers. </p>',
+            };
+            jsPsych.init({
+                    timeline: [wrong_browser],
+            });
+    }
+
+    else { // If browser is ok, lead on to the experimentIF BROWSER IS OK, LEAD ON TO THE EXPERIMENT
+
+          // Removes the cursor
+          let cursornone = document.getElementById("cursornone").innerHTML;
+
+          //Set up the canvas and get the window height and width.
+          var canvas = document.getElementById("myCanvas");
+          var context = canvas.getContext("2d");
+          //context.canvas.width  = 800;
+          //context.canvas.height =  540;
+          var centerWidth = canvas.width / 2.0;
+          var centerHeight = canvas.height / 2.0;
+
+          // Create "Variable/function" that makes sure you remain in FullScreen
+          var fullscreen =	{
+                type: 'fullscreen', // Call the function "fullscreen" of the pluggin "fullscreen_emo"
+                message:'<p> To take part in the experiment, your browser must be in fullscreen mode. </p> <p>Exiting fullscreen mode will pause the experiment. </p> <p> Please click the button below to enable fullscreen mode and continue.</p>',
+                button_label: 'Put in Fullscreen',
+                delay_after: 300,
+                check_fullscreen: true,
+                data: {
+                      test_part: 'fullscreen',
+                      // Here put all the names of the variables you want to save with a value like "888" example:
+                      // blocknumber: 888,
+                },
+          };
+
+          // Ask the participants to enter details
+          var subdetails = {
+                type: 'survey-text',
+                preamble: ['<p style = "text-align: center; font-size: 28px">Please enter the following:</p>'],
+                questions: [{prompt: "Worker ID?", rows: 3, columns: 40}],
+                data: {
+                      test_part: 'subdetails',
+                      // Here put all the names of the variables you want to save
+                },
+                on_start: function(){
+                      var res = cursornone.replace("none", "default");
+                      document.getElementById("cursornone").innerHTML = res;
+                },
+                on_finish: function(){
+                      var res = cursornone.replace("default", "none");
+                      document.getElementById("cursornone").innerHTML = res;
+                },
+          };
+
+          var subdetails2 = {
+                type: 'survey-text',
+                preamble: ['<p style = "text-align: center; font-size: 28px">Please enter the following:</p>'],
+                questions: [{prompt: "Gender (F/M)?", rows: 3, columns: 40}, {prompt: "Age?", rows: 3, columns: 40}],
+                data: {
+                      test_part: 'subdetails',
+                      // Here put all the names of the variables you want to save
+                },
+                on_start: function(){
+                      var res = cursornone.replace("none", "default");
+                      document.getElementById("cursornone").innerHTML = res;
+                },
+                on_finish: function(){
+                      var res = cursornone.replace("default", "none");
+                      document.getElementById("cursornone").innerHTML = res;
+                },
+          };
+
+// --------------------------------- PRE-LOAD ANY MEDIA  --------------------------------- //
+            // Example
+            var instrImg = [];
+            for(var t=1;t < nbInstr+1;t++){
+                  instrImg[t-1] = 'instructions/instructionsDiapo/Slide'+t+'.jpg'; // Pre-load all the jpg files in this folder
+            };
+
+            //var expImg =
+
+// --------------------------------- BEGINING EXPERIMENT  --------------------------------- //
+
+            var subject_id    = Math.floor(Math.random()*9000000) + 1000000; // there is a new extention, i.e. var subject_id = jsPsych.randomization.randomID(15)
+
+            var exp_timeline = [];
+
+            if(debug == false){
+                  exp_timeline.push(fullscreen);
+                  exp_timeline.push(subdetails);
+                  exp_timeline.push(subdetails2);
+            }
+
+            //exp_timeline.push(infopg);
+            //exp_timeline.push(consentpg);
+
+            var instructions  = instr(instrImg);
+            //var task        = rsvp(NumBlocks, NumTrials);
+            //var practice    = practrsvp(numPrac);
+
+            for(var i = 0; i < instructions.length; i++){
+                   exp_timeline.push(instructions[i]);
+            };
+            // for(var i = 0; i < task.length; i++){
+            //       exp_timeline.push(task[i]);
+            // };
+
+            // Execute the experiment
+            jsPsych.init({
+                  preload_images: instrImg,
+                  timeline: exp_timeline,
+
+                  // on_trial_finish: function() {
+                  //       jsPsych.data.addProperties({
+                  //             subject_id: subject_id
+                  //       });
+                  //       var data = JSON.parse(jsPsych.data.getLastTrialData().json());
+                  //       save_data_pt(data);
+                  // },
+                  on_finish: function() {
+                        //jsPsych.data.localSave('mome' + subject_id + 'local.csv', 'csv');
+                        jsPsych.data.displayData(); // Disable once online, use to look at data while coding
+                        document.write('<p><br></br><br></br><center>Thank you for participating! <br></br> Your data code is <strong>'+subject_id+'</strong>.<br></center><p>')
+                  },
+            });
+
+
+
+    } // End of the experiment (end of checking browser)
+</script>
+</html>
