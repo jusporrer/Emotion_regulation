@@ -20,11 +20,12 @@
         <title>   My experiment EMO</title>
         <script   src = "jspsych-master/jspsych.js"></script> <!-- imports the library, should be downloaded and put into your experiment folder -->
         <link     href = "jspsych-master/css/jspsych.css" rel="stylesheet" type="text/css"></link>
-        <script   src = "jspsych-master/plugins/jspsych-html-keyboard-response.js"></script>  <!-- every pluggin that you use from the library needs to be added here -->
+        <script   src = "jspsych-master/plugins/jspsych-html-keyboard-response.js"></script>  <!-- every pluggin that you use needs to be added here -->
         <script   src = "jspsych-master/plugins/jspsych-survey-text.js"></script>
         <script   src = "jspsych-master/plugins/jspsych-image-keyboard-response.js"></script>
         <script   src = "jspsych-master/plugins_JS/fullscreen-emo.js"></script> <!-- pluggin that I modified -->
         <script   src = "getBrowserInfo.js"></script> <!-- add the external functions-->
+        <script   src = "createCondiMatrix.js"></script>
         <script   src = "rsvp.js"></script>
         <script   src = "instr.js"></script>
         <style    id ="cursornone"> html { cursor: none; };  </style> <!-- removes the cursor, delete if cursor needed -->
@@ -37,12 +38,19 @@
 
 // --------------------------------- PARAMETERS --------------------------------- //
 
-    // Parameters (put here all your parameters, there will be global)
-    var numPrac     = 1;
-    var NumBlocks   = 1;
-    var NumTrials   = 1;
-    var nbInstr     = 14; // how many Instr Slides you have
-    var debug       = true; // if true, skips fullscreen and info
+    // Parameters (put here all your parameters, they will be global)
+    var nbBlocksPrac   = 1;
+    var nbTrialsPrac   = 1;
+    var nbBlocksExp       = 8;
+    var nbTrialsExp       = 6;
+
+    var setSize         = 15;
+    var imageDuration   = 70; // in ms, so 0.07 sec
+    var fixation_time   = 1000; // in ms, so 1 sec
+    var timeBetweenTrials = 2000;
+
+    var nbInstr         = 14; // how many Instr Slides you have
+    var debug           = true; // if true, skips fullscreen and info
 
 // --------------------------------- INITIALISATION  --------------------------------- //
 
@@ -74,17 +82,37 @@
           var centerHeight = canvas.height / 2.0;
 
           // Create "Variable/function" that makes sure you remain in FullScreen
-          var fullscreen =	{
+          var firstFullscreen =	{
                 type: 'fullscreen', // Call the function "fullscreen" of the pluggin "fullscreen_emo"
                 message:'<p> To take part in the experiment, your browser must be in fullscreen mode. </p> <p>Exiting fullscreen mode will pause the experiment. </p> <p> Please click the button below to enable fullscreen mode and continue.</p>',
                 button_label: 'Put in Fullscreen',
                 delay_after: 300,
                 check_fullscreen: true,
                 data: {
-                      test_part: 'fullscreen',
+                      test_part: 'firstFullscreen',
                       // Here put all the names of the variables you want to save with a value like "888" example:
                       // blocknumber: 888,
                 },
+          };
+
+          var fullscreenExp = {
+                type: 'fullscreen',
+                message: '<p>You need to be in fullscreen mode to continue the experiment! <br></br> Please click the button below to enter fullscreen mode.<br></br><p>',
+                fullscreen_mode: false,
+                data: {
+                      test_part: 'fullscreenExp',
+                },
+          };
+
+          var fixation = {
+                type:'html-keyboard-response',
+                stimulus: '<div style="font-size:70px;">+</div>',
+                choices: jsPsych.NO_KEYS,
+                trial_duration: fixation_time,
+                prompt: '<p style="color:#FFFFFF; text-align:center; font-size: 24px">invisibleprompt</p>',
+                data:{
+                      test_part:'fixation',
+                }
           };
 
           // Ask the participants to enter details
@@ -140,24 +168,22 @@
             var exp_timeline = [];
 
             if(debug == false){
-                  exp_timeline.push(fullscreen);
+                  exp_timeline.push(firstFullscreen);
                   exp_timeline.push(subdetails);
                   exp_timeline.push(subdetails2);
             }
 
-            //exp_timeline.push(infopg);
-            //exp_timeline.push(consentpg);
-
-            var instructions  = instr(instrImg);
-            //var task        = rsvp(NumBlocks, NumTrials);
+            var firstInstr    = instr();
+            var task          = rsvp();
             //var practice    = practrsvp(numPrac);
 
-            for(var i = 0; i < instructions.length; i++){
-                   exp_timeline.push(instructions[i]);
-            };
-            // for(var i = 0; i < task.length; i++){
-            //       exp_timeline.push(task[i]);
+            // for(var i = 0; i < firstInstr.length; i++){
+            //        exp_timeline.push(firstInstr[i]);
             // };
+
+            for(var i = 0; i < task.length; i++){
+                  exp_timeline.push(task[i]);
+            };
 
             // Execute the experiment
             jsPsych.init({
