@@ -3,8 +3,8 @@
             Creation date: 17 March 2020
 
       Advice:
-            Open with your browser (best with Chrome) and click on F12 to have your console. Use F5 to refresh after each save.
-            Use "console.log(var)" to print something in your console
+            Open with your browser (best with Chrome) and click on F12 to open your console. Use F5 to refresh after each save.
+            Use "console.log(var)" to print the variable "var" in your console
             Comments inside the script : // (keymap: "Ctrl + /")
 
       Useful material:
@@ -17,7 +17,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>   My experiment EMO</title>
+        <title>   My experiment EMO </title>
         <script   src = "jspsych-master/jspsych.js"></script> <!-- imports the library, should be downloaded and put into your experiment folder -->
         <link     href = "jspsych-master/css/jspsych.css" rel="stylesheet" type="text/css"></link>
         <script   src = "jspsych-master/plugins/jspsych-html-keyboard-response.js"></script>  <!-- every pluggin that you use needs to be added here -->
@@ -177,9 +177,9 @@
             var task          = rsvp();
             //var practice    = practrsvp(numPrac);
 
-            // for(var i = 0; i < firstInstr.length; i++){
-            //        exp_timeline.push(firstInstr[i]);
-            // };
+            for(var i = 0; i < firstInstr.length; i++){
+                   exp_timeline.push(firstInstr[i]);
+            };
 
             for(var i = 0; i < task.length; i++){
                   exp_timeline.push(task[i]);
