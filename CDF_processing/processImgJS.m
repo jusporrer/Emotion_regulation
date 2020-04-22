@@ -88,9 +88,9 @@ end
 
 %% Save into mat file to make the loading easier 
 
-% save('../imgJS/WMN_img_rsvp.jpg');
-% save('../imgJS/WMF_img_rsvp.jpg');
-% save('../imgJS/WFN_img_rsvp.jpg');
-% save('../imgJS/WFF_img_rsvp.jpg');
+save('../exp_images/WMN_img_rsvp.mat','WMN_img_rsvp');
+save('../exp_images/WMF_img_rsvp.mat','WMF_img_rsvp');
+save('../exp_images/WFN_img_rsvp.mat','WFN_img_rsvp');
+save('../exp_images/WFF_img_rsvp.mat','WFF_img_rsvp');
 
 
