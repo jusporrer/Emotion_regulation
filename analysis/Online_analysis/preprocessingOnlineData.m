@@ -6,15 +6,7 @@ clear all;
 
 %% =================== Load the data                    ===================
 
-data_rsvp = importfile("dataMamaFull.csv"); 
-
-% pos_happyexp = [] ;
-% for i = 1:length(test_part)
-%     % we are looking for moodpart 
-%     if +(test_part{i}(4:6) == 'dte') == [1 1 1]
-%         pos_happyexp = [pos_happyexp i] ;
-%     end
-% end
+data_rsvp = importfile("dataJulianaFull2.csv"); 
 
 useless_parts = (data_rsvp.test_part == "fullscreenExp" | ...
     data_rsvp.test_part == "instr" | data_rsvp.test_part == "fixation"| ...

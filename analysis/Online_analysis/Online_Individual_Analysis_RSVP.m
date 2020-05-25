@@ -2,7 +2,8 @@
 % in a RSVP Task
 % Author : Juliana Sporrer 
 % Creation : February 2020
-clear all 
+clear all
+format long g
 %function [rsvp]                 = Individual_Analysis_RSVP(ID, fig)
 
 fig                         = 1;
@@ -38,6 +39,9 @@ posTarget                   = data_rsvp.posTarget(nTrain+1:end);
 distractor                  = data_rsvp.distractor(nTrain+1:end);
 target                      = data_rsvp.target(nTrain+1:end);
 
+trialExp                    = 288; 
+blockExp                    = 12; 
+
 %% =================== Basic Information                ===================
 
 nLine                      = 1:length(trial); % allows the indexing
@@ -54,7 +58,7 @@ instQuestHom = (test_part == "rsvpAnswHom") * 2;
 
 instQuest = instQuestFem + instQuestHom; 
 
-if length(nTrial) == 300
+if length(nTrial) == trialExp
     disp(['No data loss : There were ',num2str(length(trial)), ' trials']);
 else
     disp(['Problem : There were only ',num2str(length(trial)), ' trials out of the normal ', ...
@@ -477,11 +481,11 @@ rsvp.rt_incorrect           = mean(rt(incorrect == 1));
 rsvp.rt_falseAlarm          = mean(rt(falseAlarm == 1));
 rsvp.rt_miss                = mean(rt(miss == 1));
 
-disp(['RTs correct : ',num2str(rsvp.rt_correct), ' s for correct trials including ', ...
-    num2str(rsvp.rt_hit), ' s for hits & ', num2str(rsvp.rt_reject), ' s for rejections']);
+disp(['RTs correct : ',num2str(rsvp.rt_correct), ' ms for correct trials including ', ...
+    num2str(rsvp.rt_hit), ' ms for hits & ', num2str(rsvp.rt_reject), ' ms for rejections']);
 
-disp(['RTs incorrect : ',num2str(rsvp.rt_incorrect), ' s for incorrect trials including ', ...
-    num2str(rsvp.rt_falseAlarm), ' s for false alarms & ', num2str(rsvp.rt_miss), ' s for misses']);
+disp(['RTs incorrect : ',num2str(rsvp.rt_incorrect), ' ms for incorrect trials including ', ...
+    num2str(rsvp.rt_falseAlarm), ' ms for false alarms & ', num2str(rsvp.rt_miss), ' ms for misses']);
 
 %% =================== RTs - Rewards                    ===================
 
@@ -493,8 +497,8 @@ rsvp.rt_largeRwd            = mean(rt(largeRwd));
 rsvp.rt_largeRwd_correct    = mean(rt(largeRwd_correct));
 rsvp.rt_largeRwd_incorrect  = mean(rt(largeRwd_incorrect));
 
-disp(['RTs reward : ',num2str(rsvp.rt_smallRwd), ' s for small rewards & ', ...
-    num2str(rsvp.rt_largeRwd), ' s for large rewards ']);
+disp(['RTs reward : ',num2str(rsvp.rt_smallRwd), ' ms for small rewards & ', ...
+    num2str(rsvp.rt_largeRwd), ' ms for large rewards ']);
 
 %% =================== RTs - Conditions                 ===================
 
@@ -538,8 +542,8 @@ rsvp.rt_BC_fem_correct      = mean(rt(BC_fem_correct));
 rsvp.rt_BC_fem_incorrect    = mean(rt(BC_fem_incorrect));
 
 
-disp(['RTs Emotion : ',num2str(rsvp.rt_DC), ' s for detrimental condition, ', ...
-    num2str(rsvp.rt_CC), ' s for control condition & ',num2str(rsvp.rt_BC), ' s for beneficial condition']);
+disp(['RTs Emotion : ',num2str(rsvp.rt_DC), ' ms for detrimental condition, ', ...
+    num2str(rsvp.rt_CC), ' ms for control condition & ',num2str(rsvp.rt_BC), ' ms for beneficial condition']);
 
 %% =================== RTs - Gender                     ===================
 rsvp.rt_fem                 = mean(rt(fem_condition));
@@ -550,8 +554,8 @@ rsvp.rt_hom                 = mean(rt(hom_condition));
 rsvp.rt_hom_correct         = mean(rt(hom_correct));
 rsvp.rt_hom_incorrect       = mean(rt(hom_incorrect));
 
-disp(['RTs Gender: ',num2str(rsvp.rt_fem), ' s for condition femme & ', ...
-    num2str(rsvp.rt_hom), ' s for condition homme ']);
+disp(['RTs Gender: ',num2str(rsvp.rt_fem), ' ms for condition femme & ', ...
+    num2str(rsvp.rt_hom), ' ms for condition homme ']);
 
 %% =================== RTs - Conditions & Rewards       ===================
 
@@ -807,8 +811,8 @@ if fig
     hold on
     p1 = plot(rsvp.DC_block, rsvp.LC_DC,'-x','linew',1.5);
     p1.Color = [.75 .45 .55];
-    p2 = plot(unique(block), rsvp.LC_CC,'-+','linew',1.5);
-    p2.Color = [.5 .5 .5];
+%     p2 = plot(1:blockExp, rsvp.LC_CC,'-+','linew',1.5);
+%     p2.Color = [.5 .5 .5];
     p3 = plot(rsvp.BC_block, rsvp.LC_BC,'-o','linew',1.5);
     p3.Color = [.40 .55 .40];
     line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
@@ -860,8 +864,8 @@ if fig
     hold on
     p1 = plot(rsvp.DC_block, rsvp.RTsC_DC,'-x','linew',1.5);
     p1.Color = [.75 .45 .55];
-    p2 = plot(unique(block), rsvp.RTsC_CC,'-o','linew',1.5);
-    p2.Color = [.50 .50 .50];
+%     p2 = plot(unique(block), rsvp.RTsC_CC,'-o','linew',1.5);
+%     p2.Color = [.50 .50 .50];
     p3 = plot(rsvp.BC_block, rsvp.RTsC_BC,'-+','linew',1.5);
     p3.Color = [.40 .55 .40];
     line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
