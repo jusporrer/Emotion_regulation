@@ -1,28 +1,38 @@
 % JS initial group analysis script for the effect of incentives on emotion regulation
 
 % Creation : Mars 2020
-clearvars;
+clearvars; 
 close all;
 
 %% =================== Get All Individual Data          ===================
 
-subject_ID = [81433] %[98197, 81477, 90255, 90266]; % [81473, 74239, 98197, 12346, 81477, 90255, 90266, 33222, 48680];  %  [81433, 79662, 90580];
+load('data_rsvp_Aws_1708.mat', 'data_rsvp_Aws')
+%load('subject_id.mat', 'subject_id') 
+load('first_sess_id.mat', 'first_sess_id')
 
-% for subj_idx = 1:length(subject_ID)
-%     disp(['=================== Subject ', ...
-%         num2str(subject_ID(subj_idx)), ' ===================' ]);
-%     rsvpGRP(subj_idx) = Individual_Analysis_RSVP(subject_ID(subj_idx), false);
-rsvpGRP = Online_Individual_Analysis_RSVP_Aws; 
-subj_idx = 1; 
-% end
+subject_id = first_sess_id; 
+
+% subject_id = subject_id(subject_id ~= "7283KR2W" & subject_id ~= "MXUFYD7Y" & ...
+%     subject_id ~= "JQ4U6XHT" & subject_id ~= "NJTPQDN4" & subject_id ~= "BRGUQ29W" );
+
+subject_id = subject_id(subject_id ~= "7283KR2W" & subject_id ~= "MXUFYD7Y" & ...
+    subject_id ~= "JQ4U6XHT" & subject_id ~= "NJTPQDN4" & subject_id ~= "BRGUQ29W" );
+
+
+for subj_idx = 1:length(subject_id)
+    disp(['=================== Subject ', ...
+        num2str(subject_id(subj_idx)), ' ===================' ]);
+    rsvpGRP(subj_idx) = Online_Individual_Analysis_RSVP_Aws(subject_id(subj_idx), false, 1);
+    %subj_idx = 1; 
+end
 
 %% =================== General Information              ===================
 disp('=================== General Group Information ===================');
 
-rt                      = [rsvpGRP.rt];
+%rt                      = [rsvpGRP.rt];
 %[h_RT, p_RT]            = adtest(rt); % Normality Anderson-Darling test
 
-nS                      = length(subject_ID);
+nS                      = length(subject_id);
 disp(['Number of subjects: ',num2str(nS)]);
 
 nExcTrial               = mean([rsvpGRP.nExcTrial]);
@@ -320,10 +330,10 @@ criterion_BC_sem        = std(criterion_BC)/sqrt(nS);
 aprime                  = [rsvpGRP.aprime];
 bprime                  = [rsvpGRP.bprime];
 
-%% =================== RTs - General                    ===================
-
-disp('=================== RTs information ===================');
-
+ %% =================== RTs - General                    ===================
+ 
+ disp('=================== RTs information ===================');
+ 
 rt_correct              = ([rsvpGRP.rt_correct]);
 
 rt_hit                  = ([rsvpGRP.rt_hit]);
@@ -497,13 +507,13 @@ rt_fast_perf            = [rsvpGRP.rt_fast_perf];
 
 [h_rt_perf, p_rt_perf, ci_rt_perf, stats_rt_perf] = ttest2(rt_slow_perf, rt_fast_perf);
 
-for subj_idx = 1:length(subject_ID)
+for subj_idx = 1:length(subject_id)
     
     for block = 1:12
         LC(subj_idx,block)                = rsvpGRP(subj_idx).LC(block);
-        %LC_CC(subj_idx,block)             = rsvpGRP(subj_idx).LC_CC(block);
+        LC_CC(subj_idx,block)             = rsvpGRP(subj_idx).LC_CC(block);
         RTsC(subj_idx,block)              = rsvpGRP(subj_idx).RTsC(block);
-        %RTsC_CC(subj_idx,block)           = rsvpGRP(subj_idx).RTsC_CC(block);
+        RTsC_CC(subj_idx,block)           = rsvpGRP(subj_idx).RTsC_CC(block);
         
     end
     
@@ -540,42 +550,42 @@ b1 = bar((2-.8/3), mean(perf_CC_DC),'FaceColor',[.85 .75 .75], 'BarWidth',.8/3,'
 b2 = bar((2), mean(perf_CC),'FaceColor',[.75 .75 .75], 'BarWidth',.8/3,'FaceAlpha', .9);
 b3 = bar((2+.8/3), mean(perf_CC_BC),'FaceColor',[.75 .85 .75], 'BarWidth',.8/3, 'FaceAlpha', .9);
 bar(3, mean(perf_BC),'FaceColor',[.40 .55 .40], 'FaceAlpha', .9)
-%sigstar({[1,2],[1,3],[2,3]},[p_perf_DC_CC, p_perf_DC_BC, p_perf_CC_BC], 0, 100);
+sigstar({[1,2],[1,3],[2,3]},[p_perf_DC_CC, p_perf_DC_BC, p_perf_CC_BC], 0, 100);
 xticks([1 2 3])
 xticklabels({'DC','CC','BC'})
 legend([b1 b2 b3],{'CC (DC)','CC', 'CC (BC)'},'fontsize', 6, 'location','southeast')
 ylabel('Performance (mean +/- SEM %)','fontsize', 10)
 title('Performance According to Conditions','fontsize', 10)
-axis([0 4 50 105])
+axis([0 4 50 100])
 grid minor
 box on
 hold off
 
 % Performance par rewards
-% subplot(2,2,2)
-% hold on;
-% rwd_plotY = [perf_smallRwd.', perf_largeRwd.'];
-% rwd_plotX = [1, 2];
-% rwd_plot_color = {[.00, .45, .55], [.45, .75, .80]};
-% B = boxplot(rwd_plotY, rwd_plotX,'Widths',.7);
-% get (B, 'tag');
-% set(B(1,:), 'color', 'k'); set(B(2,:), 'color', 'k');
-% set(B(6,:), 'color', 'k', 'linewidth', 2);
-% scatter(rwd_plotX,mean(rwd_plotY),'k','filled','d')
-% h = findobj(gca,'Tag','Box');
-% for j=1:length(h)
-%     patch(get(h(j),'XData'),get(h(j),'YData'),rwd_plot_color{j},'FaceAlpha',.7);
-% end
-% %sigstar({[1,2]},p_perf_rwd, 0, 1);
-% xticks([1 2])
-% legend({'Mean'}, 'Location', 'southeast')
-% xticklabels({'Small Rwd','Large Rwd'})
-% ylabel('Performance (median +/- percentile %)','fontsize', 10)
-% title('Performance According to Reward Size','fontsize', 10)
-% axis([0 3 50 110])
-% grid minor
-% box on
-% hold off
+subplot(2,2,2)
+hold on;
+rwd_plotY = [perf_smallRwd.', perf_largeRwd.'];
+rwd_plotX = [1, 2];
+rwd_plot_color = {[.00, .45, .55], [.45, .75, .80]};
+B = boxplot(rwd_plotY, rwd_plotX,'Widths',.7);
+get (B, 'tag');
+set(B(1,:), 'color', 'k'); set(B(2,:), 'color', 'k');
+set(B(6,:), 'color', 'k', 'linewidth', 2);
+scatter(rwd_plotX,mean(rwd_plotY),'k','filled','d')
+h = findobj(gca,'Tag','Box');
+for j=1:length(h)
+    patch(get(h(j),'XData'),get(h(j),'YData'),rwd_plot_color{j},'FaceAlpha',.7);
+end
+sigstar({[1,2]},p_perf_rwd, 0, 1);
+xticks([1 2])
+legend({'Mean'}, 'Location', 'southeast')
+xticklabels({'Small Rwd','Large Rwd'})
+ylabel('Performance (median +/- percentile %)','fontsize', 10)
+title('Performance According to Reward Size','fontsize', 10)
+axis([0 3 45 100])
+grid minor
+box on
+hold off
 
 % Performance par conditions & rewards
 subplot(2,2,3)
@@ -604,15 +614,15 @@ bar(3.5, mean(perf_CC_largeRwd),'FaceColor',[.65 .65 .65], 'BarWidth',.5/3, 'Fac
 bar(3.5+.5/3, mean(perf_CC_BC_largeRwd),'FaceColor',[.65 .75 .65], 'BarWidth',.5/3, 'FaceAlpha', .9);
 bar(4, mean(perf_BC_largeRwd),'FaceColor',[.30 .45 .30], 'BarWidth',.5, 'FaceAlpha', .9);
 
-%sigstar({[1,1.5],[1,2],[1.5,2]},[p_perf_DC_CC_smallRwd, p_perf_DC_BC_smallRwd, p_perf_CC_BC_smallRwd], 0, 100);
-%sigstar({[3,3.5],[3,4],[3.5,4]},[p_perf_DC_CC_largeRwd, p_perf_DC_BC_largeRwd, p_perf_CC_BC_largeRwd], 0, 100);
+sigstar({[1,1.5],[1,2],[1.5,2]},[p_perf_DC_CC_smallRwd, p_perf_DC_BC_smallRwd, p_perf_CC_BC_smallRwd], 0, 100);
+sigstar({[3,3.5],[3,4],[3.5,4]},[p_perf_DC_CC_largeRwd, p_perf_DC_BC_largeRwd, p_perf_CC_BC_largeRwd], 0, 100);
 
 xticks([1.5 3.5])
 xticklabels({'Small Rwd', 'Large Rwd'})
 legend([b1 b2 b3 b4 b5],{'DC','CC (DC)','CC', 'CC (BC)', 'BC'}, 'fontsize', 6 , 'Location', 'southeast')
 ylabel('Performance (mean +/- SEM %)','fontsize', 10)
 title('Performance According to Rewards and Conditions','fontsize', 10)
-axis([0 5 50 105])
+axis([0 5 50 100])
 grid minor
 box on
 hold off
@@ -634,19 +644,19 @@ e1 = errorbar(1:3,[mean(perf_DC_smallRwd), mean(perf_CC_smallRwd), mean(perf_BC_
     [perf_DC_smallRwd_sem, perf_CC_smallRwd_sem,perf_BC_smallRwd_sem], 'k.','LineWidth',.9);
 e1.Color = [.45, .75, .80];
 line([0,5], [0,0], 'color','k','LineStyle',':','LineWidth',.8)
-%sigstar({[.8,1.2],[1.8,2.2],[2.8,3.2]},[p_perf_DC_rwd, p_perf_CC_rwd, p_perf_BC_rwd], 0, 100);
+sigstar({[.8,1.2],[1.8,2.2],[2.8,3.2]},[p_perf_DC_rwd, p_perf_CC_rwd, p_perf_BC_rwd], 0, 100);
 xticks([1 2 3])
 legend({'Large Rwd','Small Rwd'}, 'Location', 'southeast')
 xticklabels({'DC','CC','BC '})
 ylabel('Performance (mean +/- SEM)','fontsize', 10)
 title('Performance According to Reward and Conditions','fontsize', 10)
-axis([0 4 50 105])
+axis([0 4 50 100])
 grid minor
 box on
 hold off
 
 % Title of the performance plots
-sgtitle(['Performance Plots for ',num2str(nS), ' Pilots'])
+sgtitle(['Performance Plots for ',num2str(nS), ' Subjects'])
 
 %% SDT Plots 
 figure('Name', 'RSVP SDT Plots');
@@ -671,21 +681,21 @@ hold off
 subplot(2,3,2)
 hold on;
 errorbar(1, mean(criterion_DC), criterion_DC_sem, 'k.','LineWidth',1)
-errorbar(1.5-.5/3, mean(criterion_CC_DC), criterion_CC_DC_sem, 'k.','LineWidth',.8)
-errorbar(1.5, mean(criterion_CC), criterion_CC_sem, 'k.','LineWidth',.8)
-errorbar(1.5+.5/3, mean(criterion_CC_BC), criterion_CC_BC_sem, 'k.','LineWidth',.8)
+%errorbar(1.5-.5/3, mean(criterion_CC_DC), criterion_CC_DC_sem, 'k.','LineWidth',.8)
+errorbar(1.5, mean(criterion_CC), criterion_CC_sem, 'k.','LineWidth',1)
+%errorbar(1.5+.5/3, mean(criterion_CC_BC), criterion_CC_BC_sem, 'k.','LineWidth',.8)
 errorbar(2, mean(criterion_BC), criterion_BC_sem, 'k.','LineWidth',1)
 
 bar(1, mean(criterion_DC),'FaceColor',[.70 .60 .70], 'BarWidth',.5, 'FaceAlpha', .9);
-b5 = bar(1.5-.5/3, mean(criterion_CC_DC),'FaceColor',[0.73,0.68,0.73], 'BarWidth',.5/3, 'FaceAlpha', .9);
-b6 = bar(1.5, mean(criterion_CC),'FaceColor',[.65 .65 .65], 'BarWidth',.5/3, 'FaceAlpha', .9);
-b7 = bar(1.5+.5/3, mean(criterion_CC_BC),'FaceColor',[0.54,0.47,0.54], 'BarWidth',.5/3, 'FaceAlpha', .9);
+%b5 = bar(1.5-.5/3, mean(criterion_CC_DC),'FaceColor',[0.73,0.68,0.73], 'BarWidth',.5/3, 'FaceAlpha', .9);
+b6 = bar(1.5, mean(criterion_CC),'FaceColor',[.65 .65 .65], 'BarWidth',.5, 'FaceAlpha', .9);
+%b7 = bar(1.5+.5/3, mean(criterion_CC_BC),'FaceColor',[0.54,0.47,0.54], 'BarWidth',.5/3, 'FaceAlpha', .9);
 bar(2, mean(criterion_BC),'FaceColor',[0.52,0.37,0.52], 'BarWidth',.5, 'FaceAlpha', .9);
 
-%sigstar({[1,1.5],[1,2],[1.5,2]},[p_crit_DC_CC, p_crit_DC_BC, p_crit_CC_BC], 0, 100);
+sigstar({[1,1.5],[1,2],[1.5,2]},[p_crit_DC_CC, p_crit_DC_BC, p_crit_CC_BC], 0, 100);
 xticks([1 1.5 2])
 xticklabels({'DC','CC','BC'})
-legend([b5 b6 b7],{'CC (DC)','CC', 'CC (BC)'},'fontsize', 6, 'location','southeast')
+%legend([b5 b6 b7],{'CC (DC)','CC', 'CC (BC)'},'fontsize', 6, 'location','southeast')
 ylabel('Criterion C (mean +/- SEM %)','fontsize', 10)
 title('Criterion According to the Conditions','fontsize', 10)
 axis([0 3 0 1.5])
@@ -700,7 +710,7 @@ scatter(mean(dprime_CC), mean(perf_CC), 30, 'MarkerFaceColor', 'k' ,'MarkerEdgeC
 scatter(mean(dprime_BC), mean(perf_BC), 30, 'MarkerFaceColor', 'g' ,'MarkerEdgeColor','k')
 legend({'DC','CC', 'BC'},'fontsize', 6, 'location','southeast')
 %line([0, 1], [0, 100], 'color', 'r','LineStyle','--','LineWidth',1.5);
-xlim([0 1]); ylim([0 100]);
+xlim([0.5 1.5]); ylim([0 100]);
 xlabel('D Prime', 'fontsize', 10);
 ylabel('Performance', 'fontsize', 10);
 title("Link betwene Performance and D'",'fontsize', 10);
@@ -712,21 +722,21 @@ hold off
 subplot(2,3,4)
 hold on;
 errorbar(1, mean(dprime_DC), dprime_DC_sem, 'k.','LineWidth',1)
-errorbar(1.5-.5/3, mean(dprime_CC_DC), dprime_CC_DC_sem, 'k.','LineWidth',.8)
-errorbar(1.5, mean(dprime_CC), dprime_CC_sem, 'k.','LineWidth',.8)
-errorbar(1.5+.5/3, mean(dprime_CC_BC), dprime_CC_BC_sem, 'k.','LineWidth',.8)
+%errorbar(1.5-.5/3, mean(dprime_CC_DC), dprime_CC_DC_sem, 'k.','LineWidth',.8)
+errorbar(1.5, mean(dprime_CC), dprime_CC_sem, 'k.','LineWidth',1)
+%errorbar(1.5+.5/3, mean(dprime_CC_BC), dprime_CC_BC_sem, 'k.','LineWidth',.8)
 errorbar(2, mean(dprime_BC), dprime_BC_sem, 'k.','LineWidth',1)
 
 bar(1, mean(dprime_DC),'FaceColor',[.90 .58 .69], 'BarWidth',.5, 'FaceAlpha', .9);
-b2 = bar(1.5-.5/3, mean(dprime_CC_DC),'FaceColor',[.95 .85 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
-b3 = bar(1.5, mean(dprime_CC),'FaceColor',[.85 .85 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
-b4 = bar(1.5+.5/3, mean(dprime_CC_BC),'FaceColor',[.85 .95 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
+%b2 = bar(1.5-.5/3, mean(dprime_CC_DC),'FaceColor',[.95 .85 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
+b3 = bar(1.5, mean(dprime_CC),'FaceColor',[.85 .85 .85], 'BarWidth',.5, 'FaceAlpha', .9);
+%b4 = bar(1.5+.5/3, mean(dprime_CC_BC),'FaceColor',[.85 .95 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
 bar(2, mean(dprime_BC),'FaceColor',[.63 .82 .75], 'BarWidth',.5, 'FaceAlpha', .9);
 
-%sigstar({[1,1.5],[1,2],[1.5,2]},[p_dprime_DC_CC, p_dprime_DC_BC, p_dprime_CC_BC], 0, 100);
+sigstar({[1,1.5],[1,2],[1.5,2]},[p_dprime_DC_CC, p_dprime_DC_BC, p_dprime_CC_BC], 0, 100);
 xticks([1 1.5 2])
 xticklabels({'DC','CC','BC'})
-legend([b2 b3 b4],{'CC (DC)','CC', 'CC (BC)'},'fontsize', 6, 'location','southeast')
+%legend([b2 b3 b4],{'CC (DC)','CC', 'CC (BC)'},'fontsize', 6, 'location','southeast')
 ylabel('D prime (mean +/- SEM %)','fontsize', 10)
 title('Sensitivty Index According to the Conditions','fontsize', 10)
 axis([0 3 0 1.5])
@@ -738,34 +748,34 @@ hold off
 subplot(2,3,5:6)
 hold on;
 errorbar(1, mean(dprime_DC_smallRwd), dprime_DC_smallRwd_sem, 'k.','LineWidth',1)
-errorbar(1.5-.5/3, mean(dprime_CC_DC_smallRwd), dprime_CC_DC_smallRwd_sem, 'k.','LineWidth',.8)
+%errorbar(1.5-.5/3, mean(dprime_CC_DC_smallRwd), dprime_CC_DC_smallRwd_sem, 'k.','LineWidth',.8)
 errorbar(1.5, mean(dprime_CC_smallRwd), dprime_CC_smallRwd_sem, 'k.','LineWidth',.8)
-errorbar(1.5+.5/3, mean(dprime_CC_BC_smallRwd), dprime_CC_BC_smallRwd_sem, 'k.','LineWidth',.8)
+%errorbar(1.5+.5/3, mean(dprime_CC_BC_smallRwd), dprime_CC_BC_smallRwd_sem, 'k.','LineWidth',.8)
 errorbar(2, mean(dprime_BC_smallRwd), dprime_BC_smallRwd_sem, 'k.','LineWidth',1)
 
 errorbar(3, mean(dprime_DC_largeRwd), dprime_DC_largeRwd_sem, 'k.','LineWidth',1)
-errorbar(3.5-.5/3, mean(dprime_CC_DC_largeRwd), dprime_CC_DC_largeRwd_sem, 'k.','LineWidth',.8)
+%errorbar(3.5-.5/3, mean(dprime_CC_DC_largeRwd), dprime_CC_DC_largeRwd_sem, 'k.','LineWidth',.8)
 errorbar(3.5, mean(dprime_CC_largeRwd), dprime_CC_largeRwd_sem, 'k.','LineWidth',.8)
-errorbar(3.5+.5/3, mean(dprime_CC_BC_largeRwd), dprime_CC_BC_largeRwd_sem, 'k.','LineWidth',.8)
+%errorbar(3.5+.5/3, mean(dprime_CC_BC_largeRwd), dprime_CC_BC_largeRwd_sem, 'k.','LineWidth',.8)
 errorbar(4, mean(dprime_BC_largeRwd), dprime_BC_largeRwd_sem, 'k.','LineWidth',1)
 
 b1 = bar(1, mean(dprime_DC_smallRwd),'FaceColor',[.95 .63 .75], 'BarWidth',.5, 'FaceAlpha', .9);
-b2 = bar(1.5-.5/3, mean(dprime_CC_DC_smallRwd),'FaceColor',[.95 .85 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
-b3 = bar(1.5, mean(dprime_CC_smallRwd),'FaceColor',[.85 .85 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
-b4 = bar(1.5+.5/3, mean(dprime_CC_BC_smallRwd),'FaceColor',[.85 .95 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
+%b2 = bar(1.5-.5/3, mean(dprime_CC_DC_smallRwd),'FaceColor',[.95 .85 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
+b3 = bar(1.5, mean(dprime_CC_smallRwd),'FaceColor',[.85 .85 .85], 'BarWidth',.5, 'FaceAlpha', .9);
+%b4 = bar(1.5+.5/3, mean(dprime_CC_BC_smallRwd),'FaceColor',[.85 .95 .85], 'BarWidth',.5/3, 'FaceAlpha', .9);
 b5 = bar(2, mean(dprime_BC_smallRwd),'FaceColor',[.68 .88 .80], 'BarWidth',.5, 'FaceAlpha', .9);
 
 bar(3, mean(dprime_DC_largeRwd),'FaceColor',[.85 .52 .61], 'BarWidth',.5, 'FaceAlpha', .9);
-bar(3.5-.5/3, mean(dprime_CC_DC_largeRwd),'FaceColor',[.75 .65 .65], 'BarWidth',.5/3, 'FaceAlpha', .9);
-bar(3.5, mean(dprime_CC_largeRwd),'FaceColor',[.65 .65 .65], 'BarWidth',.5/3, 'FaceAlpha', .9);
-bar(3.5+.5/3, mean(dprime_CC_BC_largeRwd),'FaceColor',[.65 .75 .65], 'BarWidth',.5/3, 'FaceAlpha', .9);
+%bar(3.5-.5/3, mean(dprime_CC_DC_largeRwd),'FaceColor',[.75 .65 .65], 'BarWidth',.5/3, 'FaceAlpha', .9);
+bar(3.5, mean(dprime_CC_largeRwd),'FaceColor',[.65 .65 .65], 'BarWidth',.5, 'FaceAlpha', .9);
+%bar(3.5+.5/3, mean(dprime_CC_BC_largeRwd),'FaceColor',[.65 .75 .65], 'BarWidth',.5/3, 'FaceAlpha', .9);
 bar(4, mean(dprime_BC_largeRwd),'FaceColor',[.58 .77 .70], 'BarWidth',.5, 'FaceAlpha', .9);
 
-%sigstar({[1,3],[1.5,3.5],[2,4]},[p_dprime_DC_rwd, p_dprime_CC_rwd, p_dprime_BC_rwd], 0, 100);
+sigstar({[1,3],[1.5,3.5],[2,4]},[p_dprime_DC_rwd, p_dprime_CC_rwd, p_dprime_BC_rwd], 0, 100);
 
 xticks([1.5 3.5])
 xticklabels({'Small Rwd', 'Large Rwd'})
-legend([b1 b2 b3 b4 b5],{'DC','CC (DC)','CC', 'CC (BC)', 'BC'}, 'fontsize', 6 , 'Location', 'southeast')
+%legend([b1 b2 b3 b4 b5],{'DC','CC (DC)','CC', 'CC (BC)', 'BC'}, 'fontsize', 6 , 'Location', 'southeast')
 ylabel('D prime (mean +/- SEM %)','fontsize', 10)
 title('Sensitivty Index According to Rewards and Conditions','fontsize', 10)
 axis([0 5 0 1.5])
@@ -774,21 +784,21 @@ box on
 hold off
 
 % Title of the performance plots
-sgtitle(['SDT Plots for ',num2str(nS), ' Pilots'])
+sgtitle(['SDT Plots for ',num2str(nS), ' Subjects'])
 
 %% RTs Plots
 figure('Name', 'RSVP RTs Plots');
-subplot(2,3,1)
-histogram(rt,'FaceColor',[.44, .24, .38], 'EdgeColor', [.5 .5 .5])
-xlabel('log(RTs) (mean +/- SEM)','fontsize', 10)
-ylabel('Number of Trials','fontsize', 10)
-title('Fig1. Distribution of RSVP Reaction Times','fontsize', 10)
-axis([-3 3 -inf inf])
-grid minor
-box on
+% subplot(2,3,1)
+% histogram(rt,'FaceColor',[.44, .24, .38], 'EdgeColor', [.5 .5 .5])
+% xlabel('log(RTs) (mean +/- SEM)','fontsize', 10)
+% ylabel('Number of Trials','fontsize', 10)
+% title('Fig1. Distribution of RSVP Reaction Times','fontsize', 10)
+% axis([-3 3 -inf inf])
+% grid minor
+% box on
 
 % RTs par conditions
-subplot(2,3,2)
+subplot(2,2,1)
 hold on;
 bar([nanmean(rt_DC) 0 0],'FaceColor',[.55 .25 .35]);
 bar([0 nanmean(rt_CC) 0],'FaceColor',[.75 .75 .75]);
@@ -796,7 +806,7 @@ bar([0 0 nanmean(rt_BC)],'FaceColor',[.40 .55 .40]);
 errorbar(1, nanmean(rt_DC), nanstd(rt_DC)/sqrt(nS), 'k.','LineWidth',1)
 errorbar(2, nanmean(rt_CC), nanstd(rt_CC)/sqrt(nS), 'k.','LineWidth',1)
 errorbar(3, nanmean(rt_BC), nanstd(rt_BC)/sqrt(nS), 'k.','LineWidth',1)
-%sigstar({[1,2],[1,3],[2,3]},[p_rt_DC_CC, p_rt_DC_BC, p_rt_CC_BC], 0, 1);
+sigstar({[1,2],[1,3],[2,3]},[p_rt_DC_CC, p_rt_DC_BC, p_rt_CC_BC], 0, 1);
 xticks([1 2 3 4])
 xticklabels({'DC','CC', 'BC'})
 ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
@@ -807,13 +817,13 @@ box on
 hold off
 
 % RTs par rewards
-subplot(2,3,3)
+subplot(2,2,2)
 hold on;
 bar([nanmean(rt_smallRwd) 0],'FaceColor',[.45, .75, .80]);
 bar([0 nanmean(rt_largeRwd)],'FaceColor',[.00, .45, .55]);
 errorbar(1, nanmean(rt_smallRwd), nanstd(rt_smallRwd)/sqrt(nS), 'k.','LineWidth',1)
 errorbar(2, nanmean(rt_largeRwd), nanstd(rt_largeRwd)/sqrt(nS), 'k.','LineWidth',1)
-%sigstar({[1,2]},p_rt_rwd, 0, 1);
+sigstar({[1,2]},p_rt_rwd, 0, 1);
 xticks([1 2])
 xticklabels({'Small Rwd','Large Rwd'})
 ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
@@ -882,63 +892,63 @@ box on
 hold off
 
 % Title of the performance plots
-sgtitle(['RTs Plots for ',num2str(nS), ' Pilots'])
+sgtitle(['RTs Plots for ',num2str(nS), ' Subjects'])
 
 %% Gender Plots
 
 % % Performance par gender
  figure('Name', 'Gender Plots');
-% 
-% subplot(2,2,1)
-% hold on;
-% bar(1, mean(perf_fem),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
-% bar(1.5, mean(perf_hom),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
-% bar(2.5, mean(perf_fem(1:4)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
-% bar(3, mean(perf_hom(1:4)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
-% bar(4, mean(perf_fem(5:end)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
-% bar(4.5, mean(perf_hom(5:end)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
-% errorbar(1, mean(perf_fem), std(perf_fem)/sqrt(nS), 'k.','LineWidth',1)
-% errorbar(1.5, mean(perf_hom), std(perf_hom)/sqrt(nS), 'k.','LineWidth',1)
-% errorbar(2.5, mean(perf_fem(1:4)), std(perf_fem(1:4))/sqrt(nS), 'k.','LineWidth',1)
-% errorbar(3, mean(perf_hom(1:4)), std(perf_hom(1:4))/sqrt(nS), 'k.','LineWidth',1)
-% errorbar(4, mean(perf_fem(5:end)), std(perf_fem(5:end))/sqrt(nS), 'k.','LineWidth',1)
-% errorbar(4.5, mean(perf_hom(5:end)), std(perf_hom(5:end))/sqrt(nS), 'k.','LineWidth',1)
-% sigstar({[1,1.5]},p_perf_gender, 0, 100);
-% legend({'Female Face', 'Male Face'},'fontsize', 6 , 'Location', 'northeast')
-% xticks([1 2.5 4])
-% xticklabels({'General','Female pilot','Male pilot'})
-% ylabel('Performance (mean +/- SEM %)','fontsize', 10)
-% title('Performance according to gender','fontsize', 10)
-% axis([0.5 5 50 105])
-% grid minor
-% box on
-% hold off
-% 
-% subplot(2,2,2)
-% hold on;
-% bar(1, mean(rt_fem),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
-% bar(1.5, mean(rt_hom),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
-% bar(2.5, mean(rt_fem(1:4)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
-% bar(3, mean(rt_hom(1:4)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
-% bar(4, mean(rt_fem(5:end)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
-% bar(4.5, mean(rt_hom(5:end)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
-% errorbar(1, mean(rt_fem), std(rt_fem)/sqrt(nS), 'k.','LineWidth',1)
-% errorbar(1.5, mean(rt_hom), std(rt_hom)/sqrt(nS), 'k.','LineWidth',1)
-% errorbar(2.5, mean(rt_fem(1:4)), std(rt_fem(1:4))/sqrt(nS), 'k.','LineWidth',1)
-% errorbar(3, mean(rt_hom(1:4)), std(rt_hom(1:4))/sqrt(nS), 'k.','LineWidth',1)
-% errorbar(4, mean(rt_fem(5:end)), std(rt_fem(5:end))/sqrt(nS), 'k.','LineWidth',1)
-% errorbar(4.5, mean(rt_hom(5:end)), std(rt_hom(5:end))/sqrt(nS), 'k.','LineWidth',1)
-% %sigstar({[1,1.5]},p_rt_gender, 0, 1);
-% legend({'Female Face', 'Male Face'},'fontsize', 6 , 'Location', 'northeast')
-% xticks([1 2.5 4])
-% xticklabels({'General','Female pilot','Male pilot'})
-% ylabel('log(RTs)','fontsize', 10)
-% title('RTs according to gender','fontsize', 10)
-% axis([0.5 5 -1 1])
-% grid minor
-% box on
-% hold off
-% 
+
+subplot(2,2,1)
+hold on;
+bar(1, mean(perf_fem),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+bar(1.5, mean(perf_hom),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+bar(2.5, mean(perf_fem(1:4)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+bar(3, mean(perf_hom(1:4)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+bar(4, mean(perf_fem(5:end)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+bar(4.5, mean(perf_hom(5:end)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+errorbar(1, mean(perf_fem), std(perf_fem)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(1.5, mean(perf_hom), std(perf_hom)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(2.5, mean(perf_fem(1:4)), std(perf_fem(1:4))/sqrt(nS), 'k.','LineWidth',1)
+errorbar(3, mean(perf_hom(1:4)), std(perf_hom(1:4))/sqrt(nS), 'k.','LineWidth',1)
+errorbar(4, mean(perf_fem(5:end)), std(perf_fem(5:end))/sqrt(nS), 'k.','LineWidth',1)
+errorbar(4.5, mean(perf_hom(5:end)), std(perf_hom(5:end))/sqrt(nS), 'k.','LineWidth',1)
+sigstar({[1,1.5]},p_perf_gender, 0, 100);
+legend({'Female Face', 'Male Face'},'fontsize', 6 , 'Location', 'northeast')
+xticks([1 2.5 4])
+xticklabels({'General','Female pilot','Male pilot'})
+ylabel('Performance (mean +/- SEM %)','fontsize', 10)
+title('Performance according to gender','fontsize', 10)
+axis([0.5 5 50 105])
+grid minor
+box on
+hold off
+
+subplot(2,2,2)
+hold on;
+bar(1, mean(rt_fem),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+bar(1.5, mean(rt_hom),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+bar(2.5, mean(rt_fem(1:4)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+bar(3, mean(rt_hom(1:4)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+bar(4, mean(rt_fem(5:end)),'FaceColor',[0.85 0.55 0.65],'BarWidth',.5);
+bar(4.5, mean(rt_hom(5:end)),'FaceColor',[0.45, 0.60, 0.70],'BarWidth',.5);
+errorbar(1, mean(rt_fem), std(rt_fem)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(1.5, mean(rt_hom), std(rt_hom)/sqrt(nS), 'k.','LineWidth',1)
+errorbar(2.5, mean(rt_fem(1:4)), std(rt_fem(1:4))/sqrt(nS), 'k.','LineWidth',1)
+errorbar(3, mean(rt_hom(1:4)), std(rt_hom(1:4))/sqrt(nS), 'k.','LineWidth',1)
+errorbar(4, mean(rt_fem(5:end)), std(rt_fem(5:end))/sqrt(nS), 'k.','LineWidth',1)
+errorbar(4.5, mean(rt_hom(5:end)), std(rt_hom(5:end))/sqrt(nS), 'k.','LineWidth',1)
+sigstar({[1,1.5]},p_rt_gender, 0, 1);
+legend({'Female Face', 'Male Face'},'fontsize', 6 , 'Location', 'northeast')
+xticks([1 2.5 4])
+xticklabels({'General','Female pilot','Male pilot'})
+ylabel('log(RTs)','fontsize', 10)
+title('RTs according to gender','fontsize', 10)
+axis([0.5 5 -1 1])
+grid minor
+box on
+hold off
+
 % Performance par genre & conditions
 subplot(2,1,2)
 hold on;
@@ -980,24 +990,24 @@ box on
 hold off
 
 % Title of the performance plots
-sgtitle(['Gender Plots for ',num2str(nS), ' Pilots'])
+sgtitle(['Gender Plots for ',num2str(nS), ' Subjects'])
 
 %% Learning Curves Plots
-fig = false;
+fig = true;
 if fig
     figure('Name', 'RSVP Learning Curve Plots');
     
     subplot(2,1,1)
-    p = plot(1:length(LC), mean(LC),'linew',1.5);
+    p = plot(1:size(LC,2), mean(LC),'linew',1.5);
     p.Color = [.0, .0, .0];
-    shadedErrorBar(1:length(LC),mean(LC),(std(LC)/sqrt(nS)),'lineprops',{'Color',[.0, .0, .0]},'patchSaturation',.4);
+    shadedErrorBar(1:size(LC,2), mean(LC),(std(LC)/sqrt(nS)),'lineprops',{'Color',[.0, .0, .0]},'patchSaturation',.4);
     %line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
     ylabel('Performance (mean +/- SEM)','fontsize', 10)
     xlabel('Number of Blocks','fontsize', 10)
-    xticks(1:(length(LC)))
+    xticks(1:(size(LC,2)))
     xticklabels(1:12)
     title('Learning Curve RSVP Experiment','fontsize', 10)
-    axis([0 (length(LC)+1) 40 100])
+    axis([0 (size(LC,2)+1) 40 100])
     grid minor
     box on
     
@@ -1024,18 +1034,18 @@ if fig
     hold on
     p1 = plot(1:6, mean(LC_DC),'-x','linew',1.5);
     p1.Color = [.75 .45 .55];
-    p2 = plot(1:6, mean(LC_CC),'-+','linew',1.5); %1:.5:6.5
+    %p2 = plot(1:12, mean(LC_CC),'-+','linew',1.5); %1:.5:6.5
     p2.Color = [.50 .50 .50];
     p3 = plot(1:6, mean(LC_BC),'-o','linew',1.5);
     p3.Color = [.40 .55 .40];
     shadedErrorBar(1:6,mean(LC_DC),(std(LC_DC)/sqrt(nS)),'lineprops',{'Color',[.75 .45 .55]},'patchSaturation',.4);
-    shadedErrorBar(1:6,mean(LC_CC),(std(LC_CC)/sqrt(nS)),'lineprops',{'Color',[.50 .50 .50]},'patchSaturation',.4);
+    %shadedErrorBar(1:12,mean(LC_CC),(std(LC_CC)/sqrt(nS)),'lineprops',{'Color',[.50 .50 .50]},'patchSaturation',.4);
     shadedErrorBar(1:6,mean(LC_BC),(std(LC_BC)/sqrt(nS)),'lineprops',{'Color',[.40 .55 .40]},'patchSaturation',.4);
     %line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
     legend({'DC','CC','BC'}, 'Location', 'southeast')
     ylabel('Performance (mean +/- SEM)','fontsize', 10)
     xlabel('Number of Blocks','fontsize', 10)
-    xticks(1:6); xticklabels(1:6)
+    xticks(1:12); xticklabels(1:12)
     title('Learning Curve for Each Conditions','fontsize', 10)
     axis([0 7 40 100])
     hold off
@@ -1043,7 +1053,7 @@ if fig
     box on
     
     % Title of the LC plots
-    sgtitle(['Learning Curve Plots for ',num2str(nS), 'Pilots'])
+    sgtitle(['Learning Curve Plots for ',num2str(nS), 'Subjects'])
     
     %% RTs Curves Plots
     figure('Name', 'RSVP RTs Curve Plots');
@@ -1074,16 +1084,16 @@ if fig
     
     
     subplot(2,3,2:3)
-    p = plot(1:length(RTsC), smooth(mean(RTsC)),'linew',1.5);
+    p = plot(1:size(RTsC,2), smooth(mean(RTsC)),'linew',1.5);
     p.Color = [.44, .24, .38];
-    shadedErrorBar(1:length(RTsC), smooth(mean(RTsC)),(std(RTsC)/sqrt(nS)),'lineprops',{'Color',[.44, .24, .38]},'patchSaturation',.4);
+    shadedErrorBar(1:size(RTsC,2), smooth(mean(RTsC)),(std(RTsC)/sqrt(nS)),'lineprops',{'Color',[.44, .24, .38]},'patchSaturation',.4);
     line([-15,15], [0,0],'color','k','LineStyle','--','LineWidth',.7)
     ylabel('log(RTs) (mean +/- SEM)','fontsize', 10)
     xlabel('Number of Blocks','fontsize', 10)
-    xticks(1:(length(RTsC)))
+    xticks(1:size(RTsC,2))
     xticklabels(1:12)
     title('RTs Curve RSVP Experiment','fontsize', 10)
-    axis([0 (length(RTsC)+1)  -1 1])
+    axis([0 (size(RTsC,2)+1)  -1 1])
     grid minor
     box on
     
@@ -1110,12 +1120,12 @@ if fig
     hold on
     p1 = plot(1:6, mean(RTsC_DC),'-x','linew',1.5);
     p1.Color = [.75 .45 .55];
-    p2 = plot(1:6, mean(RTsC_CC),'-+','linew',1.5); %1:.5:6.5 if 12 blocks
-    p2.Color = [.50 .50 .50];
+    %p2 = plot(1:6, mean(RTsC_CC),'-+','linew',1.5); %1:.5:6.5 if 12 blocks
+    %p2.Color = [.50 .50 .50];
     p3 = plot(1:6, mean(RTsC_BC),'-o','linew',1.5);
     p3.Color = [.40 .55 .40];
     shadedErrorBar(1:6,mean(RTsC_DC),(std(RTsC_DC)/sqrt(nS)),'lineprops',{'Color',[.75 .45 .55]},'patchSaturation',.4);
-    shadedErrorBar(1:6,mean(RTsC_CC),(std(RTsC_CC)/sqrt(nS)),'lineprops',{'Color',[.50 .50 .50]},'patchSaturation',.4);
+    %shadedErrorBar(1:6,mean(RTsC_CC),(std(RTsC_CC)/sqrt(nS)),'lineprops',{'Color',[.50 .50 .50]},'patchSaturation',.4);
     shadedErrorBar(1:6,mean(RTsC_BC),(std(RTsC_BC)/sqrt(nS)),'lineprops',{'Color',[.40 .55 .40]},'patchSaturation',.4);
     line([-15,15], [0,0],'color','k','LineStyle','--','LineWidth',.7)
     legend({'DC','CC','BC'}, 'Location', 'southeast')
@@ -1129,6 +1139,6 @@ if fig
     box on
     
     % Title of the RTS curve plots
-    sgtitle(['RTs Curve Plots for ',num2str(nS), 'Pilots'])
+    sgtitle(['RTs Curve Plots for ',num2str(nS), 'Subjects'])
     
 end

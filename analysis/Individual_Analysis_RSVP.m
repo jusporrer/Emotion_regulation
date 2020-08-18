@@ -1,12 +1,10 @@
-% Individual analysis script for the effect of motivation on emotion regulation 
+% Individual analysis script for the effect of motivation on emotion regulation
 % in a RSVP Task
-% Author : Juliana Sporrer 
+% Author : Juliana Sporrer
 % Creation : February 2020
 
-%function [rsvp]                 = Individual_Analysis_RSVP(ID, fig)
+function [rsvp]                 = Individual_Analysis_RSVP(ID, fig)
 
-ID                          =  90255;
-fig                         = 0;
 
 %% =================== Load the data                    ===================
 resp_folder                     = '../results';
@@ -73,15 +71,15 @@ up_RtExp                    = mean_RtExp+std_RtExp ;
 kept_RtExp                  = intersect(find(rt(nTrial) > low_RtExp), find(rt(nTrial) < up_RtExp));
 excl_RtExp                  = [find(rt(nTrial) < low_RtExp) find(rt(nTrial) > up_RtExp)];
 
-rsvp.nExcTrial              = length(excl_RtExp); 
+rsvp.nExcTrial              = length(excl_RtExp);
 
 if ID == 81477
     kept_RtExp(31) = [];
-end 
+end
 
 nTrial                      = nTrial(kept_RtExp);
-rsvp.rt                     = log(rt(nTrial)); 
-rt                          = log(rt(nTrial)); 
+rsvp.rt                     = log(rt(nTrial));
+rt                          = log(rt(nTrial));
 block                       = block(nTrial);
 
 if length(nTrial) < length(trial)
@@ -203,10 +201,10 @@ smallRwd_correct            = correct & smallRwd;
 smallRwd_incorrect          = incorrect & smallRwd;
 rsvp.smallRwd_rate          = sum(smallRwd_correct)/sum(smallRwd)*100;
 
-% SDT: smallRwd 
+% SDT: smallRwd
 hit_rate_smallRwd           = (sum(smallRwd & (correct_Fem | correct_Hom)) / sum(smallRwd));
 falseAlarm_rate_smallRwd    = (sum(smallRwd & (incorrect_Fem | incorrect_Hom)) / sum(smallRwd));
-[rsvp.dprime_smallRwd, rsvp.criterion_smallRwd, rsvp.aprime_smallRwd, rsvp.bprime_smallRwd] = sdt_measures(hit_rate_smallRwd, falseAlarm_rate_smallRwd); 
+[rsvp.dprime_smallRwd, rsvp.criterion_smallRwd, rsvp.aprime_smallRwd, rsvp.bprime_smallRwd] = sdt_measures(hit_rate_smallRwd, falseAlarm_rate_smallRwd);
 
 largeRwd                    = reward(nTrial) == 2;
 rsvp.largeRwdBlock          = unique(block(largeRwd == 1));
@@ -214,10 +212,10 @@ largeRwd_correct            = correct & largeRwd;
 largeRwd_incorrect          = incorrect & largeRwd;
 rsvp.largeRwd_rate          = sum(largeRwd_correct)/sum(largeRwd)*100;
 
-% SDT: CC 
+% SDT: CC
 hit_rate_largeRwd           = (sum(largeRwd & (correct_Fem | correct_Hom)) / sum(largeRwd));
 falseAlarm_rate_largeRwd    = (sum(largeRwd & (incorrect_Fem | incorrect_Hom)) / sum(largeRwd));
-[rsvp.dprime_largeRwd, rsvp.criterion_largeRwd, rsvp.aprime_largeRwd, rsvp.bprime_largeRwd] = sdt_measures(hit_rate_largeRwd, falseAlarm_rate_largeRwd); 
+[rsvp.dprime_largeRwd, rsvp.criterion_largeRwd, rsvp.aprime_largeRwd, rsvp.bprime_largeRwd] = sdt_measures(hit_rate_largeRwd, falseAlarm_rate_largeRwd);
 
 disp(['Reward : ',num2str(round(rsvp.smallRwd_rate)), '% were correct for small rwd & ', ...
     num2str(round(rsvp.largeRwd_rate)), '% were correct for large rwd' ]);
@@ -233,7 +231,7 @@ rsvp.DC_block               = unique(block(DC_condition));
 DC_trials                   = zeros(1,length(nTrial));
 for i = 1:length(rsvp.DC_block)
     DC_trials               = DC_trials + (block == rsvp.DC_block(i));
-end 
+end
 
 DC_hom                      = condition(nTrial) == 1;
 DC_hom_correct              = correct & DC_hom;
@@ -253,7 +251,7 @@ rsvp.BC_block               = unique(block(BC_condition));
 BC_trials                   = zeros(1,length(nTrial));
 for i = 1:length(rsvp.BC_block)
     BC_trials               = BC_trials + (block == rsvp.BC_block(i));
-end 
+end
 
 BC_hom                      = condition(nTrial) == 5;
 BC_hom_correct              = correct & BC_hom;
@@ -297,10 +295,10 @@ else
 end
 
 % Condition Emotions
-rsvp.perf_DC                = sum(DC_correct)/sum(DC_condition)*100;  
-rsvp.perf_BC                = sum(BC_correct)/sum(BC_condition)*100; 
-rsvp.perf_CC_DC             = sum(CC_DC_correct)/sum(CC_DC_condition)*100; 
-rsvp.perf_CC_BC             = sum(CC_BC_correct)/sum(CC_BC_condition)*100; 
+rsvp.perf_DC                = sum(DC_correct)/sum(DC_condition)*100;
+rsvp.perf_BC                = sum(BC_correct)/sum(BC_condition)*100;
+rsvp.perf_CC_DC             = sum(CC_DC_correct)/sum(CC_DC_condition)*100;
+rsvp.perf_CC_BC             = sum(CC_BC_correct)/sum(CC_BC_condition)*100;
 rsvp.perf_CC                = sum(CC_correct)/sum(CC_condition)*100;
 
 disp(['Performance Emotion : ',num2str(round(rsvp.perf_DC)), '% for detrimental condition, ', ...
@@ -316,8 +314,8 @@ hom_condition               = condition(nTrial) == 1 | condition(nTrial) == 3 | 
 hom_correct                 = correct & hom_condition;
 hom_incorrect               = incorrect & hom_condition;
 
-rsvp.perf_fem               = sum(fem_correct) / sum(fem_condition) * 100; 
-rsvp.perf_hom               = sum(hom_correct) / sum(hom_condition) * 100; 
+rsvp.perf_fem               = sum(fem_correct) / sum(fem_condition) * 100;
+rsvp.perf_hom               = sum(hom_correct) / sum(hom_condition) * 100;
 
 disp(['Performance Gender: ',num2str(round(rsvp.perf_fem)), '% for condition femme & ', ...
     num2str(round(rsvp.perf_hom)), '% for condition homme ']);
@@ -384,92 +382,92 @@ disp(['Performance Lag : ',num2str(round(rsvp.lag2_rate)), '% were correct after
 
 %% =================== Signal Detection Theory          ===================
 
-[rsvp.dprime, rsvp.criterion, rsvp.aprime, rsvp.bprime] = sdt_measures(rsvp.hit_rate, rsvp.falseAlarm_rate); 
+[rsvp.dprime, rsvp.criterion, rsvp.aprime, rsvp.bprime] = sdt_measures(rsvp.hit_rate, rsvp.falseAlarm_rate);
 
 % SDT: DC
 rsvp.hit_rate_DC            = sum(DC_condition & (correct_Fem | correct_Hom)) / sum(DC_condition);
 rsvp.reject_rate_DC         = sum(DC_condition & (correct_NotFem | correct_NotHom)) / sum(DC_condition);
 rsvp.falseAlarm_rate_DC     = sum(DC_condition & (incorrect_Fem | incorrect_Hom)) / sum(DC_condition);
 rsvp.miss_rate_DC           = sum(DC_condition & (incorrect_NotFem | incorrect_NotHom)) / sum(DC_condition);
-[rsvp.dprime_DC, rsvp.criterion_DC, rsvp.aprime_DC, rsvp.bprime_DC] = sdt_measures(rsvp.hit_rate_DC, rsvp.falseAlarm_rate_DC); 
+[rsvp.dprime_DC, rsvp.criterion_DC, rsvp.aprime_DC, rsvp.bprime_DC] = sdt_measures(rsvp.hit_rate_DC, rsvp.falseAlarm_rate_DC);
 
 hit_rate_DC_smallRwd        = sum(smallRwd & DC_condition & (correct_Fem | correct_Hom)) / sum(smallRwd & DC_condition);
 falseAlarm_rate_DC_smallRwd = sum(smallRwd & DC_condition & (incorrect_Fem | incorrect_Hom)) / sum(smallRwd & DC_condition);
 [rsvp.dprime_DC_smallRwd, rsvp.criterion_DC_smallRwd, rsvp.aprime_DC_smallRwd, rsvp.bprime_DC_smallRwd] = ...
-    sdt_measures(hit_rate_DC_smallRwd, falseAlarm_rate_DC_smallRwd); 
+    sdt_measures(hit_rate_DC_smallRwd, falseAlarm_rate_DC_smallRwd);
 
 hit_rate_DC_largeRwd        = sum(largeRwd & DC_condition & (correct_Fem | correct_Hom)) / sum(largeRwd & DC_condition);
 falseAlarm_rate_DC_largeRwd = sum(largeRwd & DC_condition & (incorrect_Fem | incorrect_Hom)) / sum( largeRwd & DC_condition);
 [rsvp.dprime_DC_largeRwd, rsvp.criterion_DC_largeRwd, rsvp.aprime_DC_largeRwd, rsvp.bprime_DC_largeRwd] = ...
-    sdt_measures(hit_rate_DC_largeRwd, falseAlarm_rate_DC_largeRwd); 
+    sdt_measures(hit_rate_DC_largeRwd, falseAlarm_rate_DC_largeRwd);
 
 % SDT: BC
 rsvp.hit_rate_BC            = sum(BC_condition & (correct_Fem | correct_Hom)) / sum(BC_condition);
 rsvp.reject_rate_BC         = sum(BC_condition & (correct_NotFem | correct_NotHom)) / sum(BC_condition);
 rsvp.falseAlarm_rate_BC     = sum(BC_condition & (incorrect_Fem | incorrect_Hom)) / sum(BC_condition);
 rsvp.miss_rate_BC           = sum(BC_condition & (incorrect_NotFem | incorrect_NotHom))/ sum(BC_condition);
-[rsvp.dprime_BC, rsvp.criterion_BC, rsvp.aprime_BC, rsvp.bprime_BC] = sdt_measures(rsvp.hit_rate_BC, rsvp.falseAlarm_rate_BC); 
+[rsvp.dprime_BC, rsvp.criterion_BC, rsvp.aprime_BC, rsvp.bprime_BC] = sdt_measures(rsvp.hit_rate_BC, rsvp.falseAlarm_rate_BC);
 
 hit_rate_BC_smallRwd        = sum(smallRwd & BC_condition & (correct_Fem | correct_Hom)) / sum(smallRwd & BC_condition);
 falseAlarm_rate_BC_smallRwd = sum(smallRwd & BC_condition & (incorrect_Fem | incorrect_Hom)) / sum(smallRwd & BC_condition);
 [rsvp.dprime_BC_smallRwd, rsvp.criterion_BC_smallRwd, rsvp.aprime_BC_smallRwd, rsvp.bprime_BC_smallRwd] = ...
-    sdt_measures(hit_rate_BC_smallRwd, falseAlarm_rate_BC_smallRwd); 
+    sdt_measures(hit_rate_BC_smallRwd, falseAlarm_rate_BC_smallRwd);
 
 hit_rate_BC_largeRwd        = sum(largeRwd & BC_condition & (correct_Fem | correct_Hom)) / sum(largeRwd & BC_condition);
 falseAlarm_rate_BC_largeRwd = sum(largeRwd & BC_condition & (incorrect_Fem | incorrect_Hom)) / sum(largeRwd & BC_condition);
 [rsvp.dprime_BC_largeRwd, rsvp.criterion_BC_largeRwd, rsvp.aprime_BC_largeRwd, rsvp.bprime_BC_largeRwd] = ...
-    sdt_measures(hit_rate_BC_largeRwd, falseAlarm_rate_BC_largeRwd); 
+    sdt_measures(hit_rate_BC_largeRwd, falseAlarm_rate_BC_largeRwd);
 
-% SDT: CC DC 
+% SDT: CC DC
 rsvp.hit_rate_CC_DC         = (sum(CC_DC_condition & (correct_Fem | correct_Hom)) / sum(CC_DC_condition));
 rsvp.reject_rate_CC_DC      = (sum(CC_DC_condition & (correct_NotFem | correct_NotHom)) / sum(CC_DC_condition));
 rsvp.falseAlarm_rate_CC_DC  = (sum(CC_DC_condition & (incorrect_Fem | incorrect_Hom)) / sum(CC_DC_condition));
 rsvp.miss_rate_CC_DC        = (sum(CC_DC_condition & (incorrect_NotFem | incorrect_NotHom))/ sum(CC_DC_condition));
-[rsvp.dprime_CC_DC, rsvp.criterion_CC_DC, rsvp.aprime_CC_DC, rsvp.bprime_CC_DC] = sdt_measures(rsvp.hit_rate_CC_DC, rsvp.falseAlarm_rate_CC_DC); 
+[rsvp.dprime_CC_DC, rsvp.criterion_CC_DC, rsvp.aprime_CC_DC, rsvp.bprime_CC_DC] = sdt_measures(rsvp.hit_rate_CC_DC, rsvp.falseAlarm_rate_CC_DC);
 
 hit_rate_CC_DC_smallRwd     = sum(smallRwd & CC_DC_condition & (correct_Fem | correct_Hom)) / sum(smallRwd & CC_DC_condition);
 falseAlarm_rate_CC_DC_smallRwd = sum(smallRwd & CC_DC_condition & (incorrect_Fem | incorrect_Hom)) / sum(smallRwd & CC_DC_condition);
 [rsvp.dprime_CC_DC_smallRwd, rsvp.criterion_CC_DC_smallRwd, rsvp.aprime_CC_DC_smallRwd, rsvp.bprime_CC_DC_smallRwd] = ...
-    sdt_measures(hit_rate_CC_DC_smallRwd, falseAlarm_rate_CC_DC_smallRwd); 
+    sdt_measures(hit_rate_CC_DC_smallRwd, falseAlarm_rate_CC_DC_smallRwd);
 
 hit_rate_CC_DC_largeRwd     = sum(largeRwd & CC_DC_condition & (correct_Fem | correct_Hom)) / sum(largeRwd & CC_DC_condition);
 falseAlarm_rate_CC_DC_largeRwd = sum(largeRwd & CC_DC_condition & (incorrect_Fem | incorrect_Hom)) / sum(largeRwd & CC_DC_condition);
 [rsvp.dprime_CC_DC_largeRwd, rsvp.criterion_CC_DC_largeRwd, rsvp.aprime_CC_DC_largeRwd, rsvp.bprime_CC_DC_largeRwd] = ...
-    sdt_measures(hit_rate_CC_DC_largeRwd, falseAlarm_rate_CC_DC_largeRwd); 
+    sdt_measures(hit_rate_CC_DC_largeRwd, falseAlarm_rate_CC_DC_largeRwd);
 
-% SDT: CC BC 
+% SDT: CC BC
 rsvp.hit_rate_CC_BC         = (sum(CC_BC_condition & (correct_Fem | correct_Hom)) / sum(CC_BC_condition));
 rsvp.reject_rate_CC_BC      = (sum(CC_BC_condition & (correct_NotFem | correct_NotHom)) / sum(CC_BC_condition));
 rsvp.falseAlarm_rate_CC_BC  = (sum(CC_BC_condition & (incorrect_Fem | incorrect_Hom)) / sum(CC_BC_condition));
 rsvp.miss_rate_CC_BC        = (sum(CC_BC_condition & (incorrect_NotFem | incorrect_NotHom))/ sum(CC_BC_condition));
-[rsvp.dprime_CC_BC, rsvp.criterion_CC_BC, rsvp.aprime_CC_BC, rsvp.bprime_CC_BC] = sdt_measures(rsvp.hit_rate_CC_BC, rsvp.falseAlarm_rate_CC_BC); 
+[rsvp.dprime_CC_BC, rsvp.criterion_CC_BC, rsvp.aprime_CC_BC, rsvp.bprime_CC_BC] = sdt_measures(rsvp.hit_rate_CC_BC, rsvp.falseAlarm_rate_CC_BC);
 
 hit_rate_CC_BC_smallRwd     = sum(smallRwd & CC_BC_condition & (correct_Fem | correct_Hom)) / sum(smallRwd & CC_BC_condition);
 falseAlarm_rate_CC_BC_smallRwd = sum(smallRwd & CC_BC_condition & (incorrect_Fem | incorrect_Hom)) / sum(smallRwd & CC_BC_condition);
 [rsvp.dprime_CC_BC_smallRwd, rsvp.criterion_CC_BC_smallRwd, rsvp.aprime_CC_BC_smallRwd, rsvp.bprime_CC_BC_smallRwd] = ...
-    sdt_measures(hit_rate_CC_BC_smallRwd, falseAlarm_rate_CC_BC_smallRwd); 
+    sdt_measures(hit_rate_CC_BC_smallRwd, falseAlarm_rate_CC_BC_smallRwd);
 
 hit_rate_CC_BC_largeRwd     = sum(largeRwd & CC_BC_condition & (correct_Fem | correct_Hom)) / sum(largeRwd & CC_BC_condition);
 falseAlarm_rate_CC_BC_largeRwd  = sum(largeRwd & CC_BC_condition & (incorrect_Fem | incorrect_Hom)) / sum(largeRwd & CC_BC_condition);
 [rsvp.dprime_CC_BC_largeRwd, rsvp.criterion_CC_BC_largeRwd, rsvp.aprime_CC_BC_largeRwd, rsvp.bprime_CC_BC_largeRwd] = ...
-    sdt_measures(hit_rate_CC_BC_largeRwd, falseAlarm_rate_CC_BC_largeRwd); 
+    sdt_measures(hit_rate_CC_BC_largeRwd, falseAlarm_rate_CC_BC_largeRwd);
 
-% SDT: CC 
+% SDT: CC
 rsvp.hit_rate_CC            = (sum(CC_condition & (correct_Fem | correct_Hom)) / sum(CC_condition));
 rsvp.reject_rate_CC         = (sum(CC_condition & (correct_NotFem | correct_NotHom)) / sum(CC_condition));
 rsvp.falseAlarm_rate_CC     = (sum(CC_condition & (incorrect_Fem | incorrect_Hom)) / sum(CC_condition));
 rsvp.miss_rate_CC           = (sum(CC_condition & (incorrect_NotFem | incorrect_NotHom))/ sum(CC_condition));
-[rsvp.dprime_CC, rsvp.criterion_CC, rsvp.aprime_CC, rsvp.bprime_CC] = sdt_measures(rsvp.hit_rate_CC, rsvp.falseAlarm_rate_CC); 
+[rsvp.dprime_CC, rsvp.criterion_CC, rsvp.aprime_CC, rsvp.bprime_CC] = sdt_measures(rsvp.hit_rate_CC, rsvp.falseAlarm_rate_CC);
 
 hit_rate_CC_smallRwd        = sum(smallRwd & CC_condition & (correct_Fem | correct_Hom)) / sum(smallRwd & CC_condition);
 falseAlarm_rate_CC_smallRwd = sum(smallRwd & CC_condition & (incorrect_Fem | incorrect_Hom)) / sum(smallRwd & CC_condition);
 [rsvp.dprime_CC_smallRwd, rsvp.criterion_CC_smallRwd, rsvp.aprime_CC_smallRwd, rsvp.bprime_CC_smallRwd] = ...
-    sdt_measures(hit_rate_CC_smallRwd, falseAlarm_rate_CC_smallRwd); 
+    sdt_measures(hit_rate_CC_smallRwd, falseAlarm_rate_CC_smallRwd);
 
 hit_rate_CC_largeRwd        = sum(largeRwd & CC_condition & (correct_Fem | correct_Hom)) / sum(largeRwd & CC_condition);
 falseAlarm_rate_CC_largeRwd = sum(largeRwd & CC_condition & (incorrect_Fem | incorrect_Hom)) / sum(largeRwd & CC_condition);
 [rsvp.dprime_CC_largeRwd, rsvp.criterion_CC_largeRwd, rsvp.aprime_CC_largeRwd, rsvp.bprime_CC_largeRwd] = ...
-    sdt_measures(hit_rate_CC_largeRwd, falseAlarm_rate_CC_largeRwd); 
+    sdt_measures(hit_rate_CC_largeRwd, falseAlarm_rate_CC_largeRwd);
 
 %% =================== RTs - Correct & Incorrect Trials ===================
 
@@ -578,9 +576,9 @@ rsvp.rt_hom_largeRwd        = mean(rt(largeRwd & hom_condition));
 
 %% =================== RTs - Link To Performance        ===================
 
-rsvp.rt_median              = median(rt); 
+rsvp.rt_median              = median(rt);
 
-rt_slow                     = find(rt > rsvp.rt_median); 
+rt_slow                     = find(rt > rsvp.rt_median);
 rsvp.rt_slow_perf           = sum(correct(rt_slow))/length(rt_slow)*100;
 rt_fast                     = find(rt < rsvp.rt_median);
 rsvp.rt_fast_perf           = sum(correct(rt_fast))/length(rt_fast)*100;
@@ -598,7 +596,7 @@ end
 
 rsvp.LC_smallRwd            = zeros(1,length(rsvp.smallRwdBlock));
 for i = 1:length(rsvp.smallRwdBlock)
-     rsvp.LC_smallRwd(i)    = sum(correct(block == rsvp.smallRwdBlock(i)))/sum(smallRwd(block == rsvp.smallRwdBlock(i)))*100;
+    rsvp.LC_smallRwd(i)    = sum(correct(block == rsvp.smallRwdBlock(i)))/sum(smallRwd(block == rsvp.smallRwdBlock(i)))*100;
 end
 
 rsvp.LC_largeRwd            = zeros(1,length(rsvp.largeRwdBlock));
@@ -608,17 +606,17 @@ end
 
 rsvp.LC_DC                  = zeros(1,length(rsvp.DC_block));
 for i = 1:length(rsvp.DC_block)
-     rsvp.LC_DC(i)          = sum(DC_correct(block == rsvp.DC_block(i)))/ sum(DC_condition(block == rsvp.DC_block(i)))*100;
+    rsvp.LC_DC(i)          = sum(DC_correct(block == rsvp.DC_block(i)))/ sum(DC_condition(block == rsvp.DC_block(i)))*100;
 end
 
 rsvp.LC_BC                  = zeros(1,length(rsvp.BC_block));
 for i = 1:length(rsvp.BC_block)
-     rsvp.LC_BC(i)          = sum(BC_correct(block == rsvp.BC_block(i))) / sum(BC_condition(block == rsvp.BC_block(i)))*100;
+    rsvp.LC_BC(i)          = sum(BC_correct(block == rsvp.BC_block(i))) / sum(BC_condition(block == rsvp.BC_block(i)))*100;
 end
 
 rsvp.LC_CC                  = zeros(1,cfg_exp.nBlocksExp);
 for i = 1:length(rsvp.LC_CC)
-     rsvp.LC_CC(i)          = sum(CC_correct(block == i))/ sum(CC_condition(block == i))*100;
+    rsvp.LC_CC(i)          = sum(CC_correct(block == i))/ sum(CC_condition(block == i))*100;
 end
 
 %% =================== RTs Curves                       ===================
@@ -630,7 +628,7 @@ end
 
 rsvp.RTsC_smallRwd          = zeros(1,length(rsvp.smallRwdBlock));
 for i = 1:length(rsvp.smallRwdBlock)
-     rsvp.RTsC_smallRwd(i)  = mean(rt(block == rsvp.smallRwdBlock(i)));
+    rsvp.RTsC_smallRwd(i)  = mean(rt(block == rsvp.smallRwdBlock(i)));
 end
 
 rsvp.RTsC_largeRwd          = zeros(1,length(rsvp.largeRwdBlock));
@@ -640,24 +638,24 @@ end
 
 rsvp.RTsC_DC                = zeros(1,length(rsvp.DC_block));
 for i = 1:length(rsvp.DC_block)
-     rsvp.RTsC_DC(i)        = mean(rt(block == rsvp.DC_block(i) & DC_condition));
+    rsvp.RTsC_DC(i)        = mean(rt(block == rsvp.DC_block(i) & DC_condition));
 end
 
 rsvp.RTsC_BC                = zeros(1,length(rsvp.BC_block));
 for i = 1:length(rsvp.BC_block)
-     rsvp.RTsC_BC(i)        = mean(rt(block == rsvp.BC_block(i) & BC_condition));
+    rsvp.RTsC_BC(i)        = mean(rt(block == rsvp.BC_block(i) & BC_condition));
 end
 
 rsvp.RTsC_CC                = zeros(1,cfg_exp.nBlocksExp);
 for i = 1:length(rsvp.RTsC_CC)
-     rsvp.RTsC_CC(i)        = mean(rt(block == i & CC_condition));
+    rsvp.RTsC_CC(i)        = mean(rt(block == i & CC_condition));
 end
 
 %% =================== PLOT PART                        ===================
 if fig
     
     %% Performance Plots
-    % Performance par conditions 
+    % Performance par conditions
     figure('Name', 'Performance Plots');
     subplot(2,2,1)
     hold on;
@@ -669,11 +667,11 @@ if fig
     ylabel('Performance','fontsize', 10)
     title('Performance according to conditions','fontsize', 10)
     axis([0 4 50 105])
-    grid minor 
-    box on 
+    grid minor
+    box on
     hold off
     
-    % Performance par rewards 
+    % Performance par rewards
     subplot(2,2,2)
     hold on;
     bar([rsvp.smallRwd_rate 0],'FaceColor',[0.75, 0.85, 0.90]);
@@ -683,11 +681,11 @@ if fig
     ylabel('Performance','fontsize', 10)
     title('Performance according to reward','fontsize', 10)
     axis([0 3 50 105])
-    grid minor 
-    box on 
+    grid minor
+    box on
     hold off
-
-    % Performance par conditions & rewards 
+    
+    % Performance par conditions & rewards
     subplot(2,1,2)
     hold on;
     bar([rsvp.perf_DC_smallRwd 0 0 0 0 0],'FaceColor',[0.65 0.35 0.45]);
@@ -701,14 +699,14 @@ if fig
     ylabel('Performance','fontsize', 10)
     title('Performance according to reward & conditions','fontsize', 10)
     axis([0 7 50 105])
-    grid minor 
-    box on 
+    grid minor
+    box on
     hold off
-
-    % Title of the whole plot 
+    
+    % Title of the whole plot
     sgtitle(['Performance Plots for Pilot n°',num2str(ID)])
     
-    %% RTs Plots 
+    %% RTs Plots
     figure('Name', 'RTs Plots');
     [h_RT, p_RT] = adtest(rt);
     subplot(2,3,1)
@@ -724,8 +722,8 @@ if fig
     axis([-1.5 1.5 0 80])
     grid minor
     box on
-
-    % RTs par conditions 
+    
+    % RTs par conditions
     subplot(2,3,2)
     hold on;
     bar([rsvp.rt_DC 0 0],'FaceColor',[0.75 0.45 0.55]);
@@ -736,11 +734,11 @@ if fig
     ylabel('RTs','fontsize', 10)
     title('RTs according to conditions','fontsize', 10)
     axis([0 4 -1 1])
-    grid minor 
-    box on 
+    grid minor
+    box on
     hold off
     
-    % RTs par rewards 
+    % RTs par rewards
     subplot(2,3,3)
     hold on;
     bar([rsvp.rt_smallRwd 0],'FaceColor',[0.75, 0.85, 0.90]);
@@ -750,11 +748,11 @@ if fig
     ylabel('RTs','fontsize', 10)
     title('RTs according to reward','fontsize', 10)
     axis([0 3 -1 1])
-    grid minor 
-    box on 
+    grid minor
+    box on
     hold off
-
-    % RTs par conditions & rewards 
+    
+    % RTs par conditions & rewards
     subplot(2,1,2)
     hold on;
     bar([rsvp.rt_DC_smallRwd 0 0 0 0 0],'FaceColor',[0.65 0.35 0.45]);
@@ -768,8 +766,8 @@ if fig
     ylabel('RTs','fontsize', 10)
     title('RTs according to reward & conditions','fontsize', 10)
     axis([0 7 -1 1])
-    grid minor 
-    box on 
+    grid minor
+    box on
     hold off
     
     % Title of the whole plot
@@ -777,7 +775,7 @@ if fig
     
     %% Learning Curves Plots
     figure('Name', 'Learning Curve Plots');
-
+    
     subplot(2,1,1)
     p = plot(1:(length(rsvp.LC)), rsvp.LC,'linew',1.5);
     p.Color = [0 0 0];
@@ -830,7 +828,7 @@ if fig
     
     %% RTs Curves Plots
     figure('Name', ' RSVP RTs Curve Plots');
-
+    
     subplot(2,1,1)
     p = plot(1:(length(rsvp.RTsC)), rsvp.RTsC,'linew',1.5);
     p.Color = [0 0 0];
@@ -878,9 +876,9 @@ if fig
     grid minor
     box on
     
-    %% Gender Plots 
+    %% Gender Plots
     
-    % Performance par gender 
+    % Performance par gender
     figure('Name', 'Gender Plots');
     
     gender_fem = {rsvp.perf_fem, rsvp.rt_fem};
@@ -904,7 +902,7 @@ if fig
         hold off
     end
     
-        % Performance par genre & conditions
+    % Performance par genre & conditions
     subplot(2,1,2)
     hold on;
     bar([rsvp.DC_fem_rate 0 0 0 0 0],'FaceColor',[0.65 0.35 0.45]);
@@ -921,8 +919,8 @@ if fig
     grid minor
     box on
     hold off
-        
+    
 end
 
 
-%end
+end

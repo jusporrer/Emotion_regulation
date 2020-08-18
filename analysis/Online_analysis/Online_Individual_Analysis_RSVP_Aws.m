@@ -3,43 +3,67 @@
 % Creation : May 2020
 % clear all
 %format long g
-function [rsvp]                 = Online_Individual_Analysis_RSVP_Aws()
+% "NB9F1BYK"
+function [rsvp]                 = Online_Individual_Analysis_RSVP_Aws(ID,fig,sess)
 
-fig                         = 0;
 
 %% =================== Load the data                    ===================
 %resp_folder                     = '../results';
 %resp_rsvp                       = [num2str(ID),'_rsvp.mat'];
 %resp_file_rsvp                  = fullfile(resp_folder,resp_rsvp);
 
-load('data_rsvp_Aws.mat', 'data_rsvp_Aws')
+load('data_rsvp_Aws_1708.mat', 'data_rsvp_Aws')
+
+individualData = data_rsvp_Aws(data_rsvp_Aws.participant_participantID == ID,:); 
 
 
+%% =================== Only Take First Session          ===================
+
+% later change to sessionName
+session                 = individualData.taskSession_taskSessionID; 
+nb_session              = unique(session);
+
+disp(['The participant did  ',num2str(length(nb_session)), ' session(s).']);
+
+if sess == 1 
+    individualData = individualData(session == nb_session(1),:); 
+end 
+    
 %% =================== Initialise                       ===================
-
-nTrain                      = 12;
-training                    = data_rsvp_Aws(1:nTrain,:);
-test_part                   = data_rsvp_Aws.test_part(nTrain+1:end);
+if ID == "BRGUQ29W"
+    nTrain                  = 120; 
+else 
+    nTrain                  = 12; 
+end 
+startTime                   = individualData.startTime(1); 
+doneTime                    = individualData.doneTime(1); 
+%training                    = individualData(1:nTrain,:);
+test_part                   = individualData.test_part(nTrain+1:end);
 test_part                   = cellstr(test_part);
 %(1 = Small reward, 2 = Large reward)
-reward                      = data_rsvp_Aws.condiRwd(nTrain+1:end);
+reward                      = individualData.condiRwd(nTrain+1:end);
 %(1 = DC_male, 2 = DC_female, 3 = CC_male, 4 = CC_female, 5 = BC_male , 6 = BC_female)
-condition                   = data_rsvp_Aws.condiEmoTrial(nTrain+1:end);
-block                       = data_rsvp_Aws.blockNb(nTrain+1:end);
-trial                       = data_rsvp_Aws.trialNb(nTrain+1:end);
-rt                          = data_rsvp_Aws.rt(nTrain+1:end);
+condition                   = individualData.condiEmoTrial(nTrain+1:end);
+block                       = individualData.blockNb(nTrain+1:end);
+trial                       = individualData.trialNb(nTrain+1:end);
+rt                          = individualData.rt(nTrain+1:end);
 % (1 = femquest, 2 = homquest)
-%%instQuest                   = [data_rsvp_Aws(nTrain+1:end).instQuest];
+%%instQuest                   = [individualData(nTrain+1:end).instQuest];
 % (79 = [o] / oui; 78 = [n] / non)
-response                    = data_rsvp_Aws.key_press(nTrain+1:end);
-posCritDist                 = data_rsvp_Aws.posCritDist(nTrain+1:end);
-posTarget                   = data_rsvp_Aws.posTarget(nTrain+1:end);
+response                    = individualData.key_press(nTrain+1:end);
+posCritDist                 = individualData.posCritDist(nTrain+1:end);
+posTarget                   = individualData.posTarget(nTrain+1:end);
 % 1 = fearFem, 2 = fearMale, 3 = neutralFem, 4 = neutralMale)
-distractor                  = data_rsvp_Aws.distractor(nTrain+1:end);
-target                      = data_rsvp_Aws.target(nTrain+1:end);
+distractor                  = individualData.distractor(nTrain+1:end);
+target                      = individualData.target(nTrain+1:end);
 
 trialExp                    = 288;
 blockExp                    = 12;
+
+instQuestFem = test_part == "rsvpAnswFem";
+instQuestHom = (test_part == "rsvpAnswHom") * 2;
+
+instQuest = instQuestFem + instQuestHom;
 
 %% =================== Basic Information                ===================
 
@@ -52,16 +76,17 @@ for i = 1:length(test_part)
     end
 end
 
-instQuestFem = test_part == "rsvpAnswFem";
-instQuestHom = (test_part == "rsvpAnswHom") * 2;
-
-instQuest = instQuestFem + instQuestHom;
-
 if length(nTrial) == trialExp
     disp(['No data loss : There were ',num2str(length(trial)), ' trials']);
 else
     disp(['Problem : There were only ',num2str(length(trial)), ' trials out of the normal 288 trials expected']);
 end
+
+% Length in minutes 
+length_exp              = minutes(diff(datetime([startTime; doneTime]))); 
+
+disp(['The exp laster for ',num2str(length_exp), ' min']);
+
 
 %% =================== Exclude 3 STD RTs                ===================
 
@@ -590,8 +615,9 @@ rsvp.linearCoef             = linearMdl.Coefficients.Estimate(2);
 %% =================== Learning Curves                  ===================
 
 rsvp.LC                     = zeros(1,length(unique(block)));
+a                           = 0:11; 
 for i = 1:length(rsvp.LC)
-    rsvp.LC(i)              = (sum(correct(block == i)))/(length(nTrial(block == i)))*100;
+    rsvp.LC(i)              = (sum(correct(block == a(i))))/(length(nTrial(block == a(i))))*100;
 end
 
 rsvp.LC_smallRwd            = zeros(1,length(rsvp.smallRwdBlock));
@@ -616,14 +642,14 @@ end
 
 rsvp.LC_CC                  = zeros(1,length(unique(block)));
 for i = 1:length(rsvp.LC_CC)
-    rsvp.LC_CC(i)          = sum(CC_correct(block == i))/ sum(CC_condition(block == i))*100;
+    rsvp.LC_CC(i)          = sum(CC_correct(block == a(i)))/ sum(CC_condition(block == a(i)))*100;
 end
 
 %% =================== RTs Curves                       ===================
 
 rsvp.RTsC                   = zeros(1,length(unique(block)));
-for i = 1:30
-    rsvp.RTsC(i)            = mean(rt(block == i));
+for i = 1:length(rsvp.RTsC)
+    rsvp.RTsC(i)            = mean(rt(block == a(i)));
 end
 
 rsvp.RTsC_smallRwd          = zeros(1,length(rsvp.smallRwdBlock));
@@ -648,7 +674,7 @@ end
 
 rsvp.RTsC_CC                = zeros(1,length(unique(block)));
 for i = 1:length(rsvp.RTsC_CC)
-    rsvp.RTsC_CC(i)        = mean(rt(block == i & CC_condition));
+    rsvp.RTsC_CC(i)        = mean(rt(block == a(i) & CC_condition));
 end
 
 %% =================== PLOT PART                        ===================
@@ -782,10 +808,10 @@ if fig
     line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
     ylabel('Performance (Mean)','fontsize', 10)
     xlabel('Number of blocks','fontsize', 10)
-    xticks(1:(length(rsvp.LC)))
+    xticks(0:(length(rsvp.LC)))
     xticklabels(unique(block))
     title('Learning Curve Experiment','fontsize', 10)
-    axis([0 (length(rsvp.LC)+1) 40 105])
+    axis([-1 (length(rsvp.LC)+1) 40 105])
     grid minor
     box on
     
@@ -798,9 +824,9 @@ if fig
     line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
     ylabel('Performance (Mean)','fontsize', 10)
     xlabel('Number of blocks','fontsize', 10)
-    xticks(1:12); xticklabels(unique(block))
+    xticks(0:(length(rsvp.LC))); xticklabels(unique(block))
     title('Learning Curve for Small and Large Rewards','fontsize', 10)
-    axis([0 (length(unique(block))+1) 40 110])
+    axis([-1 (length(unique(block))+1) 40 110])
     hold off
     grid minor
     box on
@@ -816,9 +842,9 @@ if fig
     line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
     ylabel('Performance (Mean)','fontsize', 10)
     xlabel('Number of blocks','fontsize', 10)
-    xticks(1:12); xticklabels(unique(block))
+    xticks(0:(length(rsvp.LC))); xticklabels(unique(block))
     title('Learning Curve for DC and BC','fontsize', 10)
-    axis([0 (length(unique(block))+1) 40 110])
+    axis([-1 (length(unique(block))+1) 40 110])
     hold off
     grid minor
     box on
@@ -835,10 +861,10 @@ if fig
     line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
     ylabel('Mean(log(RTS))','fontsize', 10)
     xlabel('Number of blocks','fontsize', 10)
-    xticks(1:(length(rsvp.RTsC)))
+    xticks(0:(length(rsvp.RTsC)))
     xticklabels(unique(block))
     title('RTs Curve RSVP Experiment','fontsize', 10)
-    axis([0 (length(rsvp.RTsC)+1) -1 1])
+    axis([-1 (length(rsvp.RTsC)+1) -1 1])
     grid minor
     box on
     
@@ -851,9 +877,9 @@ if fig
     line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
     ylabel('Mean(log(RTS))','fontsize', 10)
     xlabel('Number of blocks','fontsize', 10)
-    xticks(1:12); xticklabels(unique(block))
+    xticks(0:length(unique(block))); xticklabels(unique(block))
     title('RTs Curve for Small and Large Rewards','fontsize', 10)
-    axis([0 (length(unique(block))+1) -1 1])
+    axis([-1 (length(unique(block))+1) -1 1])
     hold off
     grid minor
     box on
@@ -869,9 +895,9 @@ if fig
     line([-15,15], [50,50],'color','k','LineStyle','--','LineWidth',.7)
     ylabel('Mean(log(RTS))','fontsize', 10)
     xlabel('Number of blocks','fontsize', 10)
-    xticks(1:12); xticklabels(unique(block))
+    xticks(0:length(unique(block))); xticklabels(unique(block))
     title('RTs Curve for DC and BC','fontsize', 10)
-    axis([0 (length(unique(block))+1) -1 1])
+    axis([-1 (length(unique(block))+1) -1 1])
     hold off
     grid minor
     box on

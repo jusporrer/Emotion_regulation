@@ -10,6 +10,16 @@ function [dprime, criterion, aprime, bprime] = sdt_measures(hit_rate, falseAlarm
 %   Author : Juliana Sporrer
 %   Date of creation : 31-Mars-2020 
 
+%% Avoids inf 
+nTarget = 1;
+
+if hit_rate == 0 || hit_rate == 1
+    hit_rate = .5/nTarget;
+end
+if falseAlarm_rate == 0 || falseAlarm_rate == 1
+    falseAlarm_rate = 1-.5/nTarget;
+end 
+
 %% d', Parametric sensitivity index (Macmillan, 1993)
 dprime              = norminv(hit_rate) - norminv(falseAlarm_rate);
 

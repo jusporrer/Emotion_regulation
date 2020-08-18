@@ -3,3 +3,9 @@
 /exp_images
 *.asv
 instructions/~$instructionsDiapo.pptx
+analysis/Online_analysis/tableEmo_Aws
+data_rsvp.mat
+data_rsvp_Aws.mat 
+data_rsvp_Aws_1708.mat
+subject_id.mat 
+first_sess_id.mat
