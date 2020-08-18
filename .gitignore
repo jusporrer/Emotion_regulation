@@ -4,6 +4,7 @@
 *.asv
 instructions/~$instructionsDiapo.pptx
 analysis/Online_analysis/tableEmo_Aws
+analysis/Online_analysis/pilot_online
 data_rsvp.mat
 data_rsvp_Aws.mat 
 data_rsvp_Aws_1708.mat
